@@ -358,6 +358,16 @@
       line-height: 1.5;
     }
 
+    .info-card ul a {
+      color: inherit;
+      text-underline-offset: 2px;
+    }
+
+    .info-card ul a:hover,
+    .info-card ul a:focus {
+      color: var(--brand-blue);
+    }
+
     .global {
       margin-top: 18px;
       display: flex;
@@ -510,22 +520,13 @@
         <article class="info-card">
           <h3>Before kickoff (optional)</h3>
           <p>To move faster, connect these ahead of the call:</p>
-          <ul>
-            <li><strong>Triple Pixel</strong></li>
-            <li><strong>Key integrations</strong></li>
-            <li><strong>Tracking settings and UTM rules</strong></li>
-          </ul>
+          <ul data-resource-list="beforeKickoff"></ul>
         </article>
 
         <article class="info-card">
           <h3>Kickoff outcomes</h3>
           <p>You leave with clarity on setup, dashboards, and what to do next:</p>
-          <ul>
-            <li><strong>Summary Dashboard</strong></li>
-            <li><strong>Attribution Dashboard</strong></li>
-            <li><strong>Creative Analysis</strong></li>
-            <li><strong>Cohort Analysis and Customer Segments</strong></li>
-          </ul>
+          <ul data-resource-list="kickoffOutcomes"></ul>
         </article>
       </div>
 
@@ -542,15 +543,53 @@
     </section>
   </main>
 
-  <script src="booking-links.js"></script>
+  <script src="booking-page-links.js"></script>
   <script>
     (function () {
-      var links = window.BOOKING_LINKS || {};
+      var linkConfig = window.BOOKING_PAGE_LINKS || {};
+      var bookingLinks = Object.assign(
+        {},
+        linkConfig.regionBookingLinks || {},
+        linkConfig.globalBookingLinks || {}
+      );
+
       document.querySelectorAll("[data-link]").forEach(function (el) {
         var key = el.getAttribute("data-link");
-        if (links[key]) {
-          el.href = links[key];
+        if (bookingLinks[key]) {
+          el.href = bookingLinks[key];
         }
+      });
+
+      var resourceLinks = linkConfig.resourceChecklistLinks || {};
+      document.querySelectorAll("[data-resource-list]").forEach(function (listEl) {
+        var section = listEl.getAttribute("data-resource-list");
+        var items = resourceLinks[section];
+        if (!Array.isArray(items)) {
+          return;
+        }
+
+        listEl.innerHTML = "";
+
+        items.forEach(function (item) {
+          if (!item || !item.label) {
+            return;
+          }
+
+          var li = document.createElement("li");
+          var strong = document.createElement("strong");
+
+          if (item.href) {
+            var anchor = document.createElement("a");
+            anchor.href = item.href;
+            anchor.textContent = item.label;
+            strong.appendChild(anchor);
+          } else {
+            strong.textContent = item.label;
+          }
+
+          li.appendChild(strong);
+          listEl.appendChild(li);
+        });
       });
 
       var storageKey = "tw-booking-theme";
