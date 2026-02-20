@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Triple Whale Implementation Booking</title>
+  <meta name="description" content="Choose your region and book your Triple Whale implementation kickoff." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --brand-blue: #0c70f2;
+      --brand-blue-hover: #0a62d6;
+      --ink: #0a0a0a;
+      --charcoal: #2c2c2c;
+      --mid-gray: #6f6f6f;
+      --light-gray: #f2f2f2;
+      --white: #ffffff;
+      --line: #d8d8d8;
+      --focus-ring: rgba(12, 112, 242, 0.32);
+      --shadow: 0 26px 70px rgba(10, 10, 10, 0.1);
+      --radius-lg: 24px;
+      --radius-md: 16px;
+      --radius-sm: 12px;
+      --max-width: 1020px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Manrope", system-ui, -apple-system, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(860px 420px at 88% -14%, rgba(12, 112, 242, 0.18), transparent 60%),
+        radial-gradient(780px 380px at -10% 16%, rgba(12, 112, 242, 0.1), transparent 60%),
+        linear-gradient(180deg, #fbfbfc 0%, #f5f7fb 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 20px 64px;
+    }
+
+    .page {
+      width: 100%;
+      max-width: var(--max-width);
+      position: relative;
+    }
+
+    .frame {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(10, 10, 10, 0.08);
+      padding: 36px 42px 46px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+      animation: reveal 500ms ease both;
+    }
+
+    .frame::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(540px 140px at 4% 0%, rgba(12, 112, 242, 0.1), transparent 60%),
+        linear-gradient(180deg, rgba(242, 242, 242, 0.62), transparent 32%);
+      pointer-events: none;
+    }
+
+    .brand {
+      position: relative;
+      z-index: 1;
+      display: inline-flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .brand-name {
+      margin: 0;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      color: var(--charcoal);
+      text-transform: uppercase;
+    }
+
+    header {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.17em;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--brand-blue);
+    }
+
+    h1 {
+      font-size: clamp(36px, 5vw, 56px);
+      margin: 0;
+      line-height: 1.05;
+      max-width: 860px;
+      letter-spacing: -0.03em;
+    }
+
+    .lead {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.65;
+      color: var(--charcoal);
+      max-width: 760px;
+    }
+
+    .lead strong {
+      color: var(--ink);
+    }
+
+    .regions {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .region-card {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(249, 250, 252, 1));
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 20px 20px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-height: 220px;
+      transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+      animation: reveal 540ms ease both;
+    }
+
+    .region-card:nth-child(2) {
+      animation-delay: 60ms;
+    }
+
+    .region-card:nth-child(3) {
+      animation-delay: 120ms;
+    }
+
+    .region-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(12, 112, 242, 0.35);
+      box-shadow: 0 12px 28px rgba(10, 10, 10, 0.08);
+    }
+
+    .region-card h2 {
+      margin: 0;
+      font-size: 30px;
+      letter-spacing: -0.02em;
+    }
+
+    .region-card p {
+      margin: 0;
+      color: var(--mid-gray);
+      font-size: 15px;
+      line-height: 1.55;
+    }
+
+    .tag {
+      align-self: flex-start;
+      background: rgba(12, 112, 242, 0.1);
+      color: #0b4eaa;
+      font-weight: 700;
+      font-size: 12px;
+      padding: 7px 10px;
+      border-radius: 999px;
+    }
+
+    .cta {
+      margin-top: auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      font-weight: 700;
+      color: var(--white);
+      background: var(--brand-blue);
+      border: 1px solid var(--brand-blue);
+      min-height: 48px;
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease, border-color 160ms ease;
+    }
+
+    .cta span {
+      font-size: 15px;
+      letter-spacing: 0.01em;
+    }
+
+    .cta:hover,
+    .cta:focus {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 26px rgba(12, 112, 242, 0.26);
+      background: var(--brand-blue-hover);
+      border-color: var(--brand-blue-hover);
+    }
+
+    .note {
+      position: relative;
+      z-index: 1;
+      background: var(--light-gray);
+      border-left: 4px solid var(--brand-blue);
+      padding: 15px 16px;
+      border-radius: 14px;
+      color: var(--charcoal);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .info-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .info-card {
+      background: #fbfbfc;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 18px 18px 19px;
+    }
+
+    .info-card h3 {
+      margin: 0 0 9px;
+      font-size: 18px;
+      color: var(--ink);
+    }
+
+    .info-card p {
+      margin: 0 0 10px;
+      color: var(--charcoal);
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .info-card ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--charcoal);
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .global {
+      margin-top: 18px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .global strong {
+      color: var(--charcoal);
+      font-size: 15px;
+    }
+
+    .global a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      color: var(--charcoal);
+      font-weight: 700;
+      text-decoration: none;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #f7f8fa;
+      padding: 10px 14px;
+      transition: border-color 140ms ease, color 140ms ease, background 140ms ease;
+    }
+
+    .global a:hover,
+    .global a:focus {
+      border-color: rgba(12, 112, 242, 0.45);
+      background: #f0f5ff;
+      color: #0b4eaa;
+    }
+
+    .footer {
+      margin-top: 24px;
+      font-size: 13px;
+      color: var(--mid-gray);
+    }
+
+    a:focus-visible {
+      outline: 3px solid var(--focus-ring);
+      outline-offset: 2px;
+    }
+
+    @keyframes reveal {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 720px) {
+      .frame {
+        padding: 30px 22px 36px;
+      }
+
+      h1 {
+        font-size: clamp(34px, 11vw, 48px);
+      }
+
+      .region-card h2 {
+        font-size: 28px;
+      }
+
+      .global {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="frame">
+      <div class="brand" aria-label="Triple Whale">
+        <p class="brand-name">Triple Whale</p>
+      </div>
+
+      <header>
+        <div class="eyebrow">Implementation Command Center</div>
+        <h1>Book your kickoff and move from reporting to action.</h1>
+        <p class="lead">
+          Pick the region closest to your business hours. Your onboarding specialist will guide setup, confirm measurement, and give you clear next steps.
+          <strong>Unified data. Proven measurement.</strong>
+        </p>
+      </header>
+
+      <div class="regions">
+        <article class="region-card">
+          <div class="tag">North + South America</div>
+          <h2>Americas</h2>
+          <p>Best for EST, CST, MST, and PST working hours.</p>
+          <a class="cta" href="https://example.com/americas" data-link="americas" aria-label="Book Americas implementation time">
+            <span>Book Americas</span>
+          </a>
+        </article>
+
+        <article class="region-card">
+          <div class="tag">Europe, Middle East, Africa</div>
+          <h2>EMEA</h2>
+          <p>Best for GMT, CET, and SAST time zones.</p>
+          <a class="cta" href="https://example.com/emea" data-link="emea" aria-label="Book EMEA implementation time">
+            <span>Book EMEA</span>
+          </a>
+        </article>
+
+        <article class="region-card">
+          <div class="tag">Asia-Pacific</div>
+          <h2>APAC</h2>
+          <p>Best for AEDT, AEST, JST, and SGT schedules.</p>
+          <a class="cta" href="https://example.com/apac" data-link="apac" aria-label="Book APAC implementation time">
+            <span>Book APAC</span>
+          </a>
+        </article>
+      </div>
+
+      <div class="info-grid">
+        <article class="info-card">
+          <h3>Before kickoff (optional)</h3>
+          <p>To move faster, connect these ahead of the call:</p>
+          <ul>
+            <li><strong>Triple Pixel</strong></li>
+            <li><strong>Key integrations</strong></li>
+            <li><strong>Tracking settings and UTM rules</strong></li>
+          </ul>
+        </article>
+
+        <article class="info-card">
+          <h3>Kickoff outcomes</h3>
+          <p>You leave with clarity on setup, dashboards, and what to do next:</p>
+          <ul>
+            <li><strong>Summary Dashboard</strong></li>
+            <li><strong>Attribution Dashboard</strong></li>
+            <li><strong>Creative Analysis</strong></li>
+            <li><strong>Cohort Analysis and Customer Segments</strong></li>
+          </ul>
+        </article>
+      </div>
+
+      <div class="note">
+        If no times match your normal schedule, use worldwide availability to access the full team. After kickoff, we will connect you with your dedicated Customer Success contact.
+      </div>
+
+      <div class="global">
+        <strong>Need full team coverage?</strong>
+        <a href="https://example.com/worldwide" data-link="worldwide">View worldwide availability</a>
+      </div>
+
+      <div class="footer">If you are unsure, start with the region closest to your business hours.</div>
+    </section>
+  </main>
+
+  <script src="booking-links.js"></script>
+  <script>
+    (function () {
+      var links = window.BOOKING_LINKS || {};
+      document.querySelectorAll("[data-link]").forEach(function (el) {
+        var key = el.getAttribute("data-link");
+        if (links[key]) {
+          el.href = links[key];
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
