@@ -160,12 +160,13 @@
       border-radius: 999px;
       background: var(--toggle-bg);
       color: var(--charcoal);
-      font: inherit;
-      font-size: 13px;
-      font-weight: 700;
-      line-height: 1;
-      min-height: 40px;
-      padding: 11px 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      line-height: 0;
       cursor: pointer;
       transition: border-color 140ms ease, color 140ms ease, background 140ms ease;
     }
@@ -175,6 +176,29 @@
       border-color: rgba(12, 112, 242, 0.45);
       background: var(--global-hover-bg);
       color: var(--global-hover-text);
+    }
+
+    .theme-toggle svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      pointer-events: none;
+    }
+
+    .theme-toggle .icon-sun {
+      display: none;
+    }
+
+    html[data-theme="dark"] .theme-toggle .icon-sun {
+      display: inline-block;
+    }
+
+    html[data-theme="dark"] .theme-toggle .icon-moon {
+      display: none;
     }
 
     h1 {
@@ -401,8 +425,8 @@
       }
 
       .theme-toggle {
-        min-height: 36px;
-        padding: 9px 12px;
+        width: 36px;
+        height: 36px;
       }
 
       h1 {
@@ -427,7 +451,22 @@
         <div class="brand" aria-label="Triple Whale">
           <p class="brand-name">Triple Whale</p>
         </div>
-        <button class="theme-toggle" id="theme-toggle" type="button" aria-pressed="false">Dark mode</button>
+        <button class="theme-toggle" id="theme-toggle" type="button" aria-pressed="false" aria-label="Enable dark mode" title="Enable dark mode">
+          <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3c0 .28-.02.56-.02.84A9 9 0 0 0 21 12.79z"></path>
+          </svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <line x1="12" y1="2" x2="12" y2="5"></line>
+            <line x1="12" y1="19" x2="12" y2="22"></line>
+            <line x1="2" y1="12" x2="5" y2="12"></line>
+            <line x1="19" y1="12" x2="22" y2="12"></line>
+            <line x1="4.9" y1="4.9" x2="7.1" y2="7.1"></line>
+            <line x1="16.9" y1="16.9" x2="19.1" y2="19.1"></line>
+            <line x1="4.9" y1="19.1" x2="7.1" y2="16.9"></line>
+            <line x1="16.9" y1="7.1" x2="19.1" y2="4.9"></line>
+          </svg>
+        </button>
       </div>
 
       <header>
@@ -525,7 +564,9 @@
         }
         var darkEnabled = theme === "dark";
         toggle.setAttribute("aria-pressed", String(darkEnabled));
-        toggle.textContent = darkEnabled ? "Light mode" : "Dark mode";
+        var label = darkEnabled ? "Enable light mode" : "Enable dark mode";
+        toggle.setAttribute("aria-label", label);
+        toggle.setAttribute("title", label);
       }
 
       function getInitialTheme() {
