@@ -12,6 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
     :root {
+      color-scheme: light;
       --brand-blue: #0c70f2;
       --brand-blue-hover: #0a62d6;
       --ink: #0a0a0a;
@@ -20,12 +21,56 @@
       --light-gray: #f2f2f2;
       --white: #ffffff;
       --line: #d8d8d8;
+      --frame-border: rgba(10, 10, 10, 0.08);
       --focus-ring: rgba(12, 112, 242, 0.32);
       --shadow: 0 26px 70px rgba(10, 10, 10, 0.1);
+      --bg-radial-1: rgba(12, 112, 242, 0.18);
+      --bg-radial-2: rgba(12, 112, 242, 0.1);
+      --bg-linear-top: #fbfbfc;
+      --bg-linear-bottom: #f5f7fb;
+      --frame-overlay-top: rgba(242, 242, 242, 0.62);
+      --card-top: rgba(255, 255, 255, 1);
+      --card-bottom: rgba(249, 250, 252, 1);
+      --info-card-bg: #fbfbfc;
+      --tag-bg: rgba(12, 112, 242, 0.1);
+      --tag-text: #0b4eaa;
+      --global-bg: #f7f8fa;
+      --global-hover-bg: #f0f5ff;
+      --global-hover-text: #0b4eaa;
+      --toggle-bg: #f7f8fa;
       --radius-lg: 24px;
       --radius-md: 16px;
       --radius-sm: 12px;
       --max-width: 1020px;
+    }
+
+    html[data-theme="dark"] {
+      color-scheme: dark;
+      --brand-blue: #3e82f6;
+      --brand-blue-hover: #5f97fb;
+      --ink: #f3f7ff;
+      --charcoal: #d8e4ff;
+      --mid-gray: #a5b6dc;
+      --light-gray: #0d1d45;
+      --white: #071a3e;
+      --line: #1b3870;
+      --frame-border: rgba(104, 145, 221, 0.3);
+      --focus-ring: rgba(113, 166, 255, 0.45);
+      --shadow: 0 24px 65px rgba(1, 8, 30, 0.55);
+      --bg-radial-1: rgba(62, 130, 246, 0.28);
+      --bg-radial-2: rgba(62, 130, 246, 0.18);
+      --bg-linear-top: #041339;
+      --bg-linear-bottom: #072257;
+      --frame-overlay-top: rgba(132, 171, 240, 0.08);
+      --card-top: #0b214e;
+      --card-bottom: #081c44;
+      --info-card-bg: #0a214d;
+      --tag-bg: rgba(62, 130, 246, 0.26);
+      --tag-text: #c5dcff;
+      --global-bg: #0a214d;
+      --global-hover-bg: #13326c;
+      --global-hover-text: #d5e5ff;
+      --toggle-bg: #0a214d;
     }
 
     * {
@@ -37,9 +82,9 @@
       font-family: "Manrope", system-ui, -apple-system, sans-serif;
       color: var(--ink);
       background:
-        radial-gradient(860px 420px at 88% -14%, rgba(12, 112, 242, 0.18), transparent 60%),
-        radial-gradient(780px 380px at -10% 16%, rgba(12, 112, 242, 0.1), transparent 60%),
-        linear-gradient(180deg, #fbfbfc 0%, #f5f7fb 100%);
+        radial-gradient(860px 420px at 88% -14%, var(--bg-radial-1), transparent 60%),
+        radial-gradient(780px 380px at -10% 16%, var(--bg-radial-2), transparent 60%),
+        linear-gradient(180deg, var(--bg-linear-top) 0%, var(--bg-linear-bottom) 100%);
       min-height: 100vh;
       display: flex;
       align-items: center;
@@ -56,7 +101,7 @@
     .frame {
       background: var(--white);
       border-radius: var(--radius-lg);
-      border: 1px solid rgba(10, 10, 10, 0.08);
+      border: 1px solid var(--frame-border);
       padding: 36px 42px 46px;
       box-shadow: var(--shadow);
       position: relative;
@@ -70,16 +115,25 @@
       inset: 0;
       background:
         radial-gradient(540px 140px at 4% 0%, rgba(12, 112, 242, 0.1), transparent 60%),
-        linear-gradient(180deg, rgba(242, 242, 242, 0.62), transparent 32%);
+        linear-gradient(180deg, var(--frame-overlay-top), transparent 32%);
       pointer-events: none;
+    }
+
+    .topbar {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 20px;
     }
 
     .brand {
       position: relative;
-      z-index: 1;
       display: inline-flex;
       align-items: center;
-      margin-bottom: 20px;
+      margin-bottom: 0;
     }
 
     .brand-name {
@@ -100,12 +154,27 @@
       margin-bottom: 28px;
     }
 
-    .eyebrow {
-      text-transform: uppercase;
-      letter-spacing: 0.17em;
-      font-size: 12px;
+    .theme-toggle {
+      appearance: none;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--toggle-bg);
+      color: var(--charcoal);
+      font: inherit;
+      font-size: 13px;
       font-weight: 700;
-      color: var(--brand-blue);
+      line-height: 1;
+      min-height: 40px;
+      padding: 11px 14px;
+      cursor: pointer;
+      transition: border-color 140ms ease, color 140ms ease, background 140ms ease;
+    }
+
+    .theme-toggle:hover,
+    .theme-toggle:focus-visible {
+      border-color: rgba(12, 112, 242, 0.45);
+      background: var(--global-hover-bg);
+      color: var(--global-hover-text);
     }
 
     h1 {
@@ -138,7 +207,7 @@
     }
 
     .region-card {
-      background: linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(249, 250, 252, 1));
+      background: linear-gradient(180deg, var(--card-top), var(--card-bottom));
       border: 1px solid var(--line);
       border-radius: var(--radius-md);
       padding: 20px 20px 20px;
@@ -179,8 +248,8 @@
 
     .tag {
       align-self: flex-start;
-      background: rgba(12, 112, 242, 0.1);
-      color: #0b4eaa;
+      background: var(--tag-bg);
+      color: var(--tag-text);
       font-weight: 700;
       font-size: 12px;
       padding: 7px 10px;
@@ -238,7 +307,7 @@
     }
 
     .info-card {
-      background: #fbfbfc;
+      background: var(--info-card-bg);
       border: 1px solid var(--line);
       border-radius: var(--radius-md);
       padding: 18px 18px 19px;
@@ -288,7 +357,7 @@
       text-decoration: none;
       border: 1px solid var(--line);
       border-radius: 10px;
-      background: #f7f8fa;
+      background: var(--global-bg);
       padding: 10px 14px;
       transition: border-color 140ms ease, color 140ms ease, background 140ms ease;
     }
@@ -296,8 +365,8 @@
     .global a:hover,
     .global a:focus {
       border-color: rgba(12, 112, 242, 0.45);
-      background: #f0f5ff;
-      color: #0b4eaa;
+      background: var(--global-hover-bg);
+      color: var(--global-hover-text);
     }
 
     .footer {
@@ -327,6 +396,15 @@
         padding: 30px 22px 36px;
       }
 
+      .topbar {
+        margin-bottom: 14px;
+      }
+
+      .theme-toggle {
+        min-height: 36px;
+        padding: 9px 12px;
+      }
+
       h1 {
         font-size: clamp(34px, 11vw, 48px);
       }
@@ -345,12 +423,14 @@
 <body>
   <main class="page">
     <section class="frame">
-      <div class="brand" aria-label="Triple Whale">
-        <p class="brand-name">Triple Whale</p>
+      <div class="topbar">
+        <div class="brand" aria-label="Triple Whale">
+          <p class="brand-name">Triple Whale</p>
+        </div>
+        <button class="theme-toggle" id="theme-toggle" type="button" aria-pressed="false">Dark mode</button>
       </div>
 
       <header>
-        <div class="eyebrow">Implementation Command Center</div>
         <h1>Book your kickoff and move from reporting to action.</h1>
         <p class="lead">
           Pick the region closest to your business hours. Your onboarding specialist will guide setup, confirm measurement, and give you clear next steps.
@@ -433,6 +513,54 @@
           el.href = links[key];
         }
       });
+
+      var storageKey = "tw-booking-theme";
+      var root = document.documentElement;
+      var toggle = document.getElementById("theme-toggle");
+
+      function applyTheme(theme) {
+        root.setAttribute("data-theme", theme);
+        if (!toggle) {
+          return;
+        }
+        var darkEnabled = theme === "dark";
+        toggle.setAttribute("aria-pressed", String(darkEnabled));
+        toggle.textContent = darkEnabled ? "Light mode" : "Dark mode";
+      }
+
+      function getInitialTheme() {
+        var savedTheme = null;
+        try {
+          savedTheme = window.localStorage.getItem(storageKey);
+        } catch (err) {
+          savedTheme = null;
+        }
+
+        if (savedTheme === "dark" || savedTheme === "light") {
+          return savedTheme;
+        }
+
+        if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+          return "dark";
+        }
+
+        return "light";
+      }
+
+      applyTheme(getInitialTheme());
+
+      if (toggle) {
+        toggle.addEventListener("click", function () {
+          var nextTheme = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+          applyTheme(nextTheme);
+
+          try {
+            window.localStorage.setItem(storageKey, nextTheme);
+          } catch (err) {
+            // Ignore storage failures (e.g., private browsing restrictions).
+          }
+        });
+      }
     })();
   </script>
 </body>
