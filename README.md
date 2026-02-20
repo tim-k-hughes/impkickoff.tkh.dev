@@ -1,6 +1,6 @@
 # Triple Whale Onboarding Booking Hub
 
-✨ **Live app:** [https://your-project-name.netlify.app
+✨ **Live app:** [triplewhale-onboarding-kickoff.netlify.app
 ](https://triplewhale-onboarding-kickoff.netlify.app/)
 ## Purpose
 This repo contains a single-page booking hub used as `{{booking_link}}` in the welcome email.  
