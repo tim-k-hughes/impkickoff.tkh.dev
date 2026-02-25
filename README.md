@@ -24,26 +24,30 @@ What was implemented:
 
 ```js
 window.BOOKING_PAGE_LINKS = {
-  regionBookingLinks: {
-    americas: "https://example.com/americas",
-    emea: "https://example.com/emea",
-    apac: "https://example.com/apac"
+  bookingButtons: {
+    americasCard: { dataLinkKey: "americas", url: "https://example.com/americas" },
+    emeaCard: { dataLinkKey: "emea", url: "https://example.com/emea" },
+    apacCard: { dataLinkKey: "apac", url: "https://example.com/apac" }
   },
-  globalBookingLinks: {
-    worldwide: "https://example.com/worldwide"
+  additionalCoverageLink: {
+    worldwideAvailability: { dataLinkKey: "worldwide", url: "https://example.com/worldwide" }
   },
-  resourceChecklistLinks: {
-    beforeKickoff: [
-      { label: "Triple Pixel", href: "https://example.com/triple-pixel" }
-    ],
-    kickoffOutcomes: [
-      { label: "Summary Dashboard", href: "https://example.com/summary-dashboard" }
-    ]
+  checklistSections: {
+    beforeKickoff: {
+      sectionKey: "beforeKickoff",
+      items: [{ label: "Triple Pixel", url: "https://example.com/triple-pixel" }]
+    },
+    kickoffOutcomes: {
+      sectionKey: "kickoffOutcomes",
+      items: [{ label: "Summary Dashboard", url: "https://example.com/summary-dashboard" }]
+    }
   }
 };
 ```
 
 - `index.html` loads `booking-page-links.js` and maps URLs via `data-link` and `data-resource-list`, so booking and checklist links are editable in one place.
+- For booking buttons and worldwide link, edit `url` values under objects with `dataLinkKey`.
+- For checklist bullets, add/remove items under `checklistSections.<section>.items`.
 - Added onboarding-themed content sections from the welcome email:
   - “Connect what you can (optional)” with Triple Pixel, integrations, and tracking/UTM rules
   - “Kickoff agenda” with Summary, Attribution, Creative Analysis, and Cohort/Segments
