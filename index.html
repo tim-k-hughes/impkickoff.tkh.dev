@@ -531,7 +531,7 @@
       </div>
 
       <div class="note">
-        If no times match your normal schedule, use worldwide availability to access the full team. After kickoff, we will connect you with your dedicated Customer Success contact.
+        If no times match your normal schedule, use worldwide availability to access the full team and find a time that works for everyone.
       </div>
 
       <div class="global">
@@ -547,11 +547,24 @@
   <script>
     (function () {
       var linkConfig = window.BOOKING_PAGE_LINKS || {};
-      var bookingLinks = Object.assign(
-        {},
-        linkConfig.regionBookingLinks || {},
-        linkConfig.globalBookingLinks || {}
-      );
+      var bookingLinks = {};
+
+      function addBookingLinksFromGroup(group) {
+        if (!group || typeof group !== "object") {
+          return;
+        }
+
+        Object.keys(group).forEach(function (entryKey) {
+          var entry = group[entryKey];
+          if (!entry || !entry.dataLinkKey || !entry.url) {
+            return;
+          }
+          bookingLinks[entry.dataLinkKey] = entry.url;
+        });
+      }
+
+      addBookingLinksFromGroup(linkConfig.bookingButtons);
+      addBookingLinksFromGroup(linkConfig.additionalCoverageLink);
 
       document.querySelectorAll("[data-link]").forEach(function (el) {
         var key = el.getAttribute("data-link");
@@ -560,11 +573,15 @@
         }
       });
 
-      var resourceLinks = linkConfig.resourceChecklistLinks || {};
+      var checklistSections = linkConfig.checklistSections || {};
       document.querySelectorAll("[data-resource-list]").forEach(function (listEl) {
         var section = listEl.getAttribute("data-resource-list");
-        var items = resourceLinks[section];
-        if (!Array.isArray(items)) {
+        var sectionConfig = checklistSections[section];
+        var items = sectionConfig && Array.isArray(sectionConfig.items)
+          ? sectionConfig.items
+          : [];
+
+        if (!items.length) {
           return;
         }
 
@@ -578,9 +595,9 @@
           var li = document.createElement("li");
           var strong = document.createElement("strong");
 
-          if (item.href) {
+          if (item.url) {
             var anchor = document.createElement("a");
-            anchor.href = item.href;
+            anchor.href = item.url;
             anchor.textContent = item.label;
             strong.appendChild(anchor);
           } else {
