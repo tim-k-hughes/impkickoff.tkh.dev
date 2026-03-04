@@ -364,18 +364,6 @@
       border-color: var(--brand-blue-hover);
     }
 
-    .note {
-      position: relative;
-      z-index: 1;
-      background: var(--light-gray);
-      border-left: 4px solid var(--brand-blue);
-      padding: 15px 16px;
-      border-radius: 14px;
-      color: var(--charcoal);
-      font-size: 15px;
-      line-height: 1.6;
-    }
-
     .info-grid {
       position: relative;
       z-index: 1;
@@ -423,20 +411,28 @@
       color: var(--brand-blue);
     }
 
-    .global {
+    .coverage {
       margin-top: 18px;
+      background: var(--info-card-bg);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 15px 16px;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: 10px;
+      justify-content: space-between;
+      gap: 14px;
     }
 
-    .global strong {
+    .coverage-copy {
+      margin: 0;
       color: var(--charcoal);
       font-size: 15px;
+      line-height: 1.5;
+      flex: 1 1 420px;
     }
 
-    .global a {
+    .coverage a {
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -451,8 +447,8 @@
       transition: border-color 140ms ease, color 140ms ease, background 140ms ease;
     }
 
-    .global a:hover,
-    .global a:focus {
+    .coverage a:hover,
+    .coverage a:focus {
       border-color: rgba(12, 112, 242, 0.45);
       background: var(--global-hover-bg);
       color: var(--global-hover-text);
@@ -502,8 +498,7 @@
         font-size: 28px;
       }
 
-      .global {
-        flex-direction: column;
+      .coverage {
         align-items: flex-start;
       }
     }
@@ -588,14 +583,12 @@
         </article>
       </div>
 
-      <div class="note">
-        If no times match your normal schedule, use worldwide availability to access the full team and find a time that works for everyone.
-      </div>
-
-      <div class="global">
-        <strong>Need full team coverage?</strong>
+      <section class="coverage" aria-label="Worldwide booking availability">
+        <p class="coverage-copy">
+          If the regional options above do not have a time in your working hours, use worldwide availability to book outside your timezone with the full team.
+        </p>
         <a href="https://example.com/worldwide" data-link="worldwide">View worldwide availability</a>
-      </div>
+      </section>
 
       <div class="footer">If you are unsure, start with the region closest to your business hours.</div>
     </section>
