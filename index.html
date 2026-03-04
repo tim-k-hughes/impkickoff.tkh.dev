@@ -547,7 +547,7 @@
           <div class="tag">North + South America</div>
           <h2>Americas</h2>
           <div class="recommendation-slot" data-recommendation-slot aria-hidden="true"></div>
-          <p>Best for EST, CST, MST, and PST working hours.</p>
+          <p data-timezone-region="americas">Best for EST, CST, MST, and PST working hours.</p>
           <a class="cta" href="https://example.com/americas" data-link="americas" aria-label="Book Americas implementation time">
             <span>Book Americas</span>
           </a>
@@ -557,7 +557,7 @@
           <div class="tag">Europe, Middle East, Africa</div>
           <h2>EMEA</h2>
           <div class="recommendation-slot" data-recommendation-slot aria-hidden="true"></div>
-          <p>Best for GMT, CET, and SAST time zones.</p>
+          <p data-timezone-region="emea">Best for GMT, CET, and SAST time zones.</p>
           <a class="cta" href="https://example.com/emea" data-link="emea" aria-label="Book EMEA implementation time">
             <span>Book EMEA</span>
           </a>
@@ -567,7 +567,7 @@
           <div class="tag">Asia-Pacific</div>
           <h2>APAC</h2>
           <div class="recommendation-slot" data-recommendation-slot aria-hidden="true"></div>
-          <p>Best for AEDT, AEST, JST, and SGT schedules.</p>
+          <p data-timezone-region="apac">Best for AEST, JST, and SGT schedules.</p>
           <a class="cta" href="https://example.com/apac" data-link="apac" aria-label="Book APAC implementation time">
             <span>Book APAC</span>
           </a>
@@ -672,6 +672,126 @@
       }
 
       applyGeoRecommendation();
+
+      function formatList(labels) {
+        if (!labels || !labels.length) {
+          return "";
+        }
+        if (labels.length === 1) {
+          return labels[0];
+        }
+        if (labels.length === 2) {
+          return labels[0] + " and " + labels[1];
+        }
+        return labels.slice(0, -1).join(", ") + ", and " + labels[labels.length - 1];
+      }
+
+      function parseOffsetMinutes(label) {
+        if (!label) {
+          return null;
+        }
+
+        var normalized = String(label).toUpperCase().replace(/\s+/g, "");
+        normalized = normalized.replace(/^GMT/, "").replace(/^UTC/, "");
+
+        var match = normalized.match(/^([+-])(\d{1,2})(?::?(\d{2}))?$/);
+        if (!match) {
+          return null;
+        }
+
+        var sign = match[1] === "-" ? -1 : 1;
+        var hours = parseInt(match[2], 10);
+        var minutes = parseInt(match[3] || "0", 10);
+
+        return sign * ((hours * 60) + minutes);
+      }
+
+      function resolveTimeZoneAbbreviation(zoneConfig) {
+        if (!zoneConfig || !zoneConfig.timeZone) {
+          return null;
+        }
+
+        try {
+          var formatter = new Intl.DateTimeFormat("en-US", {
+            timeZone: zoneConfig.timeZone,
+            timeZoneName: "short"
+          });
+          var timeZonePart = formatter
+            .formatToParts(new Date())
+            .find(function (part) { return part.type === "timeZoneName"; });
+          var zoneLabel = timeZonePart && timeZonePart.value
+            ? timeZonePart.value.toUpperCase().replace(/\s+/g, "")
+            : "";
+
+          if (/^[A-Z]{2,6}$/.test(zoneLabel) && zoneLabel.indexOf("GMT") !== 0 && zoneLabel.indexOf("UTC") !== 0) {
+            return zoneLabel;
+          }
+
+          var offsetMinutes = parseOffsetMinutes(zoneLabel);
+          if (offsetMinutes !== null && zoneConfig.offsetLabels && zoneConfig.offsetLabels[offsetMinutes]) {
+            return zoneConfig.offsetLabels[offsetMinutes];
+          }
+        } catch (error) {
+          return zoneConfig.fallback || null;
+        }
+
+        return zoneConfig.fallback || null;
+      }
+
+      function applyTimezoneLabels() {
+        if (typeof Intl === "undefined" || typeof Intl.DateTimeFormat !== "function") {
+          return;
+        }
+
+        var timezoneRegions = {
+          americas: {
+            suffix: "working hours",
+            zones: [
+              { timeZone: "America/New_York", fallback: "EST", offsetLabels: { "-300": "EST", "-240": "EDT" } },
+              { timeZone: "America/Chicago", fallback: "CST", offsetLabels: { "-360": "CST", "-300": "CDT" } },
+              { timeZone: "America/Denver", fallback: "MST", offsetLabels: { "-420": "MST", "-360": "MDT" } },
+              { timeZone: "America/Los_Angeles", fallback: "PST", offsetLabels: { "-480": "PST", "-420": "PDT" } }
+            ]
+          },
+          emea: {
+            suffix: "time zones",
+            zones: [
+              { timeZone: "Europe/London", fallback: "GMT", offsetLabels: { "0": "GMT", "60": "BST" } },
+              { timeZone: "Europe/Berlin", fallback: "CET", offsetLabels: { "60": "CET", "120": "CEST" } },
+              { timeZone: "Africa/Johannesburg", fallback: "SAST", offsetLabels: { "120": "SAST" } }
+            ]
+          },
+          apac: {
+            suffix: "schedules",
+            zones: [
+              { timeZone: "Australia/Sydney", fallback: "AEST", offsetLabels: { "600": "AEST", "660": "AEDT" } },
+              { timeZone: "Asia/Tokyo", fallback: "JST", offsetLabels: { "540": "JST" } },
+              { timeZone: "Asia/Singapore", fallback: "SGT", offsetLabels: { "480": "SGT" } }
+            ]
+          }
+        };
+
+        document.querySelectorAll("[data-timezone-region]").forEach(function (copyEl) {
+          var regionKey = copyEl.getAttribute("data-timezone-region");
+          var regionConfig = timezoneRegions[regionKey];
+
+          if (!regionConfig || !regionConfig.zones || !regionConfig.zones.length) {
+            return;
+          }
+
+          var labels = regionConfig.zones
+            .map(resolveTimeZoneAbbreviation)
+            .filter(function (label) { return !!label; });
+
+          if (labels.length !== regionConfig.zones.length) {
+            return;
+          }
+
+          copyEl.textContent = "Best for " + formatList(labels) + " " + regionConfig.suffix + ".";
+        });
+      }
+
+      applyTimezoneLabels();
 
       var checklistSections = linkConfig.checklistSections || {};
       document.querySelectorAll("[data-resource-list]").forEach(function (listEl) {
