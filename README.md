@@ -57,8 +57,44 @@ Current status noted in that prior thread:
 - Brand kit restyle request (Triple Whale colors/typography/tone rules) had been submitted but was not yet applied
 - Links were still placeholder URLs in `booking-page-links.js`
 
-## Current Status (Updated Feb 20, 2026)
+## Current Status (Updated Mar 19, 2026)
 - Brand-kit styling has now been applied to `index.html` (color, typography, spacing, tone, CTA/focus states).
-- Booking and checklist URLs in `booking-page-links.js` are still placeholders and should be replaced with production links.
+- Booking URLs in `booking-page-links.js` are still placeholders and should be replaced with production links.
+- The two onboarding resource cards now support MSP-aware link sets in `booking-page-links.js`.
+
+## MSP-Aware Resource Links
+The page now reads lowercase `?msp=` and `?headless=` from the URL and swaps the onboarding resource cards accordingly.
+
+- Supported values: `Shopify`, `WooCommerce`, `BigCommerce`, `custom`
+- Matching is case-insensitive and ignores spaces / punctuation
+- Missing, blank, or unknown `msp` values fall back to the `tw_msp` cookie when present, otherwise default to Shopify
+- A valid `?msp=` value updates the `tw_msp` cookie
+- Blank or invalid `?msp=` values do not overwrite the cookie
+- `?headless=true` adds extra setup docs for the active MSP and updates the `tw_headless` cookie
+- `?headless=false` turns those extra docs off and updates the `tw_headless` cookie
+- If `headless` is missing, the page falls back to `tw_headless` when present, otherwise defaults to `false`
+
+Edit platform-specific resource links in:
+
+- `booking-page-links.js` -> `checklistSections.beforeKickoff.itemsByMsp`
+- `booking-page-links.js` -> `checklistSections.kickoffOutcomes.itemsByMsp`
+- `booking-page-links.js` -> `checklistSections.<section>.headlessItemsByMsp`
+
+Section titles and descriptions for those two cards also live in `booking-page-links.js`, so copy and URLs can be maintained in one place. The page also surfaces a small platform context label so revisits still visibly reflect the active MSP, including when headless mode comes from the cookie.
+
+## Brand Personalization
+The hero copy now reads `?brand=` from the URL and personalizes the headline and supporting copy when a brand name is available.
+
+- A valid `?brand=` value updates the `tw_brand` cookie
+- If `brand` is missing, the page falls back to `tw_brand` when present
+- Blank `brand` values do not overwrite the cookie
+- If both the URL and cookie have values, the URL wins and the cookie is updated
+
+## Geo Recommendation Persistence
+The recommended region highlight now uses `geo` from the URL first and falls back to a cookie on later visits.
+
+- A valid `?geo=` value updates the `tw_geo` cookie
+- If there is no valid `geo` query param, the page falls back to `tw_geo`
+- If both the URL and cookie have values, the URL wins and the cookie is updated
 # tw-onboarding-router
 # tw-onboarding-router

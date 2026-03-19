@@ -373,6 +373,30 @@
       margin-bottom: 20px;
     }
 
+    .resource-context {
+      position: relative;
+      z-index: 1;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 14px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--info-card-bg);
+      color: var(--charcoal);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+
+    html[data-active-headless="true"] .resource-context {
+      border-color: var(--recommend-border);
+      background: linear-gradient(180deg, var(--recommend-surface-top), var(--recommend-surface-bottom));
+      color: var(--recommend-copy);
+      box-shadow: 0 0 0 3px var(--recommend-ring);
+    }
+
     .info-card {
       background: var(--info-card-bg);
       border: 1px solid var(--line);
@@ -530,9 +554,9 @@
       </div>
 
       <header>
-        <h1>Book your kickoff and move from reporting to action.</h1>
+        <h1 data-brand-headline>Welcome to Triple Whale. Book your kickoff and turn insights into action.</h1>
         <p class="lead">
-          Pick the region closest to your business hours. Your onboarding specialist will guide setup, confirm measurement, and give you clear next steps.
+          <span data-brand-lead-copy>Choose the region closest to your business hours. Your onboarding specialist will guide setup, confirm measurement, and set you up for activation.</span>
           <strong>Unified data. Proven measurement.</strong>
         </p>
       </header>
@@ -569,16 +593,20 @@
         </article>
       </div>
 
+      <p class="resource-context" data-active-msp-copy aria-live="polite">
+        Setup resources are tailored to your ecommerce platform.
+      </p>
+
       <div class="info-grid">
-        <article class="info-card">
-          <h3>Before kickoff (optional)</h3>
-          <p>To move faster, connect these ahead of the call:</p>
+        <article class="info-card" data-resource-section="beforeKickoff">
+          <h3 data-resource-title="beforeKickoff">Configuration before kickoff</h3>
+          <p data-resource-description="beforeKickoff">Phase 2 is configuration. Complete as much setup as you can before kickoff so we can validate everything faster on the call.</p>
           <ul data-resource-list="beforeKickoff"></ul>
         </article>
 
-        <article class="info-card">
-          <h3>Kickoff outcomes</h3>
-          <p>You leave with clarity on setup, dashboards, and what to do next:</p>
+        <article class="info-card" data-resource-section="kickoffOutcomes">
+          <h3 data-resource-title="kickoffOutcomes">Activation after kickoff</h3>
+          <p data-resource-description="kickoffOutcomes">Phase 3 is activation. Leaving kickoff, your team should know what is configured, what still needs to be finished, and what to use as training begins.</p>
           <ul data-resource-list="kickoffOutcomes"></ul>
         </article>
       </div>
@@ -599,6 +627,224 @@
     (function () {
       var linkConfig = window.BOOKING_PAGE_LINKS || {};
       var bookingLinks = {};
+      var resourceRouting = linkConfig.resourceRouting || {};
+      var checklistSections = linkConfig.checklistSections || {};
+
+      function normalizeMspValue(value) {
+        if (!value) {
+          return null;
+        }
+
+        var normalizedValue = String(value).toLowerCase().replace(/[^a-z]/g, "");
+        var validMspValues = {
+          shopify: "shopify",
+          woocommerce: "woocommerce",
+          bigcommerce: "bigcommerce",
+          custom: "custom"
+        };
+
+        return validMspValues[normalizedValue] || null;
+      }
+
+      function normalizeHeadlessValue(value) {
+        if (value === true || value === false) {
+          return value;
+        }
+
+        if (value === null || typeof value === "undefined") {
+          return null;
+        }
+
+        var normalizedValue = String(value).toLowerCase().trim();
+
+        if (normalizedValue === "true") {
+          return true;
+        }
+
+        if (normalizedValue === "false") {
+          return false;
+        }
+
+        return null;
+      }
+
+      function normalizeBrandValue(value) {
+        if (value === null || typeof value === "undefined") {
+          return null;
+        }
+
+        var normalizedValue = String(value).replace(/\s+/g, " ").trim();
+        return normalizedValue || null;
+      }
+
+      function getQueryParamValue(paramName) {
+        if (!paramName) {
+          return null;
+        }
+
+        var params = new URLSearchParams(window.location.search);
+        var match = null;
+
+        params.forEach(function (value, key) {
+          if (match !== null) {
+            return;
+          }
+
+          if (String(key).toLowerCase() === String(paramName).toLowerCase()) {
+            match = value;
+          }
+        });
+
+        return match;
+      }
+
+      function getCookieValue(cookieName) {
+        if (!cookieName || typeof document === "undefined" || typeof document.cookie !== "string") {
+          return null;
+        }
+
+        var cookies = document.cookie ? document.cookie.split(";") : [];
+
+        for (var i = 0; i < cookies.length; i += 1) {
+          var cookie = cookies[i].trim();
+
+          if (cookie.indexOf(cookieName + "=") === 0) {
+            return decodeURIComponent(cookie.slice(cookieName.length + 1));
+          }
+        }
+
+        return null;
+      }
+
+      function setCookieValue(cookieName, cookieValue) {
+        if (!cookieName || !cookieValue || typeof document === "undefined") {
+          return;
+        }
+
+        document.cookie = [
+          cookieName + "=" + encodeURIComponent(cookieValue),
+          "path=/",
+          "max-age=31536000",
+          "SameSite=Lax"
+        ].join("; ");
+      }
+
+      var defaultMsp = normalizeMspValue(resourceRouting.defaultMsp) || "shopify";
+      var defaultHeadless = normalizeHeadlessValue(resourceRouting.defaultHeadless) === true;
+      var geoCookieName = "tw_geo";
+      var mspCookieName = "tw_msp";
+      var headlessCookieName = "tw_headless";
+      var brandCookieName = "tw_brand";
+
+      function formatMspDisplayName(mspKey) {
+        var labels = {
+          shopify: "Shopify",
+          woocommerce: "WooCommerce",
+          bigcommerce: "BigCommerce",
+          custom: "Custom"
+        };
+
+        return labels[mspKey] || "Shopify";
+      }
+
+      function getActiveMsp() {
+        var rawMsp = getQueryParamValue(resourceRouting.queryParam || "msp");
+        var queryMsp = normalizeMspValue(rawMsp);
+        var cookieMsp = normalizeMspValue(getCookieValue(mspCookieName));
+
+        if (queryMsp) {
+          setCookieValue(mspCookieName, rawMsp);
+          return queryMsp;
+        }
+
+        return cookieMsp || defaultMsp;
+      }
+
+      var activeMsp = getActiveMsp();
+
+      function getActiveHeadless() {
+        var rawHeadless = getQueryParamValue(resourceRouting.headlessQueryParam || "headless");
+        var queryHeadless = normalizeHeadlessValue(rawHeadless);
+        var cookieHeadless = normalizeHeadlessValue(getCookieValue(headlessCookieName));
+
+        if (queryHeadless !== null) {
+          setCookieValue(headlessCookieName, rawHeadless);
+          return queryHeadless;
+        }
+
+        if (cookieHeadless !== null) {
+          return cookieHeadless;
+        }
+
+        return defaultHeadless;
+      }
+
+      var activeHeadless = getActiveHeadless();
+
+      function getActiveBrand() {
+        var rawBrand = getQueryParamValue("brand");
+        var queryBrand = normalizeBrandValue(rawBrand);
+        var cookieBrand = normalizeBrandValue(getCookieValue(brandCookieName));
+
+        if (queryBrand) {
+          setCookieValue(brandCookieName, queryBrand);
+          return queryBrand;
+        }
+
+        return cookieBrand || null;
+      }
+
+      var activeBrand = getActiveBrand();
+
+      function getHeroHeadline(brandName) {
+        return brandName
+          ? "Welcome to Triple Whale, " + brandName + ". Book your kickoff and turn insights into action."
+          : "Welcome to Triple Whale. Book your kickoff and turn insights into action.";
+      }
+
+      function getHeroLeadCopy(brandName) {
+        return brandName
+          ? "Choose the region closest to your business hours. Your onboarding specialist will guide setup for " + brandName + ", confirm measurement, and set you up for activation."
+          : "Choose the region closest to your business hours. Your onboarding specialist will guide setup, confirm measurement, and set you up for activation.";
+      }
+
+      function applyBrandCopy() {
+        if (document.documentElement) {
+          document.documentElement.setAttribute("data-active-brand", activeBrand || "");
+        }
+
+        if (document.body) {
+          document.body.setAttribute("data-active-brand", activeBrand || "");
+        }
+
+        document.querySelectorAll("[data-brand-headline]").forEach(function (headlineEl) {
+          headlineEl.textContent = getHeroHeadline(activeBrand);
+        });
+
+        document.querySelectorAll("[data-brand-lead-copy]").forEach(function (leadEl) {
+          leadEl.textContent = getHeroLeadCopy(activeBrand);
+        });
+      }
+
+      function applyActiveMspContext() {
+        var activeMspLabel = formatMspDisplayName(activeMsp);
+
+        if (document.documentElement) {
+          document.documentElement.setAttribute("data-active-msp", activeMsp);
+          document.documentElement.setAttribute("data-active-headless", String(activeHeadless));
+        }
+
+        if (document.body) {
+          document.body.setAttribute("data-active-msp", activeMsp);
+          document.body.setAttribute("data-active-headless", String(activeHeadless));
+        }
+
+        document.querySelectorAll("[data-active-msp-copy]").forEach(function (copyEl) {
+          copyEl.textContent = activeHeadless
+            ? "Showing " + activeMspLabel + " headless setup resources."
+            : "Showing " + activeMspLabel + " setup resources.";
+        });
+      }
 
       function addBookingLinksFromGroup(group) {
         if (!group || typeof group !== "object") {
@@ -640,11 +886,17 @@
       }
 
       function applyGeoRecommendation() {
-        var params = new URLSearchParams(window.location.search);
-        var recommendedGeo = normalizeGeoRecommendation(params.get("geo"));
+        var rawQueryGeo = getQueryParamValue("geo");
+        var queryGeo = normalizeGeoRecommendation(rawQueryGeo);
+        var cookieGeo = normalizeGeoRecommendation(getCookieValue(geoCookieName));
+        var recommendedGeo = queryGeo || cookieGeo;
 
         if (!recommendedGeo) {
           return;
+        }
+
+        if (queryGeo) {
+          setCookieValue(geoCookieName, rawQueryGeo);
         }
 
         var recommendedCard = document.querySelector('.region-card[data-geo="' + recommendedGeo + '"]');
@@ -785,14 +1037,54 @@
       }
 
       applyTimezoneLabels();
+      applyBrandCopy();
+      applyActiveMspContext();
 
-      var checklistSections = linkConfig.checklistSections || {};
-      document.querySelectorAll("[data-resource-list]").forEach(function (listEl) {
-        var section = listEl.getAttribute("data-resource-list");
-        var sectionConfig = checklistSections[section];
-        var items = sectionConfig && Array.isArray(sectionConfig.items)
-          ? sectionConfig.items
+      function getItemsForMsp(itemsByMsp, mspKey) {
+        if (!itemsByMsp || typeof itemsByMsp !== "object") {
+          return [];
+        }
+
+        if (Array.isArray(itemsByMsp[mspKey])) {
+          return itemsByMsp[mspKey];
+        }
+
+        if (Array.isArray(itemsByMsp[defaultMsp])) {
+          return itemsByMsp[defaultMsp];
+        }
+
+        return [];
+      }
+
+      document.querySelectorAll("[data-resource-section]").forEach(function (sectionEl) {
+        var sectionKey = sectionEl.getAttribute("data-resource-section");
+        var sectionConfig = checklistSections[sectionKey];
+        var titleEl = sectionEl.querySelector("[data-resource-title]");
+        var descriptionEl = sectionEl.querySelector("[data-resource-description]");
+        var listEl = sectionEl.querySelector("[data-resource-list]");
+        var itemsByMsp = sectionConfig && sectionConfig.itemsByMsp && typeof sectionConfig.itemsByMsp === "object"
+          ? sectionConfig.itemsByMsp
+          : null;
+        var headlessItemsByMsp = sectionConfig && sectionConfig.headlessItemsByMsp && typeof sectionConfig.headlessItemsByMsp === "object"
+          ? sectionConfig.headlessItemsByMsp
+          : null;
+        var baseItems = getItemsForMsp(itemsByMsp, activeMsp);
+        var headlessItems = activeHeadless
+          ? getItemsForMsp(headlessItemsByMsp, activeMsp)
           : [];
+        var items = baseItems.length
+          ? baseItems.concat(headlessItems)
+          : sectionConfig && Array.isArray(sectionConfig.items)
+            ? sectionConfig.items
+            : [];
+
+        if (titleEl && sectionConfig && sectionConfig.title) {
+          titleEl.textContent = sectionConfig.title;
+        }
+
+        if (descriptionEl && sectionConfig && sectionConfig.description) {
+          descriptionEl.textContent = sectionConfig.description;
+        }
 
         if (!items.length) {
           return;
