@@ -893,6 +893,47 @@
       background: linear-gradient(180deg, rgba(208, 120, 37, 0.12), rgba(208, 120, 37, 0.05));
     }
 
+    .debug-actions {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .debug-reset-button {
+      appearance: none;
+      border: 1px solid var(--brand-blue);
+      border-radius: var(--radius-sm);
+      background: var(--brand-blue);
+      color: var(--white);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 10px 16px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 800;
+      line-height: 1.2;
+      transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease, border-color 160ms ease;
+    }
+
+    .debug-reset-button:hover,
+    .debug-reset-button:focus-visible {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 22px rgba(12, 112, 242, 0.22);
+      background: var(--brand-blue-hover);
+      border-color: var(--brand-blue-hover);
+      outline: none;
+    }
+
+    .debug-reset-button:disabled {
+      cursor: wait;
+      transform: none;
+      box-shadow: none;
+      opacity: 0.72;
+    }
+
     @media (max-width: 1240px) {
       body[data-debug-mode="true"] .app-shell {
         grid-template-columns: minmax(0, 1fr);
@@ -1089,6 +1130,11 @@
           <div class="debug-table-wrap">
             <table class="debug-table" data-debug-overview></table>
           </div>
+        </section>
+
+        <section class="debug-actions">
+          <button class="debug-reset-button" type="button" data-debug-reset>Clear saved values and refresh</button>
+          <p class="debug-note" data-debug-reset-note>This clears saved parameter cookies for this page. Any values still present in the URL will apply again after refresh.</p>
         </section>
       </aside>
     </div>
@@ -2537,7 +2583,38 @@
         panel.hidden = false;
         renderDebugAlerts(panel.querySelector("[data-debug-alerts]"));
         renderDebugOverview(panel.querySelector("[data-debug-overview]"));
+        initializeDebugResetButton(panel);
         syncDebugPanelHeight();
+      }
+
+      function clearPersistedValuesAndRefresh() {
+        persistedCookieNames.forEach(deleteCookieValue);
+        window.location.reload();
+      }
+
+      function initializeDebugResetButton(panel) {
+        if (!panel) {
+          return;
+        }
+
+        var button = panel.querySelector("[data-debug-reset]");
+        var note = panel.querySelector("[data-debug-reset-note]");
+
+        if (!button || button.getAttribute("data-bound") === "true") {
+          return;
+        }
+
+        button.setAttribute("data-bound", "true");
+        button.addEventListener("click", function () {
+          button.disabled = true;
+          button.textContent = "Clearing saved values...";
+
+          if (note) {
+            note.textContent = "Saved parameter cookies cleared. Refreshing now. URL values in the current address will still apply after reload.";
+          }
+
+          window.setTimeout(clearPersistedValuesAndRefresh, 80);
+        });
       }
 
       function syncDebugPanelHeight() {
