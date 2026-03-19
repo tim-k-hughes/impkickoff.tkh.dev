@@ -62,7 +62,7 @@ Current status noted in that prior thread:
 - The two onboarding resource cards now support MSP-aware link sets in `booking-page-links.js`.
 
 ## MSP-Aware Resource Links
-The page now reads lowercase `?msp=`, `?headless=`, `?package=`, `?hasconversion=`, and `?hasretention=` from the URL and swaps the onboarding resource cards accordingly.
+The page now reads `?msp=`, `?headless=`, `?package=`, `?hasConversion=`, and `?hasRetention=` from the URL and swaps the onboarding resource cards accordingly.
 
 - Supported values: `Shopify`, `WooCommerce`, `BigCommerce`, `custom`
 - Matching is case-insensitive and ignores spaces / punctuation
@@ -78,8 +78,8 @@ The page now reads lowercase `?msp=`, `?headless=`, `?package=`, `?hasconversion
 - `?package=starter` removes Sonar Optimize from configuration and hides Creative Analysis, Cohort Analysis, and Customer Segments from activation
 - `?package=professional` includes the full advanced/default activation set plus MMM and Incrementality
 - Missing, blank, or `?package=advanced` keeps the default experience
-- `?hasconversion=true` adds the compact Conversion add-on callout under Configuration and updates the `tw_hasconversion` cookie
-- `?hasretention=true` adds the compact Retention add-on callout under Activation and updates the `tw_hasretention` cookie
+- `?hasConversion=true` adds the compact Conversion add-on callout under Configuration and updates the `tw_hasconversion` cookie
+- `?hasRetention=true` adds the compact Retention add-on callout under Activation and updates the `tw_hasretention` cookie
 - If either flag is missing or blank, the page falls back to its matching cookie when present
 - Only `true` is treated as an active value for those feature flags
 
@@ -100,7 +100,7 @@ The hero copy now reads `?brand=` from the URL and personalizes the supporting b
 - If `brand` is missing, the page falls back to `tw_brand` when present
 - Blank `brand` values do not overwrite the cookie
 - If both the URL and cookie have values, the URL wins and the cookie is updated
-- If a new `?brand=` value differs from the stored `tw_brand`, the page clears the persisted onboarding cookies first so the new brand starts from a clean state before any fresh query params are applied
+- If a new `?brand=` value differs from the stored `tw_brand`, the page clears the saved parameter cookies for `geo`, `msp`, `headless`, `brand`, `package`, `hasConversion`, and `hasRetention` first so the new brand starts from a clean state before any fresh query params are applied
 - The main hero headline stays fixed as `Welcome to Triple Whale!`, and the brand now appears in a smaller supporting line when available
 
 ## Geo Recommendation Persistence

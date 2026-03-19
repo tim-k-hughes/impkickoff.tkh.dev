@@ -122,11 +122,11 @@
     }
 
     body[data-debug-mode="true"] .page {
-      max-width: 1520px;
+      max-width: 1780px;
     }
 
     body[data-debug-mode="true"] .app-shell {
-      grid-template-columns: minmax(0, 1fr) minmax(460px, 560px);
+      grid-template-columns: minmax(0, 1fr) minmax(640px, 820px);
     }
 
     .frame {
@@ -737,7 +737,7 @@
     .debug-table {
       width: 100%;
       border-collapse: collapse;
-      table-layout: auto;
+      table-layout: fixed;
     }
 
     .debug-table th,
@@ -764,15 +764,32 @@
       font-weight: 800;
       letter-spacing: 0.08em;
       text-transform: uppercase;
+      white-space: nowrap;
     }
 
+    .debug-table thead th:nth-child(1),
     .debug-table tbody th {
-      width: 20%;
+      width: 18%;
       min-width: 132px;
       color: var(--ink);
       background: rgba(12, 112, 242, 0.04);
       font-size: 12px;
       font-weight: 800;
+    }
+
+    .debug-table thead th:nth-child(2),
+    .debug-table tbody td:nth-child(2) {
+      width: 22%;
+    }
+
+    .debug-table thead th:nth-child(3),
+    .debug-table tbody td:nth-child(3) {
+      width: 28%;
+    }
+
+    .debug-table thead th:nth-child(4),
+    .debug-table tbody td:nth-child(4) {
+      width: 32%;
     }
 
     .debug-table td {
@@ -785,9 +802,9 @@
       padding: 11px 12px;
     }
 
-    .debug-status-list {
+    .debug-current-value {
       display: grid;
-      gap: 3px;
+      gap: 4px;
     }
 
     .debug-parameter-label {
@@ -809,37 +826,57 @@
       line-height: 1.35;
     }
 
-    .debug-status-line {
-      font-size: 12px;
-      line-height: 1.4;
+    .debug-current-value-main {
+      min-height: 1.35em;
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 800;
+      line-height: 1.35;
+      word-break: break-word;
     }
 
-    .debug-status-line strong {
-      color: var(--ink);
-      font-weight: 800;
+    .debug-current-value-source {
+      color: var(--mid-gray);
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.35;
     }
 
     .debug-option-list {
       margin: 0;
-      padding-left: 18px;
-      color: var(--charcoal);
-      font-size: 12px;
-      line-height: 1.5;
+      padding: 0;
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
     }
 
-    .debug-option-list li + li {
-      margin-top: 6px;
-    }
-
-    .debug-option-label {
+    .debug-option-chip {
+      appearance: none;
+      border: 1px solid rgba(12, 112, 242, 0.22);
+      border-radius: 999px;
+      background: rgba(12, 112, 242, 0.08);
       color: var(--ink);
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 10px;
+      font-size: 12px;
       font-weight: 800;
+      line-height: 1.2;
+      white-space: nowrap;
+      cursor: help;
+    }
+
+    .debug-option-chip:hover,
+    .debug-option-chip:focus-visible {
+      border-color: rgba(12, 112, 242, 0.45);
+      background: rgba(12, 112, 242, 0.14);
+      outline: none;
     }
 
     .debug-cell-notes {
       display: grid;
       gap: 8px;
-      margin-top: 8px;
     }
 
     .debug-table-note {
@@ -849,9 +886,11 @@
       line-height: 1.45;
     }
 
-    .debug-table-note strong {
-      color: var(--ink);
-      font-weight: 800;
+    .debug-table-note--warning {
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: 1px solid rgba(208, 120, 37, 0.28);
+      background: linear-gradient(180deg, rgba(208, 120, 37, 0.12), rgba(208, 120, 37, 0.05));
     }
 
     @media (max-width: 1240px) {
@@ -1040,13 +1079,13 @@
         <div class="debug-panel-header">
           <p class="debug-eyebrow">Debug View</p>
           <h2>Why this page looks the way it does</h2>
-          <p class="debug-help">A cookie here just means a saved value from a past visit. The table shows the current source and accepted values for each setting.</p>
+          <p class="debug-help">A cookie here just means a saved value from a past visit. The table shows the resolved value, how it was chosen, and the accepted values for each setting. Hover an option to see what it does.</p>
         </div>
 
         <section class="debug-section" data-debug-alerts hidden></section>
 
         <section class="debug-section">
-          <h3 class="debug-section-title">Current status and options</h3>
+          <h3 class="debug-section-title">Current values</h3>
           <div class="debug-table-wrap">
             <table class="debug-table" data-debug-overview></table>
           </div>
@@ -1209,21 +1248,48 @@
         conversion: hasConversionCookieName,
         retention: hasRetentionCookieName
       };
+      var persistedCookieDetails = [
+        { displayParam: "geo", cookieName: geoCookieName },
+        { displayParam: resourceRouting.queryParam || "msp", cookieName: mspCookieName },
+        { displayParam: resourceRouting.headlessQueryParam || "headless", cookieName: headlessCookieName },
+        { displayParam: "brand", cookieName: brandCookieName },
+        { displayParam: resourceRouting.packageQueryParam || "package", cookieName: packageCookieName },
+        { displayParam: "hasConversion", cookieName: hasConversionCookieName },
+        { displayParam: "hasRetention", cookieName: hasRetentionCookieName }
+      ];
       var isDebugMode = normalizeHeadlessValue(getQueryParamValue(debugPanelParamName)) === true;
       var brandResetInfo = {
         didReset: false,
         previousBrand: null,
         nextBrand: null
       };
-      var persistedCookieNames = [
-        geoCookieName,
-        mspCookieName,
-        headlessCookieName,
-        brandCookieName,
-        packageCookieName,
-        hasConversionCookieName,
-        hasRetentionCookieName
-      ];
+      var persistedCookieNames = persistedCookieDetails.map(function (detail) {
+        return detail.cookieName;
+      });
+
+      function formatReadableList(values) {
+        if (!values || !values.length) {
+          return "";
+        }
+
+        if (values.length === 1) {
+          return values[0];
+        }
+
+        if (values.length === 2) {
+          return values[0] + " and " + values[1];
+        }
+
+        return values.slice(0, -1).join(", ") + ", and " + values[values.length - 1];
+      }
+
+      function getPersistedCookieSummaryText() {
+        return "the saved parameter cookies for " + formatReadableList(
+          persistedCookieDetails.map(function (detail) {
+            return detail.displayParam;
+          })
+        );
+      }
 
       function normalizeBrandComparisonValue(value) {
         var normalizedBrand = normalizeBrandValue(value);
@@ -1967,27 +2033,14 @@
         return el;
       }
 
-      function formatRawDebugValue(value, fallbackText) {
-        if (!isValueDefined(value)) {
-          return fallbackText || "Not present";
-        }
-
-        if (value === "") {
-          return "Blank";
-        }
-
-        return String(value);
-      }
-
-      function getReadableSourceText(source) {
+      function getCurrentValueSourceText(source) {
         var labels = {
-          url: "the URL",
-          cookie: "a saved value from a past visit",
-          default: "the built-in default",
-          none: "nothing yet"
+          url: "from URL",
+          cookie: "from saved value",
+          default: "from default"
         };
 
-        return labels[source] || "the built-in default";
+        return labels[source] || "";
       }
 
       function getPackageImpactSummary(packageKey) {
@@ -2007,12 +2060,16 @@
           key: "debug",
           title: "Debug panel",
           queryParam: debugPanelParamName,
+          displayParam: "debug",
           cookieName: null,
           normalize: normalizeHeadlessValue,
           hasDefault: true,
           defaultValue: false,
           getActiveValue: function () {
             return isDebugMode;
+          },
+          formatCurrentValue: function (value) {
+            return value === true ? "true" : "";
           },
           formatResolvedValue: function (value) {
             return value === true ? "Shown" : "Hidden";
@@ -2028,7 +2085,7 @@
               effect: "Shows this debug panel on the right."
             },
             {
-              value: "missing or false",
+              value: "false or blank",
               effect: "Keeps the debug panel hidden. This setting is not saved in a cookie."
             }
           ],
@@ -2040,11 +2097,15 @@
           key: "geo",
           title: "Recommended region",
           queryParam: "geo",
+          displayParam: "geo",
           cookieName: geoCookieName,
           normalize: normalizeGeoRecommendation,
           hasDefault: false,
           getActiveValue: function () {
             return activeRecommendedGeo;
+          },
+          formatCurrentValue: function (value) {
+            return value ? formatGeoDisplayName(value) : "";
           },
           formatResolvedValue: function (value) {
             return value ? formatGeoDisplayName(value) : "None";
@@ -2056,19 +2117,19 @@
           },
           options: [
             {
-              value: "americas",
+              value: "Americas",
               effect: "Highlights the Americas booking card."
             },
             {
-              value: "emea",
+              value: "EMEA",
               effect: "Highlights the EMEA booking card."
             },
             {
-              value: "apac",
+              value: "APAC",
               effect: "Highlights the APAC booking card."
             },
             {
-              value: "missing",
+              value: "blank",
               effect: "Nothing is highlighted unless a saved geo cookie from a past visit exists."
             }
           ],
@@ -2080,11 +2141,15 @@
           key: "brand",
           title: "Brand name",
           queryParam: "brand",
+          displayParam: "brand",
           cookieName: brandCookieName,
           normalize: normalizeBrandValue,
           hasDefault: false,
           getActiveValue: function () {
             return activeBrand;
+          },
+          formatCurrentValue: function (value) {
+            return value || "";
           },
           formatResolvedValue: function (value) {
             return value || "Not showing";
@@ -2100,31 +2165,35 @@
               effect: "Shows that brand name in the smaller line under the main heading."
             },
             {
-              value: "missing or blank",
+              value: "blank",
               effect: "Hides the brand-specific line."
             }
           ],
           invalidNote: "Blank brand values are ignored.",
-          priorityNote: "Order used: URL first, then the saved brand cookie. If the brand changes, the page clears the saved onboarding cookies first so the new brand starts clean.",
+          priorityNote: "Order used: URL first, then the saved brand cookie. If the brand changes, the page clears " + getPersistedCookieSummaryText() + " so the new brand starts clean.",
           noneSummary: "No brand name is being shown right now.",
           getNotice: function () {
             if (!brandResetInfo.didReset) {
               return null;
             }
 
-            return "The saved brand changed from " + brandResetInfo.previousBrand + " to " + brandResetInfo.nextBrand + ", so the page cleared the saved onboarding cookies before applying the new values.";
+            return "The saved brand changed from " + brandResetInfo.previousBrand + " to " + brandResetInfo.nextBrand + ", so the page cleared " + getPersistedCookieSummaryText() + " before applying the new values.";
           }
         },
         {
           key: "msp",
           title: "Platform",
           queryParam: resourceRouting.queryParam || "msp",
+          displayParam: resourceRouting.queryParam || "msp",
           cookieName: mspCookieName,
           normalize: normalizeMspValue,
           hasDefault: true,
           defaultValue: defaultMsp,
           getActiveValue: function () {
             return activeMsp;
+          },
+          formatCurrentValue: function (value) {
+            return formatMspDisplayName(value);
           },
           formatResolvedValue: function (value) {
             return formatMspDisplayName(value);
@@ -2139,15 +2208,15 @@
           },
           options: [
             {
-              value: "shopify",
+              value: "Shopify",
               effect: "Uses the Shopify Triple Pixel setup and keeps the top platform badge hidden."
             },
             {
-              value: "woocommerce",
+              value: "WooCommerce",
               effect: "Uses the WooCommerce Triple Pixel setup and shows a WooCommerce badge at the top."
             },
             {
-              value: "bigcommerce",
+              value: "BigCommerce",
               effect: "Uses the BigCommerce Triple Pixel setup and shows a BigCommerce badge at the top."
             },
             {
@@ -2162,12 +2231,17 @@
           key: "headless",
           title: "Headless setup",
           queryParam: resourceRouting.headlessQueryParam || "headless",
+          displayParam: resourceRouting.headlessQueryParam || "headless",
           cookieName: headlessCookieName,
           normalize: normalizeHeadlessValue,
           hasDefault: true,
           defaultValue: defaultHeadless,
           getActiveValue: function () {
             return activeHeadless;
+          },
+          allowBlankQuery: true,
+          formatCurrentValue: function (value) {
+            return value === true ? "true" : "false";
           },
           formatResolvedValue: function (value) {
             return value === true ? "On" : "Off";
@@ -2183,8 +2257,8 @@
               effect: "Uses the shared headless setup guide instead of the regular platform-specific Triple Pixel guide."
             },
             {
-              value: "false",
-              effect: "Keeps the regular platform-specific Triple Pixel guide."
+              value: "false or blank",
+              effect: "False turns the headless override off. A blank value falls back to the saved value or the default."
             }
           ],
           invalidNote: "Use true or false. Anything else is ignored.",
@@ -2194,12 +2268,16 @@
           key: "package",
           title: "Package tier",
           queryParam: resourceRouting.packageQueryParam || "package",
+          displayParam: resourceRouting.packageQueryParam || "package",
           cookieName: packageCookieName,
           normalize: normalizePackageValue,
           hasDefault: true,
           defaultValue: defaultPackage,
           getActiveValue: function () {
             return activePackage;
+          },
+          formatCurrentValue: function (value) {
+            return formatPackageDisplayName(value);
           },
           formatResolvedValue: function (value) {
             return formatPackageDisplayName(value);
@@ -2227,13 +2305,18 @@
         {
           key: "conversion",
           title: "Conversion add-on",
-          queryParam: featureFlagQueryParams.conversion || "hasconversion",
+          queryParam: featureFlagQueryParams.conversion || "hasConversion",
+          displayParam: "hasConversion",
           cookieName: hasConversionCookieName,
           normalize: normalizeFeatureFlagValue,
           hasDefault: true,
           defaultValue: false,
           getActiveValue: function () {
             return activeFeatureFlags.conversion;
+          },
+          allowBlankQuery: true,
+          formatCurrentValue: function (value) {
+            return value === true ? "true" : "";
           },
           formatResolvedValue: function (value) {
             return value === true ? "Visible" : "Hidden";
@@ -2249,23 +2332,28 @@
               effect: "Shows the Conversion add-on box under Configuration."
             },
             {
-              value: "missing, blank, or false",
+              value: "blank or false",
               effect: "Does not turn the add-on on. If a saved cookie already says true, the page will keep showing it."
             }
           ],
-          invalidNote: "Only true turns this on. false is treated the same as leaving it out.",
+          invalidNote: "Only true turns this on. Other values are ignored.",
           priorityNote: "Order used: URL true first, then the saved add-on cookie. If neither says true, the add-on stays hidden."
         },
         {
           key: "retention",
           title: "Retention add-on",
-          queryParam: featureFlagQueryParams.retention || "hasretention",
+          queryParam: featureFlagQueryParams.retention || "hasRetention",
+          displayParam: "hasRetention",
           cookieName: hasRetentionCookieName,
           normalize: normalizeFeatureFlagValue,
           hasDefault: true,
           defaultValue: false,
           getActiveValue: function () {
             return activeFeatureFlags.retention;
+          },
+          allowBlankQuery: true,
+          formatCurrentValue: function (value) {
+            return value === true ? "true" : "";
           },
           formatResolvedValue: function (value) {
             return value === true ? "Visible" : "Hidden";
@@ -2281,11 +2369,11 @@
               effect: "Shows the Retention add-on box under Activation."
             },
             {
-              value: "missing, blank, or false",
+              value: "blank or false",
               effect: "Does not turn the add-on on. If a saved cookie already says true, the page will keep showing it."
             }
           ],
-          invalidNote: "Only true turns this on. false is treated the same as leaving it out.",
+          invalidNote: "Only true turns this on. Other values are ignored.",
           priorityNote: "Order used: URL true first, then the saved add-on cookie. If neither says true, the add-on stays hidden."
         }
       ];
@@ -2307,7 +2395,11 @@
           source = "default";
         }
 
-        if (isValueDefined(rawQuery) && !isValueDefined(normalizedQuery)) {
+        if (
+          isValueDefined(rawQuery) &&
+          !isValueDefined(normalizedQuery) &&
+          !(rawQuery === "" && definition.allowBlankQuery)
+        ) {
           notice = definition.invalidNote || "The value in the URL is not supported, so the page ignored it.";
         }
 
@@ -2330,60 +2422,10 @@
           activeValue: activeValue,
           source: source,
           notice: notice,
-          effectiveDisplayValue: definition.formatResolvedValue(activeValue)
+          currentValueDisplay: typeof definition.formatCurrentValue === "function"
+            ? definition.formatCurrentValue(activeValue, source)
+            : definition.formatResolvedValue(activeValue)
         };
-      }
-
-      function getDebugSummaryText(definition, info) {
-        if (info.source === "none") {
-          return definition.noneSummary || "Nothing is active for this setting right now.";
-        }
-
-        if (info.source === "default") {
-          return "Using " + info.effectiveDisplayValue + " from the built-in default.";
-        }
-
-        return "Using " + info.effectiveDisplayValue + " from " + getReadableSourceText(info.source) + ".";
-      }
-
-      function appendDebugStatusLine(parent, label, value) {
-        var line = createDebugElement("div", "debug-status-line");
-        var strong = createDebugElement("strong", null, label + ": ");
-        line.appendChild(strong);
-        line.appendChild(document.createTextNode(value));
-        parent.appendChild(line);
-      }
-
-      function getCompactPageStatus(definition, info) {
-        if (!definition || !definition.key) {
-          return info && info.effectiveDisplayValue ? info.effectiveDisplayValue : "Unknown";
-        }
-
-        if (definition.key === "geo") {
-          return info.activeValue ? formatGeoDisplayName(info.activeValue) + " highlighted" : "No highlight";
-        }
-
-        if (definition.key === "brand") {
-          return info.activeValue ? "Showing " + info.activeValue : "Not showing";
-        }
-
-        if (definition.key === "msp") {
-          return formatMspDisplayName(info.activeValue) + " docs";
-        }
-
-        if (definition.key === "headless") {
-          return info.activeValue === true ? "On" : "Off";
-        }
-
-        if (definition.key === "package") {
-          return formatPackageDisplayName(info.activeValue);
-        }
-
-        if (definition.key === "conversion" || definition.key === "retention") {
-          return info.activeValue === true ? "Visible" : "Hidden";
-        }
-
-        return info.effectiveDisplayValue;
       }
 
       function renderDebugAlerts(container) {
@@ -2403,7 +2445,7 @@
           createDebugElement(
             "p",
             "debug-callout",
-            "Saved onboarding cookies were cleared because the brand changed from " + brandResetInfo.previousBrand + " to " + brandResetInfo.nextBrand + "."
+            "The brand changed from " + brandResetInfo.previousBrand + " to " + brandResetInfo.nextBrand + ", so the page cleared " + getPersistedCookieSummaryText() + "."
           )
         );
       }
@@ -2418,7 +2460,7 @@
 
         container.innerHTML = "";
 
-        ["Parameter", "Current status", "Available options"].forEach(function (label) {
+        ["Parameter", "Current value", "Note", "Available options"].forEach(function (label) {
           headRow.appendChild(createDebugElement("th", null, label));
         });
 
@@ -2430,50 +2472,54 @@
           var row = createDebugElement("tr");
           var headerCell = createDebugElement("th");
           var headerLabel = createDebugElement("div", "debug-parameter-label");
+          var currentValueCell = createDebugElement("td");
+          var currentValue = createDebugElement("div", "debug-current-value");
+          var currentValueMain = createDebugElement("div", "debug-current-value-main", info.currentValueDisplay || "");
+          var currentValueSource = getCurrentValueSourceText(info.source);
+          var noteCell = createDebugElement("td");
+          var noteList = createDebugElement("div", "debug-cell-notes");
           var optionsCell = createDebugElement("td");
-          var valueCell = createDebugElement("td");
-          var statusList = createDebugElement("div", "debug-status-list");
           var optionList = createDebugElement("ul", "debug-option-list");
-          var optionNotes = createDebugElement("div", "debug-cell-notes");
 
           headerCell.scope = "row";
-          headerLabel.appendChild(createDebugElement("span", "debug-parameter-key", definition.queryParam));
+          headerLabel.appendChild(createDebugElement("span", "debug-parameter-key", definition.displayParam || definition.queryParam));
           headerLabel.appendChild(createDebugElement("span", "debug-parameter-title", definition.title));
           headerCell.appendChild(headerLabel);
-          appendDebugStatusLine(statusList, "URL", formatRawDebugValue(info.rawQuery));
-          appendDebugStatusLine(
-            statusList,
-            "Saved",
-            definition.cookieName ? formatRawDebugValue(info.rawCookie) : "Not used for this setting"
-          );
-          appendDebugStatusLine(statusList, "Using", getDebugSummaryText(definition, info));
-          appendDebugStatusLine(statusList, "Page", getCompactPageStatus(definition, info));
-          valueCell.appendChild(statusList);
 
-          if (info.notice) {
-            valueCell.appendChild(createDebugElement("p", "debug-table-note", "Note: " + info.notice));
+          currentValue.appendChild(currentValueMain);
+          if (info.currentValueDisplay && currentValueSource) {
+            currentValue.appendChild(createDebugElement("div", "debug-current-value-source", currentValueSource));
           }
+          currentValueCell.appendChild(currentValue);
 
           definition.options.forEach(function (option) {
             var li = createDebugElement("li");
-            var label = createDebugElement("span", "debug-option-label", option.value + ": ");
-            li.appendChild(label);
-            li.appendChild(document.createTextNode(option.effect));
+            var chip = createDebugElement("span", "debug-option-chip", option.value);
+            chip.setAttribute("title", option.effect);
+            chip.setAttribute("aria-label", option.value + ". " + option.effect);
+            chip.tabIndex = 0;
+            li.appendChild(chip);
             optionList.appendChild(li);
           });
 
-          optionsCell.appendChild(optionList);
-
-          if (definition.priorityNote) {
-            optionNotes.appendChild(createDebugElement("p", "debug-table-note", definition.priorityNote));
+          if (info.notice) {
+            noteList.appendChild(createDebugElement("p", "debug-table-note debug-table-note--warning", info.notice));
           }
 
-          if (optionNotes.childNodes.length > 0) {
-            optionsCell.appendChild(optionNotes);
+          if (definition.priorityNote) {
+            noteList.appendChild(createDebugElement("p", "debug-table-note", definition.priorityNote));
+          }
+
+          noteCell.appendChild(noteList);
+          optionsCell.appendChild(optionList);
+
+          if (!info.currentValueDisplay) {
+            currentValueCell.setAttribute("aria-label", "No current value");
           }
 
           row.appendChild(headerCell);
-          row.appendChild(valueCell);
+          row.appendChild(currentValueCell);
+          row.appendChild(noteCell);
           row.appendChild(optionsCell);
           tbody.appendChild(row);
         });
