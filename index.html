@@ -126,7 +126,7 @@
     }
 
     body[data-debug-mode="true"] .app-shell {
-      grid-template-columns: minmax(0, 1fr) minmax(440px, 520px);
+      grid-template-columns: minmax(0, 1fr) minmax(460px, 560px);
     }
 
     .frame {
@@ -716,7 +716,7 @@
 
     .debug-layout {
       display: grid;
-      grid-template-columns: minmax(205px, 0.84fr) minmax(0, 1.16fr);
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
       gap: 16px;
       align-items: start;
     }
@@ -744,14 +744,14 @@
     .debug-table-wrap {
       border: 1px solid var(--line);
       border-radius: var(--radius-sm);
-      overflow: hidden;
+      overflow: auto;
       background: var(--info-card-bg);
     }
 
     .debug-table {
       width: 100%;
       border-collapse: collapse;
-      table-layout: fixed;
+      table-layout: auto;
     }
 
     .debug-table th,
@@ -790,11 +790,27 @@
 
     .debug-table td {
       color: var(--charcoal);
-      word-break: break-word;
+      word-break: normal;
+      overflow-wrap: anywhere;
     }
 
     .debug-table-wrap .debug-note {
       padding: 11px 12px;
+    }
+
+    .debug-status-list {
+      display: grid;
+      gap: 3px;
+    }
+
+    .debug-status-line {
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .debug-status-line strong {
+      color: var(--ink);
+      font-weight: 800;
     }
 
     .debug-accordion {
@@ -1112,30 +1128,24 @@
         <div class="debug-panel-header">
           <p class="debug-eyebrow">Debug View</p>
           <h2>Why this page looks the way it does</h2>
-          <p class="debug-help">A cookie here just means a saved value from a past visit.</p>
+          <p class="debug-help">A cookie here just means a saved value from a past visit. Open any guide item for the full explanation.</p>
         </div>
+
+        <section class="debug-section" data-debug-alerts hidden></section>
 
         <div class="debug-layout">
           <div class="debug-column">
-            <section class="debug-section" data-debug-alerts hidden></section>
-
             <section class="debug-section">
-              <h3 class="debug-section-title">Current page state</h3>
+              <h3 class="debug-section-title">Current status</h3>
               <div class="debug-table-wrap">
                 <table class="debug-table" data-debug-overview></table>
               </div>
-            </section>
-
-            <section class="debug-section">
-              <h3 class="debug-section-title">URL right now</h3>
-              <div class="debug-table-wrap" data-debug-url-summary></div>
             </section>
           </div>
 
           <div class="debug-column">
             <section class="debug-section">
               <h3 class="debug-section-title">Parameter guide</h3>
-              <p class="debug-note">Open any item to compare the URL, any saved cookie, and the final value the page used.</p>
               <div class="debug-accordion" data-debug-accordion></div>
             </section>
           </div>
@@ -2091,21 +2101,6 @@
         return "Advanced shows the standard resource set with no extra package-only additions or removals.";
       }
 
-      function getUrlEntries() {
-        var params = new URLSearchParams(window.location.search);
-        var entries = [];
-
-        params.forEach(function (value, key) {
-          entries.push({
-            key: key,
-            normalizedKey: String(key).toLowerCase(),
-            value: value
-          });
-        });
-
-        return entries;
-      }
-
       var debugParamDefinitions = [
         {
           key: "debug",
@@ -2457,6 +2452,46 @@
         parent.appendChild(row);
       }
 
+      function appendDebugStatusLine(parent, label, value) {
+        var line = createDebugElement("div", "debug-status-line");
+        var strong = createDebugElement("strong", null, label + ": ");
+        line.appendChild(strong);
+        line.appendChild(document.createTextNode(value));
+        parent.appendChild(line);
+      }
+
+      function getCompactPageStatus(definition, info) {
+        if (!definition || !definition.key) {
+          return info && info.effectiveDisplayValue ? info.effectiveDisplayValue : "Unknown";
+        }
+
+        if (definition.key === "geo") {
+          return info.activeValue ? formatGeoDisplayName(info.activeValue) + " highlighted" : "No highlight";
+        }
+
+        if (definition.key === "brand") {
+          return info.activeValue ? "Showing " + info.activeValue : "Not showing";
+        }
+
+        if (definition.key === "msp") {
+          return formatMspDisplayName(info.activeValue) + " docs";
+        }
+
+        if (definition.key === "headless") {
+          return info.activeValue === true ? "On" : "Off";
+        }
+
+        if (definition.key === "package") {
+          return formatPackageDisplayName(info.activeValue);
+        }
+
+        if (definition.key === "conversion" || definition.key === "retention") {
+          return info.activeValue === true ? "Visible" : "Hidden";
+        }
+
+        return info.effectiveDisplayValue;
+      }
+
       function renderDebugAlerts(container) {
         if (!container) {
           return;
@@ -2483,110 +2518,41 @@
         if (!container) {
           return;
         }
-
-        var overviewItems = [
-          {
-            label: "Region",
-            value: activeRecommendedGeo
-              ? formatGeoDisplayName(activeRecommendedGeo) + " is highlighted"
-              : "No region is highlighted"
-          },
-          {
-            label: "Brand line",
-            value: activeBrand
-              ? activeBrand + " is showing under the headline"
-              : "Not showing"
-          },
-          {
-            label: "Docs",
-            value: formatMspDisplayName(activeMsp) + (activeHeadless ? " headless guide" : " standard guide")
-          },
-          {
-            label: "Package",
-            value: activePackage === "starter"
-              ? "Starter rules are active"
-              : activePackage === "professional"
-                ? "Professional extras are active"
-                : "Advanced default is active"
-          },
-          {
-            label: "Add-ons",
-            value: activeFeatureFlags.conversion && activeFeatureFlags.retention
-              ? "Conversion and Retention are showing"
-              : activeFeatureFlags.conversion
-                ? "Conversion only"
-                : activeFeatureFlags.retention
-                  ? "Retention only"
-                  : "No add-ons are showing"
-          }
-        ];
+        var thead = createDebugElement("thead");
+        var headRow = createDebugElement("tr");
         var tbody = createDebugElement("tbody");
 
         container.innerHTML = "";
 
-        overviewItems.forEach(function (item) {
+        ["Parameter", "Current status"].forEach(function (label) {
+          headRow.appendChild(createDebugElement("th", null, label));
+        });
+
+        thead.appendChild(headRow);
+        container.appendChild(thead);
+
+        debugParamDefinitions.forEach(function (definition) {
+          var info = buildDebugInfo(definition);
           var row = createDebugElement("tr");
-          var headerCell = createDebugElement("th", null, item.label);
-          var valueCell = createDebugElement("td", null, item.value);
+          var headerCell = createDebugElement("th", null, definition.queryParam);
+          var valueCell = createDebugElement("td");
+          var statusList = createDebugElement("div", "debug-status-list");
 
           headerCell.scope = "row";
+          appendDebugStatusLine(statusList, "URL", formatRawDebugValue(info.rawQuery));
+          appendDebugStatusLine(
+            statusList,
+            "Saved",
+            definition.cookieName ? formatRawDebugValue(info.rawCookie) : "Not used for this setting"
+          );
+          appendDebugStatusLine(statusList, "Page", getCompactPageStatus(definition, info));
+          valueCell.appendChild(statusList);
           row.appendChild(headerCell);
           row.appendChild(valueCell);
           tbody.appendChild(row);
         });
 
         container.appendChild(tbody);
-      }
-
-      function renderUrlSummary(container) {
-        if (!container) {
-          return;
-        }
-
-        var urlEntries = getUrlEntries();
-        var knownParamNames = debugParamDefinitions.reduce(function (names, definition) {
-          names[String(definition.queryParam).toLowerCase()] = true;
-          return names;
-        }, {});
-
-        container.innerHTML = "";
-
-        if (!urlEntries.length) {
-          container.appendChild(createDebugElement("p", "debug-note", "There are no query parameters in the URL right now."));
-          return;
-        }
-
-        var table = createDebugElement("table", "debug-table");
-        var thead = createDebugElement("thead");
-        var headRow = createDebugElement("tr");
-        var tbody = createDebugElement("tbody");
-
-        ["Parameter", "Value", "Status"].forEach(function (label) {
-          headRow.appendChild(createDebugElement("th", null, label));
-        });
-
-        thead.appendChild(headRow);
-        table.appendChild(thead);
-
-        urlEntries.forEach(function (entry) {
-          var row = createDebugElement("tr");
-          var keyCell = createDebugElement("th", null, entry.key);
-          var valueCell = createDebugElement("td", null, entry.value === "" ? "(blank)" : entry.value);
-          var statusCell = createDebugElement(
-            "td",
-            null,
-            knownParamNames[entry.normalizedKey] ? "Used by page" : "Ignored by page"
-          );
-
-          keyCell.scope = "row";
-          row.appendChild(keyCell);
-          row.appendChild(valueCell);
-          row.appendChild(statusCell);
-          tbody.appendChild(row);
-        });
-
-        table.appendChild(tbody);
-        container.appendChild(table);
       }
 
       function renderDebugAccordion(container) {
@@ -2654,7 +2620,6 @@
         panel.hidden = false;
         renderDebugAlerts(panel.querySelector("[data-debug-alerts]"));
         renderDebugOverview(panel.querySelector("[data-debug-overview]"));
-        renderUrlSummary(panel.querySelector("[data-debug-url-summary]"));
         renderDebugAccordion(panel.querySelector("[data-debug-accordion]"));
         syncDebugPanelHeight();
       }
