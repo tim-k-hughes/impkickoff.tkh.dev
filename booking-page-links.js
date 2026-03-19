@@ -46,8 +46,7 @@ window.BOOKING_PAGE_LINKS = {
   // `sectionKey` must match `data-resource-section` / `data-resource-list` in index.html.
   checklistSections: {
     beforeKickoff: {
-      phaseLabel: "Phase 2",
-      timingLabel: "Before kickoff",
+      timingLabel: "Going into kickoff",
       title: "Configuration",
       description: "Complete as much setup as you can before your kickoff so we can validate faster on the call and create a clear path into activation.",
       sectionKey: "beforeKickoff",
@@ -64,6 +63,7 @@ window.BOOKING_PAGE_LINKS = {
           {
             itemKey: "sonar",
             label: "Configure",
+            linkLabelWhenSingleLink: true,
             links: [
               { linkKey: "sonarSend", label: "Sonar Send", url: "https://example.com/shopify/sonar-send" },
               { linkKey: "sonarOptimize", label: "Sonar Optimize", url: "https://example.com/shopify/sonar-optimize" }
@@ -81,6 +81,7 @@ window.BOOKING_PAGE_LINKS = {
           {
             itemKey: "sonar",
             label: "Configure",
+            linkLabelWhenSingleLink: true,
             links: [
               { linkKey: "sonarSend", label: "Sonar Send", url: "https://example.com/woocommerce/sonar-send" },
               { linkKey: "sonarOptimize", label: "Sonar Optimize", url: "https://example.com/woocommerce/sonar-optimize" }
@@ -98,6 +99,7 @@ window.BOOKING_PAGE_LINKS = {
           {
             itemKey: "sonar",
             label: "Configure",
+            linkLabelWhenSingleLink: true,
             links: [
               { linkKey: "sonarSend", label: "Sonar Send", url: "https://example.com/bigcommerce/sonar-send" },
               { linkKey: "sonarOptimize", label: "Sonar Optimize", url: "https://example.com/bigcommerce/sonar-optimize" }
@@ -115,6 +117,7 @@ window.BOOKING_PAGE_LINKS = {
           {
             itemKey: "sonar",
             label: "Configure",
+            linkLabelWhenSingleLink: true,
             links: [
               { linkKey: "sonarSend", label: "Sonar Send", url: "https://example.com/custom/sonar-send" },
               { linkKey: "sonarOptimize", label: "Sonar Optimize", url: "https://example.com/custom/sonar-optimize" }
@@ -135,21 +138,19 @@ window.BOOKING_PAGE_LINKS = {
       },
       addonOverrides: {
         conversion: {
-          additionalItems: [
-            {
-              itemKey: "conversionAddon",
-              label: "Conversion add-on:",
-              links: [
-                { label: "Setup Custom Events", url: "https://example.com/add-ons/conversion/setup-custom-events" }
-              ]
-            }
-          ]
+          callout: {
+            badgeLabel: "Included add-on",
+            title: "Conversion",
+            description: "Your team has access to this add-on setup guide as part of onboarding.",
+            items: [
+              { label: "Setup Custom Events", url: "https://example.com/add-ons/conversion/setup-custom-events" }
+            ]
+          }
         }
       }
     },
     kickoffOutcomes: {
-      phaseLabel: "Phase 3",
-      timingLabel: "After kickoff",
+      timingLabel: "Leaving kickoff",
       title: "Activation",
       description: "After your kickoff, your team should know what is configured, what still needs to be finished, and what to focus on as activation begins.",
       sectionKey: "kickoffOutcomes",
@@ -160,7 +161,7 @@ window.BOOKING_PAGE_LINKS = {
         { itemKey: "cohortAnalysis", label: "Cohort Analysis", url: "https://example.com/activation/cohort-analysis" },
         { itemKey: "customerSegments", label: "Customer Segments", url: "https://example.com/activation/customer-segments" },
         { itemKey: "aiVisibility", label: "AI Visibility", url: "https://example.com/activation/ai-visibility" },
-        { itemKey: "mobi", label: "Mobi", url: "https://example.com/activation/mobi" }
+        { itemKey: "moby", label: "Moby", url: "https://example.com/activation/moby" }
       ],
       packageOverrides: {
         starter: {
@@ -175,15 +176,14 @@ window.BOOKING_PAGE_LINKS = {
       },
       addonOverrides: {
         retention: {
-          additionalItems: [
-            {
-              itemKey: "retentionAddon",
-              label: "Retention add-on:",
-              links: [
-                { label: "Sync customer segments", url: "https://example.com/add-ons/retention/sync-customer-segments" }
-              ]
-            }
-          ]
+          callout: {
+            badgeLabel: "Included add-on",
+            title: "Retention",
+            description: "Your team has access to this add-on guide as activation gets underway.",
+            items: [
+              { label: "Sync customer segments", url: "https://example.com/add-ons/retention/sync-customer-segments" }
+            ]
+          }
         }
       }
     }

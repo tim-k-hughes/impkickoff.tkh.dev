@@ -230,16 +230,25 @@
       letter-spacing: -0.03em;
     }
 
+    .hero-brand-context {
+      margin: -2px 0 0;
+      color: var(--mid-gray);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .hero-brand-context[hidden] {
+      display: none;
+    }
+
     .lead {
       margin: 0;
       font-size: 16px;
       line-height: 1.65;
       color: var(--charcoal);
       max-width: 760px;
-    }
-
-    .lead strong {
-      color: var(--ink);
     }
 
     .regions {
@@ -402,6 +411,10 @@
       white-space: nowrap;
     }
 
+    .resource-context[hidden] {
+      display: none;
+    }
+
     html[data-active-headless="true"] .resource-context {
       border-color: var(--recommend-border);
       background: linear-gradient(180deg, var(--recommend-surface-top), var(--recommend-surface-bottom));
@@ -420,24 +433,16 @@
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      gap: 8px;
+      gap: 10px;
       margin: 0 0 10px;
     }
 
-    .info-card-kicker {
+    .info-card-title-row {
       display: flex;
       align-items: center;
       gap: 10px;
       flex-wrap: wrap;
       min-width: 0;
-    }
-
-    .info-card-phase {
-      color: var(--mid-gray);
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
     }
 
     .info-card-timing {
@@ -485,6 +490,74 @@
 
     .info-card ul a:hover,
     .info-card ul a:focus {
+      color: var(--brand-blue);
+    }
+
+    .info-card-addon {
+      margin-top: 16px;
+      padding: 14px 14px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(12, 112, 242, 0.18);
+      background: linear-gradient(180deg, rgba(12, 112, 242, 0.08), rgba(12, 112, 242, 0.03));
+    }
+
+    .info-card-addon[hidden] {
+      display: none;
+    }
+
+    .info-card-addon-header {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      margin: 0 0 10px;
+    }
+
+    .info-card-addon-badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 0 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(12, 112, 242, 0.16);
+      background: rgba(12, 112, 242, 0.1);
+      color: var(--tag-text);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .info-card-addon-title {
+      margin: 0;
+      color: var(--ink);
+      font-size: 17px;
+      letter-spacing: -0.01em;
+    }
+
+    .info-card-addon-description {
+      margin: 0 0 10px;
+      color: var(--charcoal);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .info-card-addon-list {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--charcoal);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .info-card-addon-list a {
+      color: inherit;
+      text-underline-offset: 2px;
+    }
+
+    .info-card-addon-list a:hover,
+    .info-card-addon-list a:focus {
       color: var(--brand-blue);
     }
 
@@ -596,8 +669,8 @@
           <p class="brand-name">Triple Whale</p>
         </div>
         <div class="topbar-actions">
-          <p class="resource-context" data-active-msp-copy aria-live="polite">
-            Setup: Shopify
+          <p class="resource-context" data-active-msp-copy aria-live="polite" hidden>
+            Shopify
           </p>
           <button class="theme-toggle" id="theme-toggle" type="button" aria-pressed="false" aria-label="Enable dark mode" title="Enable dark mode">
             <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true">
@@ -619,11 +692,9 @@
       </div>
 
       <header>
-        <h1 data-brand-headline>Welcome to Triple Whale. Book your kickoff and turn insights into action.</h1>
-        <p class="lead">
-          <span data-brand-lead-copy>Choose the region closest to your business hours. Your onboarding specialist will guide setup, confirm measurement, and set you up for activation.</span>
-          <strong>Unified data. Proven measurement.</strong>
-        </p>
+        <h1 data-brand-headline>Welcome to Triple L</h1>
+        <p class="hero-brand-context" data-brand-context hidden>Onboarding for your team</p>
+        <p class="lead" data-brand-lead-copy>Let's get your kickoff call booked so onboarding can get started.</p>
       </header>
 
       <div class="regions">
@@ -661,26 +732,40 @@
       <div class="info-grid">
         <article class="info-card" data-resource-section="beforeKickoff">
           <div class="info-card-header">
-            <div class="info-card-kicker">
-              <span class="info-card-phase" data-resource-phase="beforeKickoff">Phase 2</span>
-              <span class="info-card-timing" data-resource-timing="beforeKickoff">Before kickoff</span>
+            <div class="info-card-title-row">
+              <h3 data-resource-title="beforeKickoff">Configuration</h3>
+              <span class="info-card-timing" data-resource-timing="beforeKickoff">Going into kickoff</span>
             </div>
-            <h3 data-resource-title="beforeKickoff">Configuration</h3>
           </div>
           <p data-resource-description="beforeKickoff">Complete as much setup as you can before your kickoff so we can validate faster on the call and create a clear path into activation.</p>
           <ul data-resource-list="beforeKickoff"></ul>
+          <div class="info-card-addon" data-resource-addon hidden>
+            <div class="info-card-addon-header">
+              <span class="info-card-addon-badge" data-resource-addon-badge>Included add-on</span>
+              <h4 class="info-card-addon-title" data-resource-addon-title>Conversion</h4>
+            </div>
+            <p class="info-card-addon-description" data-resource-addon-description>Your team has access to this add-on setup guide as part of onboarding.</p>
+            <ul class="info-card-addon-list" data-resource-addon-list></ul>
+          </div>
         </article>
 
         <article class="info-card" data-resource-section="kickoffOutcomes">
           <div class="info-card-header">
-            <div class="info-card-kicker">
-              <span class="info-card-phase" data-resource-phase="kickoffOutcomes">Phase 3</span>
-              <span class="info-card-timing" data-resource-timing="kickoffOutcomes">After kickoff</span>
+            <div class="info-card-title-row">
+              <h3 data-resource-title="kickoffOutcomes">Activation</h3>
+              <span class="info-card-timing" data-resource-timing="kickoffOutcomes">Leaving kickoff</span>
             </div>
-            <h3 data-resource-title="kickoffOutcomes">Activation</h3>
           </div>
           <p data-resource-description="kickoffOutcomes">After your kickoff, your team should know what is configured, what still needs to be finished, and what to focus on as activation begins.</p>
           <ul data-resource-list="kickoffOutcomes"></ul>
+          <div class="info-card-addon" data-resource-addon hidden>
+            <div class="info-card-addon-header">
+              <span class="info-card-addon-badge" data-resource-addon-badge>Included add-on</span>
+              <h4 class="info-card-addon-title" data-resource-addon-title>Retention</h4>
+            </div>
+            <p class="info-card-addon-description" data-resource-addon-description>Your team has access to this add-on guide as activation gets underway.</p>
+            <ul class="info-card-addon-list" data-resource-addon-list></ul>
+          </div>
         </article>
       </div>
 
@@ -955,16 +1040,16 @@
 
       var activeAddon = getActiveAddon();
 
-      function getHeroHeadline(brandName) {
-        return brandName
-          ? "Welcome to Triple Whale, " + brandName + ". Book your kickoff and turn insights into action."
-          : "Welcome to Triple Whale. Book your kickoff and turn insights into action.";
+      function getHeroHeadline() {
+        return "Welcome to Triple L";
       }
 
-      function getHeroLeadCopy(brandName) {
-        return brandName
-          ? "Choose the region closest to your business hours. Your onboarding specialist will guide setup for " + brandName + ", confirm measurement, and set you up for activation."
-          : "Choose the region closest to your business hours. Your onboarding specialist will guide setup, confirm measurement, and set you up for activation.";
+      function getHeroBrandContext(brandName) {
+        return brandName ? "Onboarding for " + brandName : "";
+      }
+
+      function getHeroLeadCopy() {
+        return "Let's get your kickoff call booked so onboarding can get started.";
       }
 
       function applyBrandCopy() {
@@ -977,16 +1062,23 @@
         }
 
         document.querySelectorAll("[data-brand-headline]").forEach(function (headlineEl) {
-          headlineEl.textContent = getHeroHeadline(activeBrand);
+          headlineEl.textContent = getHeroHeadline();
+        });
+
+        document.querySelectorAll("[data-brand-context]").forEach(function (contextEl) {
+          var contextCopy = getHeroBrandContext(activeBrand);
+          contextEl.textContent = contextCopy;
+          contextEl.hidden = !contextCopy;
         });
 
         document.querySelectorAll("[data-brand-lead-copy]").forEach(function (leadEl) {
-          leadEl.textContent = getHeroLeadCopy(activeBrand);
+          leadEl.textContent = getHeroLeadCopy();
         });
       }
 
       function applyActiveMspContext() {
         var activeMspLabel = formatMspDisplayName(activeMsp);
+        var shouldShowMspContext = activeMsp !== "shopify";
 
         if (document.documentElement) {
           document.documentElement.setAttribute("data-active-msp", activeMsp);
@@ -999,9 +1091,8 @@
         }
 
         document.querySelectorAll("[data-active-msp-copy]").forEach(function (copyEl) {
-          copyEl.textContent = activeHeadless
-            ? "Setup: " + activeMspLabel + " Headless"
-            : "Setup: " + activeMspLabel;
+          copyEl.textContent = activeMspLabel;
+          copyEl.hidden = !shouldShowMspContext;
         });
       }
 
@@ -1316,24 +1407,34 @@
         return additionalItems.length ? nextItems.concat(additionalItems) : nextItems;
       }
 
-      function applyAddonItemRules(items, sectionConfig) {
-        if (!Array.isArray(items) || !items.length || !sectionConfig || !activeAddon) {
-          return items;
+      function getAddonCallout(sectionConfig) {
+        if (!sectionConfig || !activeAddon) {
+          return null;
         }
 
         var addonOverrides = sectionConfig.addonOverrides && typeof sectionConfig.addonOverrides === "object"
           ? sectionConfig.addonOverrides[activeAddon]
           : null;
 
-        if (!addonOverrides) {
-          return items;
+        if (!addonOverrides || !addonOverrides.callout) {
+          return null;
         }
 
-        var additionalItems = Array.isArray(addonOverrides.additionalItems)
-          ? addonOverrides.additionalItems.filter(function (item) { return !!item; })
+        var callout = addonOverrides.callout;
+        var calloutItems = Array.isArray(callout.items)
+          ? callout.items.filter(function (item) { return !!(item && item.label); })
           : [];
 
-        return additionalItems.length ? items.concat(additionalItems) : items;
+        if (!calloutItems.length) {
+          return null;
+        }
+
+        return {
+          badgeLabel: callout.badgeLabel || "Included add-on",
+          title: callout.title || "Add-on",
+          description: callout.description || "",
+          items: calloutItems
+        };
       }
 
       function appendInlineText(parent, text) {
@@ -1377,24 +1478,25 @@
       document.querySelectorAll("[data-resource-section]").forEach(function (sectionEl) {
         var sectionKey = sectionEl.getAttribute("data-resource-section");
         var sectionConfig = checklistSections[sectionKey];
-        var phaseEl = sectionEl.querySelector("[data-resource-phase]");
         var timingEl = sectionEl.querySelector("[data-resource-timing]");
         var titleEl = sectionEl.querySelector("[data-resource-title]");
         var descriptionEl = sectionEl.querySelector("[data-resource-description]");
         var listEl = sectionEl.querySelector("[data-resource-list]");
+        var addonEl = sectionEl.querySelector("[data-resource-addon]");
+        var addonBadgeEl = sectionEl.querySelector("[data-resource-addon-badge]");
+        var addonTitleEl = sectionEl.querySelector("[data-resource-addon-title]");
+        var addonDescriptionEl = sectionEl.querySelector("[data-resource-addon-description]");
+        var addonListEl = sectionEl.querySelector("[data-resource-addon-list]");
         var itemsByMsp = sectionConfig && sectionConfig.itemsByMsp && typeof sectionConfig.itemsByMsp === "object"
           ? sectionConfig.itemsByMsp
           : null;
         var baseItems = getItemsForMsp(itemsByMsp, activeMsp);
         var items = baseItems.length
-          ? applyAddonItemRules(applyPackageItemRules(applyHeadlessItemOverrides(baseItems, sectionConfig), sectionConfig), sectionConfig)
+          ? applyPackageItemRules(applyHeadlessItemOverrides(baseItems, sectionConfig), sectionConfig)
           : sectionConfig && Array.isArray(sectionConfig.items)
-            ? applyAddonItemRules(applyPackageItemRules(sectionConfig.items, sectionConfig), sectionConfig)
+            ? applyPackageItemRules(sectionConfig.items, sectionConfig)
             : [];
-
-        if (phaseEl && sectionConfig && sectionConfig.phaseLabel) {
-          phaseEl.textContent = sectionConfig.phaseLabel;
-        }
+        var addonCallout = getAddonCallout(sectionConfig);
 
         if (timingEl && sectionConfig && sectionConfig.timingLabel) {
           timingEl.textContent = sectionConfig.timingLabel;
@@ -1430,7 +1532,15 @@
 
           if (hasRenderableLinks) {
             if (item.label) {
-              appendInlineText(strong, item.label + " ");
+              if (item.linkLabelWhenSingleLink && itemLinks.length === 1 && itemLinks[0] && itemLinks[0].url) {
+                appendLinkContent(strong, {
+                  label: item.label,
+                  url: itemLinks[0].url
+                });
+                appendInlineText(strong, " ");
+              } else {
+                appendInlineText(strong, item.label + " ");
+              }
             }
 
             itemLinks.forEach(function (linkItem, index) {
@@ -1445,6 +1555,40 @@
 
           li.appendChild(strong);
           listEl.appendChild(li);
+        });
+
+        if (!addonEl || !addonListEl) {
+          return;
+        }
+
+        if (!addonCallout) {
+          addonEl.hidden = true;
+          addonListEl.innerHTML = "";
+          return;
+        }
+
+        addonEl.hidden = false;
+
+        if (addonBadgeEl) {
+          addonBadgeEl.textContent = addonCallout.badgeLabel;
+        }
+
+        if (addonTitleEl) {
+          addonTitleEl.textContent = addonCallout.title;
+        }
+
+        if (addonDescriptionEl) {
+          addonDescriptionEl.textContent = addonCallout.description;
+        }
+
+        addonListEl.innerHTML = "";
+
+        addonCallout.items.forEach(function (item) {
+          var li = document.createElement("li");
+          var strong = document.createElement("strong");
+          appendLinkContent(strong, item);
+          li.appendChild(strong);
+          addonListEl.appendChild(li);
         });
       });
 
