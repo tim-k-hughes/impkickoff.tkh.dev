@@ -692,8 +692,8 @@
       </div>
 
       <header>
-        <h1 data-brand-headline>Welcome to Triple L</h1>
-        <p class="hero-brand-context" data-brand-context hidden>Onboarding for your team</p>
+        <h1 data-brand-headline>Welcome to Triple Whale</h1>
+        <p class="hero-brand-context" data-brand-context hidden>Quickstart resources for your brand</p>
         <p class="lead" data-brand-lead-copy>Let's get your kickoff call booked so onboarding can get started.</p>
       </header>
 
@@ -885,6 +885,22 @@
         return match;
       }
 
+      function getQueryParamValueFromList(paramNames) {
+        if (!Array.isArray(paramNames) || !paramNames.length) {
+          return null;
+        }
+
+        for (var i = 0; i < paramNames.length; i += 1) {
+          var value = getQueryParamValue(paramNames[i]);
+
+          if (value !== null) {
+            return value;
+          }
+        }
+
+        return null;
+      }
+
       function getCookieValue(cookieName) {
         if (!cookieName || typeof document === "undefined" || typeof document.cookie !== "string") {
           return null;
@@ -1034,18 +1050,31 @@
       var activePackage = getActivePackage();
 
       function getActiveAddon() {
-        var rawAddon = getQueryParamValue(resourceRouting.addonQueryParam || "add-on");
+        var addonParamNames = [];
+        var configuredAddonParam = resourceRouting.addonQueryParam || "addon";
+        var addonAliases = Array.isArray(resourceRouting.addonQueryParamAliases)
+          ? resourceRouting.addonQueryParamAliases
+          : ["add-on"];
+
+        addonParamNames.push(configuredAddonParam);
+        addonAliases.forEach(function (alias) {
+          if (alias && addonParamNames.indexOf(alias) === -1) {
+            addonParamNames.push(alias);
+          }
+        });
+
+        var rawAddon = getQueryParamValueFromList(addonParamNames);
         return normalizeAddonValue(rawAddon);
       }
 
       var activeAddon = getActiveAddon();
 
       function getHeroHeadline() {
-        return "Welcome to Triple L";
+        return "Welcome to Triple Whale";
       }
 
       function getHeroBrandContext(brandName) {
-        return brandName ? "Onboarding for " + brandName : "";
+        return brandName ? "Quickstart resources for " + brandName : "";
       }
 
       function getHeroLeadCopy() {

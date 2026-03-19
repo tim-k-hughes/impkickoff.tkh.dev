@@ -63,7 +63,7 @@ Current status noted in that prior thread:
 - The two onboarding resource cards now support MSP-aware link sets in `booking-page-links.js`.
 
 ## MSP-Aware Resource Links
-The page now reads lowercase `?msp=`, `?headless=`, `?package=`, and `?add-on=` from the URL and swaps the onboarding resource cards accordingly.
+The page now reads lowercase `?msp=`, `?headless=`, `?package=`, and `?addon=` from the URL and swaps the onboarding resource cards accordingly. `?add-on=` is also accepted.
 
 - Supported values: `Shopify`, `WooCommerce`, `BigCommerce`, `custom`
 - Matching is case-insensitive and ignores spaces / punctuation
@@ -79,9 +79,9 @@ The page now reads lowercase `?msp=`, `?headless=`, `?package=`, and `?add-on=` 
 - `?package=starter` removes Sonar Optimize from configuration and hides Creative Analysis, Cohort Analysis, and Customer Segments from activation
 - `?package=professional` includes the full advanced/default activation set plus MMM and Incrementality
 - Missing, blank, or `?package=advanced` keeps the default experience
-- `?add-on=conversion` adds a separate bottom-of-card Conversion add-on callout under Configuration with a Setup Custom Events guide
-- `?add-on=retention` adds a separate bottom-of-card Retention add-on callout under Activation with a Sync customer segments guide
-- Missing, blank, or unknown `add-on` values leave the two sections unchanged
+- `?addon=conversion` adds a separate bottom-of-card Conversion add-on callout under Configuration with a Setup Custom Events guide
+- `?addon=retention` adds a separate bottom-of-card Retention add-on callout under Activation with a Sync customer segments guide
+- Missing, blank, or unknown `addon` values leave the two sections unchanged
 
 Edit platform-specific resource links in:
 
@@ -94,14 +94,14 @@ Edit platform-specific resource links in:
 Configuration remains MSP-aware, and `headless=true` now overrides the Triple Pixel install item with a shared headless URL. Activation uses one shared resource list for all brands unless a package rule trims specific trainings. Add-ons now render as separate bottom-of-card callouts instead of blending into the main checklist. Resource bullets can also include multiple inline links in a single bullet when needed (for example, one action with separate links for Sonar Send and Sonar Optimize). Section timing labels, titles, descriptions, package rules, and add-on rules all live in `booking-page-links.js`, so copy and URLs can be maintained in one place. The page also surfaces a small platform context label for non-Shopify MSPs so revisits still visibly reflect the active platform when needed.
 
 ## Brand Personalization
-The hero copy now reads `?brand=` from the URL and personalizes the headline and supporting copy when a brand name is available.
+The hero copy now reads `?brand=` from the URL and personalizes the supporting brand line when a brand name is available.
 
 - A valid `?brand=` value updates the `tw_brand` cookie
 - If `brand` is missing, the page falls back to `tw_brand` when present
 - Blank `brand` values do not overwrite the cookie
 - If both the URL and cookie have values, the URL wins and the cookie is updated
 - If a new `?brand=` value differs from the stored `tw_brand`, the page clears the persisted onboarding cookies first so the new brand starts from a clean state before any fresh query params are applied
-- The main hero headline stays fixed as `Welcome to Triple L`, and the brand now appears in a smaller supporting line when available
+- The main hero headline stays fixed as `Welcome to Triple Whale`, and the brand now appears in a smaller supporting line when available
 
 ## Geo Recommendation Persistence
 The recommended region highlight now uses `geo` from the URL first and falls back to a cookie on later visits.

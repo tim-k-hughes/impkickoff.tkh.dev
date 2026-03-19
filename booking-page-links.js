@@ -30,7 +30,8 @@ window.BOOKING_PAGE_LINKS = {
   },
 
   // Resource routing for the two onboarding cards.
-  // The page uses lowercase `?msp=`, `?headless=`, `?package=`, and `?add-on=` query params.
+  // The page uses lowercase `?msp=`, `?headless=`, `?package=`, and `?addon=` query params.
+  // `?add-on=` is also accepted as a legacy alias for add-on routing.
   // Matching is case-insensitive. Missing, empty, or unknown MSP values fall back to Shopify.
   resourceRouting: {
     queryParam: "msp",
@@ -39,7 +40,8 @@ window.BOOKING_PAGE_LINKS = {
     defaultHeadless: false,
     packageQueryParam: "package",
     defaultPackage: "advanced",
-    addonQueryParam: "add-on"
+    addonQueryParam: "addon",
+    addonQueryParamAliases: ["add-on"]
   },
 
   // Bulleted checklist links in the two info cards.
