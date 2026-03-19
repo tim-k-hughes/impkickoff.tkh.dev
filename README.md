@@ -60,13 +60,13 @@ Current status noted in that prior thread:
 - Brand-kit styling has now been applied to `index.html` (color, typography, spacing, tone, CTA/focus states).
 - Booking URLs in `booking-page-links.js` are still placeholders and should be replaced with production links.
 - The two onboarding resource cards now support MSP-aware link sets in `booking-page-links.js`.
-- Booking links now also support cohort-aware routing for `?cohort=` with default, SMB, mid-market, and enterprise router sets.
+- Booking links now also support cohort-aware routing for `?cohort=` with default, `smb`, `mm`, and `ent` router sets.
 
 ## URL-Driven Personalization
 The page now reads `?cohort=`, `?msp=`, `?headless=`, `?package=`, `?hasConversion=`, and `?hasRetention=` from the URL and swaps booking links and onboarding resources accordingly.
 
 ## Cohort-Aware Booking Links
-- Supported values: `SMB`, `mid-market`, `enterprise`
+- Supported values: `smb`, `mm`, `ent`
 - Matching is case-insensitive and ignores spaces / punctuation
 - Missing, blank, or unknown `cohort` values fall back to the `tw_cohort` cookie when present, otherwise keep the default shared booking routers
 - A valid `?cohort=` value updates the `tw_cohort` cookie
