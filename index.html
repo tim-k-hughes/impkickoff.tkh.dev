@@ -110,6 +110,25 @@
       position: relative;
     }
 
+    .app-shell {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    body[data-debug-mode="true"] {
+      align-items: flex-start;
+    }
+
+    body[data-debug-mode="true"] .page {
+      max-width: 1520px;
+    }
+
+    body[data-debug-mode="true"] .app-shell {
+      grid-template-columns: minmax(0, 1fr) minmax(440px, 520px);
+    }
+
     .frame {
       background: var(--white);
       border-radius: var(--radius-lg);
@@ -139,6 +158,15 @@
       justify-content: space-between;
       gap: 14px;
       margin-bottom: 20px;
+    }
+
+    .topbar-actions {
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-left: auto;
     }
 
     .brand {
@@ -221,16 +249,25 @@
       letter-spacing: -0.03em;
     }
 
+    .hero-brand-context {
+      margin: -2px 0 0;
+      color: var(--mid-gray);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .hero-brand-context[hidden] {
+      display: none;
+    }
+
     .lead {
       margin: 0;
       font-size: 16px;
       line-height: 1.65;
       color: var(--charcoal);
       max-width: 760px;
-    }
-
-    .lead strong {
-      color: var(--ink);
     }
 
     .regions {
@@ -373,16 +410,82 @@
       margin-bottom: 20px;
     }
 
+    .resource-context {
+      position: relative;
+      z-index: 1;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin: 0;
+      padding: 0 14px;
+      min-height: 40px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--toggle-bg);
+      color: var(--charcoal);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .resource-context[hidden] {
+      display: none;
+    }
+
+    html[data-active-headless="true"] .resource-context {
+      border-color: var(--recommend-border);
+      background: linear-gradient(180deg, var(--recommend-surface-top), var(--recommend-surface-bottom));
+      color: var(--recommend-copy);
+      box-shadow: 0 0 0 3px var(--recommend-ring);
+    }
+
     .info-card {
       background: var(--info-card-bg);
       border: 1px solid var(--line);
       border-radius: var(--radius-md);
       padding: 18px 18px 19px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .info-card-header {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+      margin: 0 0 10px;
+    }
+
+    .info-card-title-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      min-width: 0;
+    }
+
+    .info-card-timing {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 0 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(12, 112, 242, 0.2);
+      background: rgba(12, 112, 242, 0.08);
+      color: var(--tag-text);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      white-space: nowrap;
     }
 
     .info-card h3 {
-      margin: 0 0 9px;
-      font-size: 18px;
+      margin: 0;
+      font-size: 24px;
+      letter-spacing: -0.02em;
       color: var(--ink);
     }
 
@@ -408,6 +511,82 @@
 
     .info-card ul a:hover,
     .info-card ul a:focus {
+      color: var(--brand-blue);
+    }
+
+    .info-card-addon {
+      margin-top: auto;
+      padding: 14px 14px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(12, 112, 242, 0.18);
+      background: linear-gradient(180deg, rgba(12, 112, 242, 0.08), rgba(12, 112, 242, 0.03));
+    }
+
+    .info-card > ul[data-resource-list] {
+      margin-bottom: 16px;
+    }
+
+    .info-card-addon[hidden] {
+      display: none;
+    }
+
+    .info-card-addon-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px 10px;
+      margin: 0 0 6px;
+    }
+
+    .info-card-addon-badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 0 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(12, 112, 242, 0.16);
+      background: rgba(12, 112, 242, 0.1);
+      color: var(--tag-text);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .info-card-addon-title {
+      margin: 0;
+      color: var(--ink);
+      font-size: 17px;
+      letter-spacing: -0.01em;
+    }
+
+    .info-card-addon-description {
+      margin: 0 0 8px;
+      color: var(--charcoal);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .info-card-addon-description[hidden] {
+      display: none;
+    }
+
+    .info-card-addon-list {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--charcoal);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .info-card-addon-list a {
+      color: inherit;
+      text-underline-offset: 2px;
+    }
+
+    .info-card-addon-list a:hover,
+    .info-card-addon-list a:focus {
       color: var(--brand-blue);
     }
 
@@ -460,6 +639,305 @@
       color: var(--mid-gray);
     }
 
+    .debug-panel {
+      position: sticky;
+      top: 24px;
+      align-self: start;
+      background: rgba(255, 255, 255, 0.94);
+      border: 1px solid var(--frame-border);
+      border-radius: var(--radius-lg);
+      padding: 22px 20px;
+      box-shadow: var(--shadow);
+      overflow: auto;
+      overscroll-behavior: contain;
+      scrollbar-gutter: stable;
+      animation: reveal 620ms ease both;
+    }
+
+    html[data-theme="dark"] .debug-panel {
+      background: rgba(7, 26, 62, 0.96);
+    }
+
+    .debug-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(340px 120px at 100% 0%, rgba(12, 112, 242, 0.14), transparent 60%),
+        linear-gradient(180deg, var(--frame-overlay-top), transparent 28%);
+      pointer-events: none;
+    }
+
+    .debug-panel > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .debug-panel-header {
+      margin-bottom: 14px;
+    }
+
+    .debug-eyebrow {
+      margin: 0 0 8px;
+      color: var(--tag-text);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .debug-panel h2 {
+      margin: 0 0 8px;
+      font-size: 24px;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+    }
+
+    .debug-help,
+    .debug-note,
+    .debug-callout {
+      margin: 0;
+      color: var(--charcoal);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .debug-callout {
+      padding: 12px 14px;
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(12, 112, 242, 0.18);
+      background: linear-gradient(180deg, rgba(12, 112, 242, 0.1), rgba(12, 112, 242, 0.04));
+    }
+
+    .debug-callout--warning {
+      border-color: rgba(208, 120, 37, 0.28);
+      background: linear-gradient(180deg, rgba(208, 120, 37, 0.12), rgba(208, 120, 37, 0.05));
+    }
+
+    .debug-layout {
+      display: grid;
+      grid-template-columns: minmax(205px, 0.84fr) minmax(0, 1.16fr);
+      gap: 16px;
+      align-items: start;
+    }
+
+    .debug-column {
+      display: grid;
+      gap: 14px;
+      align-content: start;
+      min-width: 0;
+    }
+
+    .debug-section {
+      display: grid;
+      gap: 8px;
+    }
+
+    .debug-section-title {
+      margin: 0;
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+    }
+
+    .debug-table-wrap {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      background: var(--info-card-bg);
+    }
+
+    .debug-table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    .debug-table th,
+    .debug-table td {
+      padding: 9px 11px;
+      border-top: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .debug-table tbody tr:first-child th,
+    .debug-table tbody tr:first-child td,
+    .debug-table thead + tbody tr:first-child th,
+    .debug-table thead + tbody tr:first-child td {
+      border-top: 0;
+    }
+
+    .debug-table thead th {
+      color: var(--mid-gray);
+      background: rgba(12, 112, 242, 0.08);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .debug-table tbody th {
+      width: 34%;
+      color: var(--ink);
+      background: rgba(12, 112, 242, 0.04);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .debug-table td {
+      color: var(--charcoal);
+      word-break: break-word;
+    }
+
+    .debug-table-wrap .debug-note {
+      padding: 11px 12px;
+    }
+
+    .debug-accordion {
+      display: grid;
+      gap: 8px;
+    }
+
+    .debug-item {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      background: var(--info-card-bg);
+      overflow: hidden;
+    }
+
+    .debug-item summary {
+      list-style: none;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 12px 12px 11px;
+      cursor: pointer;
+    }
+
+    .debug-item summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .debug-summary-copy {
+      display: grid;
+      gap: 3px;
+      min-width: 0;
+      flex: 1 1 auto;
+    }
+
+    .debug-summary-label {
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 800;
+      line-height: 1.3;
+    }
+
+    .debug-summary-text {
+      color: var(--charcoal);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .debug-item summary::after {
+      content: "+";
+      color: var(--brand-blue);
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .debug-item[open] summary::after {
+      content: "-";
+    }
+
+    .debug-item-body {
+      display: grid;
+      gap: 12px;
+      padding: 0 12px 12px;
+      border-top: 1px solid var(--line);
+    }
+
+    .debug-facts {
+      display: grid;
+      gap: 8px;
+    }
+
+    .debug-fact {
+      display: grid;
+      gap: 4px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: rgba(12, 112, 242, 0.05);
+    }
+
+    .debug-fact-label {
+      color: var(--mid-gray);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .debug-fact-value {
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.4;
+      word-break: break-word;
+    }
+
+    .debug-options {
+      display: grid;
+      gap: 8px;
+    }
+
+    .debug-options-title {
+      margin: 0;
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .debug-option-list {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--charcoal);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .debug-option-list li + li {
+      margin-top: 6px;
+    }
+
+    .debug-option-label {
+      color: var(--ink);
+      font-weight: 800;
+    }
+
+    @media (max-width: 1240px) {
+      body[data-debug-mode="true"] .app-shell {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .debug-panel {
+        position: static;
+        top: auto;
+        max-height: none;
+      }
+    }
+
+    @media (max-width: 820px) {
+      .debug-layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
     a:focus-visible {
       outline: 3px solid var(--focus-ring);
       outline-offset: 2px;
@@ -483,6 +961,13 @@
 
       .topbar {
         margin-bottom: 14px;
+        align-items: flex-start;
+        flex-wrap: wrap;
+      }
+
+      .topbar-actions {
+        width: 100%;
+        justify-content: space-between;
       }
 
       .theme-toggle {
@@ -506,35 +991,39 @@
 </head>
 <body>
   <main class="page">
-    <section class="frame">
+    <div class="app-shell">
+      <section class="frame">
       <div class="topbar">
         <div class="brand" aria-label="Triple Whale">
           <p class="brand-name">Triple Whale</p>
         </div>
-        <button class="theme-toggle" id="theme-toggle" type="button" aria-pressed="false" aria-label="Enable dark mode" title="Enable dark mode">
-          <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3c0 .28-.02.56-.02.84A9 9 0 0 0 21 12.79z"></path>
-          </svg>
-          <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true">
-            <circle cx="12" cy="12" r="4"></circle>
-            <line x1="12" y1="2" x2="12" y2="5"></line>
-            <line x1="12" y1="19" x2="12" y2="22"></line>
-            <line x1="2" y1="12" x2="5" y2="12"></line>
-            <line x1="19" y1="12" x2="22" y2="12"></line>
-            <line x1="4.9" y1="4.9" x2="7.1" y2="7.1"></line>
-            <line x1="16.9" y1="16.9" x2="19.1" y2="19.1"></line>
-            <line x1="4.9" y1="19.1" x2="7.1" y2="16.9"></line>
-            <line x1="16.9" y1="7.1" x2="19.1" y2="4.9"></line>
-          </svg>
-        </button>
+        <div class="topbar-actions">
+          <p class="resource-context" data-active-msp-copy aria-live="polite" hidden>
+            Shopify
+          </p>
+          <button class="theme-toggle" id="theme-toggle" type="button" aria-pressed="false" aria-label="Enable dark mode" title="Enable dark mode">
+            <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3c0 .28-.02.56-.02.84A9 9 0 0 0 21 12.79z"></path>
+            </svg>
+            <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="4"></circle>
+              <line x1="12" y1="2" x2="12" y2="5"></line>
+              <line x1="12" y1="19" x2="12" y2="22"></line>
+              <line x1="2" y1="12" x2="5" y2="12"></line>
+              <line x1="19" y1="12" x2="22" y2="12"></line>
+              <line x1="4.9" y1="4.9" x2="7.1" y2="7.1"></line>
+              <line x1="16.9" y1="16.9" x2="19.1" y2="19.1"></line>
+              <line x1="4.9" y1="19.1" x2="7.1" y2="16.9"></line>
+              <line x1="16.9" y1="7.1" x2="19.1" y2="4.9"></line>
+            </svg>
+          </button>
+        </div>
       </div>
 
       <header>
-        <h1>Book your kickoff and move from reporting to action.</h1>
-        <p class="lead">
-          Pick the region closest to your business hours. Your onboarding specialist will guide setup, confirm measurement, and give you clear next steps.
-          <strong>Unified data. Proven measurement.</strong>
-        </p>
+        <h1 data-brand-headline>Welcome to Triple Whale!</h1>
+        <p class="hero-brand-context" data-brand-context hidden>Quickstart resources for your brand</p>
+        <p class="lead" data-brand-lead-copy>Let's get your kickoff call booked so onboarding can get started.</p>
       </header>
 
       <div class="regions">
@@ -570,16 +1059,42 @@
       </div>
 
       <div class="info-grid">
-        <article class="info-card">
-          <h3>Before kickoff (optional)</h3>
-          <p>To move faster, connect these ahead of the call:</p>
+        <article class="info-card" data-resource-section="beforeKickoff">
+          <div class="info-card-header">
+            <div class="info-card-title-row">
+              <h3 data-resource-title="beforeKickoff">Configuration</h3>
+              <span class="info-card-timing" data-resource-timing="beforeKickoff">Initial account setup</span>
+            </div>
+          </div>
+          <p data-resource-description="beforeKickoff">Complete as much setup as you can before your kickoff so we can validate faster on the call and create a clear path into activation.</p>
           <ul data-resource-list="beforeKickoff"></ul>
+          <div class="info-card-addon" data-resource-addon hidden>
+            <div class="info-card-addon-header">
+              <h4 class="info-card-addon-title" data-resource-addon-title>Conversion</h4>
+              <span class="info-card-addon-badge" data-resource-addon-badge>Add-on</span>
+            </div>
+            <p class="info-card-addon-description" data-resource-addon-description hidden></p>
+            <ul class="info-card-addon-list" data-resource-addon-list></ul>
+          </div>
         </article>
 
-        <article class="info-card">
-          <h3>Kickoff outcomes</h3>
-          <p>You leave with clarity on setup, dashboards, and what to do next:</p>
+        <article class="info-card" data-resource-section="kickoffOutcomes">
+          <div class="info-card-header">
+            <div class="info-card-title-row">
+              <h3 data-resource-title="kickoffOutcomes">Activation</h3>
+              <span class="info-card-timing" data-resource-timing="kickoffOutcomes">Once configured</span>
+            </div>
+          </div>
+          <p data-resource-description="kickoffOutcomes">After your kickoff, your team should know what is configured, what still needs to be finished, and what to focus on as activation begins.</p>
           <ul data-resource-list="kickoffOutcomes"></ul>
+          <div class="info-card-addon" data-resource-addon hidden>
+            <div class="info-card-addon-header">
+              <h4 class="info-card-addon-title" data-resource-addon-title>Retention</h4>
+              <span class="info-card-addon-badge" data-resource-addon-badge>Add-on</span>
+            </div>
+            <p class="info-card-addon-description" data-resource-addon-description hidden></p>
+            <ul class="info-card-addon-list" data-resource-addon-list></ul>
+          </div>
         </article>
       </div>
 
@@ -591,7 +1106,42 @@
       </section>
 
       <div class="footer">If you are unsure, start with the region closest to your business hours.</div>
-    </section>
+      </section>
+
+      <aside class="debug-panel" data-debug-panel hidden>
+        <div class="debug-panel-header">
+          <p class="debug-eyebrow">Debug View</p>
+          <h2>Why this page looks the way it does</h2>
+          <p class="debug-help">A cookie here just means a saved value from a past visit.</p>
+        </div>
+
+        <div class="debug-layout">
+          <div class="debug-column">
+            <section class="debug-section" data-debug-alerts hidden></section>
+
+            <section class="debug-section">
+              <h3 class="debug-section-title">Current page state</h3>
+              <div class="debug-table-wrap">
+                <table class="debug-table" data-debug-overview></table>
+              </div>
+            </section>
+
+            <section class="debug-section">
+              <h3 class="debug-section-title">URL right now</h3>
+              <div class="debug-table-wrap" data-debug-url-summary></div>
+            </section>
+          </div>
+
+          <div class="debug-column">
+            <section class="debug-section">
+              <h3 class="debug-section-title">Parameter guide</h3>
+              <p class="debug-note">Open any item to compare the URL, any saved cookie, and the final value the page used.</p>
+              <div class="debug-accordion" data-debug-accordion></div>
+            </section>
+          </div>
+        </div>
+      </aside>
+    </div>
   </main>
 
   <script src="booking-page-links.js"></script>
@@ -599,6 +1149,369 @@
     (function () {
       var linkConfig = window.BOOKING_PAGE_LINKS || {};
       var bookingLinks = {};
+      var resourceRouting = linkConfig.resourceRouting || {};
+      var checklistSections = linkConfig.checklistSections || {};
+
+      function normalizeMspValue(value) {
+        if (!value) {
+          return null;
+        }
+
+        var normalizedValue = String(value).toLowerCase().replace(/[^a-z]/g, "");
+        var validMspValues = {
+          shopify: "shopify",
+          woocommerce: "woocommerce",
+          bigcommerce: "bigcommerce",
+          custom: "custom"
+        };
+
+        return validMspValues[normalizedValue] || null;
+      }
+
+      function normalizeHeadlessValue(value) {
+        if (value === true || value === false) {
+          return value;
+        }
+
+        if (value === null || typeof value === "undefined") {
+          return null;
+        }
+
+        var normalizedValue = String(value).toLowerCase().trim();
+
+        if (normalizedValue === "true") {
+          return true;
+        }
+
+        if (normalizedValue === "false") {
+          return false;
+        }
+
+        return null;
+      }
+
+      function normalizeBrandValue(value) {
+        if (value === null || typeof value === "undefined") {
+          return null;
+        }
+
+        var normalizedValue = String(value).replace(/\s+/g, " ").trim();
+        return normalizedValue || null;
+      }
+
+      function normalizePackageValue(value) {
+        if (value === null || typeof value === "undefined") {
+          return null;
+        }
+
+        var normalizedValue = String(value).toLowerCase().trim();
+        var validPackageValues = {
+          starter: "starter",
+          advanced: "advanced",
+          professional: "professional"
+        };
+
+        return validPackageValues[normalizedValue] || null;
+      }
+
+      function getQueryParamValue(paramName) {
+        if (!paramName) {
+          return null;
+        }
+
+        var params = new URLSearchParams(window.location.search);
+        var match = null;
+
+        params.forEach(function (value, key) {
+          if (match !== null) {
+            return;
+          }
+
+          if (String(key).toLowerCase() === String(paramName).toLowerCase()) {
+            match = value;
+          }
+        });
+
+        return match;
+      }
+
+      function getCookieValue(cookieName) {
+        if (!cookieName || typeof document === "undefined" || typeof document.cookie !== "string") {
+          return null;
+        }
+
+        var cookies = document.cookie ? document.cookie.split(";") : [];
+
+        for (var i = 0; i < cookies.length; i += 1) {
+          var cookie = cookies[i].trim();
+
+          if (cookie.indexOf(cookieName + "=") === 0) {
+            return decodeURIComponent(cookie.slice(cookieName.length + 1));
+          }
+        }
+
+        return null;
+      }
+
+      function setCookieValue(cookieName, cookieValue) {
+        if (!cookieName || !cookieValue || typeof document === "undefined") {
+          return;
+        }
+
+        document.cookie = [
+          cookieName + "=" + encodeURIComponent(cookieValue),
+          "path=/",
+          "max-age=31536000",
+          "SameSite=Lax"
+        ].join("; ");
+      }
+
+      function deleteCookieValue(cookieName) {
+        if (!cookieName || typeof document === "undefined") {
+          return;
+        }
+
+        document.cookie = [
+          cookieName + "=",
+          "path=/",
+          "max-age=0",
+          "expires=Thu, 01 Jan 1970 00:00:00 GMT",
+          "SameSite=Lax"
+        ].join("; ");
+      }
+
+      var defaultMsp = normalizeMspValue(resourceRouting.defaultMsp) || "shopify";
+      var defaultHeadless = normalizeHeadlessValue(resourceRouting.defaultHeadless) === true;
+      var defaultPackage = normalizePackageValue(resourceRouting.defaultPackage) || "advanced";
+      var geoCookieName = "tw_geo";
+      var mspCookieName = "tw_msp";
+      var headlessCookieName = "tw_headless";
+      var brandCookieName = "tw_brand";
+      var packageCookieName = "tw_package";
+      var hasConversionCookieName = "tw_hasconversion";
+      var hasRetentionCookieName = "tw_hasretention";
+      var debugPanelParamName = "debug";
+      var featureFlagQueryParams = resourceRouting.featureFlagQueryParams && typeof resourceRouting.featureFlagQueryParams === "object"
+        ? resourceRouting.featureFlagQueryParams
+        : {};
+      var featureFlagCookieNames = {
+        conversion: hasConversionCookieName,
+        retention: hasRetentionCookieName
+      };
+      var isDebugMode = normalizeHeadlessValue(getQueryParamValue(debugPanelParamName)) === true;
+      var brandResetInfo = {
+        didReset: false,
+        previousBrand: null,
+        nextBrand: null
+      };
+      var persistedCookieNames = [
+        geoCookieName,
+        mspCookieName,
+        headlessCookieName,
+        brandCookieName,
+        packageCookieName,
+        hasConversionCookieName,
+        hasRetentionCookieName
+      ];
+
+      function normalizeBrandComparisonValue(value) {
+        var normalizedBrand = normalizeBrandValue(value);
+        return normalizedBrand ? normalizedBrand.toLowerCase() : null;
+      }
+
+      function applyDebugModeState() {
+        if (document.documentElement) {
+          document.documentElement.setAttribute("data-debug-mode", String(isDebugMode));
+        }
+
+        if (document.body) {
+          document.body.setAttribute("data-debug-mode", String(isDebugMode));
+        }
+      }
+
+      applyDebugModeState();
+
+      function resetPersistedCookiesForBrandChange() {
+        var queryBrand = normalizeBrandComparisonValue(getQueryParamValue("brand"));
+        var cookieBrand = normalizeBrandComparisonValue(getCookieValue(brandCookieName));
+
+        if (!queryBrand || !cookieBrand || queryBrand === cookieBrand) {
+          return;
+        }
+
+        brandResetInfo.didReset = true;
+        brandResetInfo.previousBrand = normalizeBrandValue(getCookieValue(brandCookieName));
+        brandResetInfo.nextBrand = normalizeBrandValue(getQueryParamValue("brand"));
+        persistedCookieNames.forEach(deleteCookieValue);
+      }
+
+      resetPersistedCookiesForBrandChange();
+
+      function formatMspDisplayName(mspKey) {
+        var labels = {
+          shopify: "Shopify",
+          woocommerce: "WooCommerce",
+          bigcommerce: "BigCommerce",
+          custom: "Custom"
+        };
+
+        return labels[mspKey] || "Shopify";
+      }
+
+      function getActiveMsp() {
+        var rawMsp = getQueryParamValue(resourceRouting.queryParam || "msp");
+        var queryMsp = normalizeMspValue(rawMsp);
+        var cookieMsp = normalizeMspValue(getCookieValue(mspCookieName));
+
+        if (queryMsp) {
+          setCookieValue(mspCookieName, rawMsp);
+          return queryMsp;
+        }
+
+        return cookieMsp || defaultMsp;
+      }
+
+      var activeMsp = getActiveMsp();
+
+      function getActiveHeadless() {
+        var rawHeadless = getQueryParamValue(resourceRouting.headlessQueryParam || "headless");
+        var queryHeadless = normalizeHeadlessValue(rawHeadless);
+        var cookieHeadless = normalizeHeadlessValue(getCookieValue(headlessCookieName));
+
+        if (queryHeadless !== null) {
+          setCookieValue(headlessCookieName, rawHeadless);
+          return queryHeadless;
+        }
+
+        if (cookieHeadless !== null) {
+          return cookieHeadless;
+        }
+
+        return defaultHeadless;
+      }
+
+      var activeHeadless = getActiveHeadless();
+
+      function getActiveBrand() {
+        var rawBrand = getQueryParamValue("brand");
+        var queryBrand = normalizeBrandValue(rawBrand);
+        var cookieBrand = normalizeBrandValue(getCookieValue(brandCookieName));
+
+        if (queryBrand) {
+          setCookieValue(brandCookieName, queryBrand);
+          return queryBrand;
+        }
+
+        return cookieBrand || null;
+      }
+
+      var activeBrand = getActiveBrand();
+
+      function getActivePackage() {
+        var rawPackage = getQueryParamValue(resourceRouting.packageQueryParam || "package");
+        var queryPackage = normalizePackageValue(rawPackage);
+        var cookiePackage = normalizePackageValue(getCookieValue(packageCookieName));
+
+        if (queryPackage) {
+          setCookieValue(packageCookieName, rawPackage);
+          return queryPackage;
+        }
+
+        return cookiePackage || defaultPackage;
+      }
+
+      var activePackage = getActivePackage();
+
+      function normalizeFeatureFlagValue(value) {
+        if (value === true) {
+          return true;
+        }
+
+        if (value === null || typeof value === "undefined") {
+          return null;
+        }
+
+        return String(value).toLowerCase().trim() === "true" ? true : null;
+      }
+
+      function getActiveFeatureFlag(featureFlagKey) {
+        if (!featureFlagKey) {
+          return false;
+        }
+
+        var queryParamName = featureFlagQueryParams[featureFlagKey];
+        var cookieName = featureFlagCookieNames[featureFlagKey];
+        var queryFlag = normalizeFeatureFlagValue(getQueryParamValue(queryParamName));
+        var cookieFlag = normalizeFeatureFlagValue(getCookieValue(cookieName));
+
+        if (queryFlag === true) {
+          setCookieValue(cookieName, "true");
+          return true;
+        }
+
+        return cookieFlag === true;
+      }
+
+      var activeFeatureFlags = {
+        conversion: getActiveFeatureFlag("conversion"),
+        retention: getActiveFeatureFlag("retention")
+      };
+
+      function getHeroHeadline() {
+        return "Welcome to Triple Whale!";
+      }
+
+      function getHeroBrandContext(brandName) {
+        return brandName ? "Quickstart resources for " + brandName : "";
+      }
+
+      function getHeroLeadCopy() {
+        return "Let's get your kickoff call booked so onboarding can get started.";
+      }
+
+      function applyBrandCopy() {
+        if (document.documentElement) {
+          document.documentElement.setAttribute("data-active-brand", activeBrand || "");
+        }
+
+        if (document.body) {
+          document.body.setAttribute("data-active-brand", activeBrand || "");
+        }
+
+        document.querySelectorAll("[data-brand-headline]").forEach(function (headlineEl) {
+          headlineEl.textContent = getHeroHeadline();
+        });
+
+        document.querySelectorAll("[data-brand-context]").forEach(function (contextEl) {
+          var contextCopy = getHeroBrandContext(activeBrand);
+          contextEl.textContent = contextCopy;
+          contextEl.hidden = !contextCopy;
+        });
+
+        document.querySelectorAll("[data-brand-lead-copy]").forEach(function (leadEl) {
+          leadEl.textContent = getHeroLeadCopy();
+        });
+      }
+
+      function applyActiveMspContext() {
+        var activeMspLabel = formatMspDisplayName(activeMsp);
+        var shouldShowMspContext = activeMsp !== "shopify";
+
+        if (document.documentElement) {
+          document.documentElement.setAttribute("data-active-msp", activeMsp);
+          document.documentElement.setAttribute("data-active-headless", String(activeHeadless));
+        }
+
+        if (document.body) {
+          document.body.setAttribute("data-active-msp", activeMsp);
+          document.body.setAttribute("data-active-headless", String(activeHeadless));
+        }
+
+        document.querySelectorAll("[data-active-msp-copy]").forEach(function (copyEl) {
+          copyEl.textContent = activeMspLabel;
+          copyEl.hidden = !shouldShowMspContext;
+        });
+      }
 
       function addBookingLinksFromGroup(group) {
         if (!group || typeof group !== "object") {
@@ -639,13 +1552,23 @@
         return validGeoValues[normalizedValue] ? normalizedValue : null;
       }
 
+      var activeRecommendedGeo = null;
+
       function applyGeoRecommendation() {
-        var params = new URLSearchParams(window.location.search);
-        var recommendedGeo = normalizeGeoRecommendation(params.get("geo"));
+        var rawQueryGeo = getQueryParamValue("geo");
+        var queryGeo = normalizeGeoRecommendation(rawQueryGeo);
+        var cookieGeo = normalizeGeoRecommendation(getCookieValue(geoCookieName));
+        var recommendedGeo = queryGeo || cookieGeo;
 
         if (!recommendedGeo) {
           return;
         }
+
+        if (queryGeo) {
+          setCookieValue(geoCookieName, rawQueryGeo);
+        }
+
+        activeRecommendedGeo = recommendedGeo;
 
         var recommendedCard = document.querySelector('.region-card[data-geo="' + recommendedGeo + '"]');
 
@@ -785,14 +1708,228 @@
       }
 
       applyTimezoneLabels();
+      applyBrandCopy();
+      applyActiveMspContext();
 
-      var checklistSections = linkConfig.checklistSections || {};
-      document.querySelectorAll("[data-resource-list]").forEach(function (listEl) {
-        var section = listEl.getAttribute("data-resource-list");
-        var sectionConfig = checklistSections[section];
-        var items = sectionConfig && Array.isArray(sectionConfig.items)
-          ? sectionConfig.items
+      function getItemsForMsp(itemsByMsp, mspKey) {
+        if (!itemsByMsp || typeof itemsByMsp !== "object") {
+          return [];
+        }
+
+        if (Array.isArray(itemsByMsp[mspKey])) {
+          return itemsByMsp[mspKey];
+        }
+
+        if (Array.isArray(itemsByMsp[defaultMsp])) {
+          return itemsByMsp[defaultMsp];
+        }
+
+        return [];
+      }
+
+      function applyHeadlessItemOverrides(items, sectionConfig) {
+        if (!activeHeadless || !Array.isArray(items) || !items.length || !sectionConfig) {
+          return items;
+        }
+
+        var headlessItemOverrides = sectionConfig.headlessItemOverrides && typeof sectionConfig.headlessItemOverrides === "object"
+          ? sectionConfig.headlessItemOverrides
+          : null;
+
+        if (!headlessItemOverrides) {
+          return items;
+        }
+
+        return items.map(function (item) {
+          if (!item || !item.itemKey || !headlessItemOverrides[item.itemKey]) {
+            return item;
+          }
+
+          var override = headlessItemOverrides[item.itemKey];
+          var mergedItem = {};
+          var itemKey;
+
+          for (itemKey in item) {
+            if (Object.prototype.hasOwnProperty.call(item, itemKey)) {
+              mergedItem[itemKey] = item[itemKey];
+            }
+          }
+
+          for (itemKey in override) {
+            if (Object.prototype.hasOwnProperty.call(override, itemKey)) {
+              mergedItem[itemKey] = override[itemKey];
+            }
+          }
+
+          return mergedItem;
+        });
+      }
+
+      function applyPackageItemRules(items, sectionConfig) {
+        if (!Array.isArray(items) || !items.length || !sectionConfig) {
+          return items;
+        }
+
+        var packageOverrides = sectionConfig.packageOverrides && typeof sectionConfig.packageOverrides === "object"
+          ? sectionConfig.packageOverrides[activePackage]
+          : null;
+
+        if (!packageOverrides) {
+          return items;
+        }
+
+        var hiddenItemKeys = Array.isArray(packageOverrides.hiddenItemKeys)
+          ? packageOverrides.hiddenItemKeys
           : [];
+        var hiddenLinkKeysByItemKey = packageOverrides.hiddenLinkKeysByItemKey && typeof packageOverrides.hiddenLinkKeysByItemKey === "object"
+          ? packageOverrides.hiddenLinkKeysByItemKey
+          : null;
+        var additionalItems = Array.isArray(packageOverrides.additionalItems)
+          ? packageOverrides.additionalItems.filter(function (item) { return !!item; })
+          : [];
+
+        var nextItems = items.reduce(function (nextItems, item) {
+          if (!item) {
+            return nextItems;
+          }
+
+          if (item.itemKey && hiddenItemKeys.indexOf(item.itemKey) !== -1) {
+            return nextItems;
+          }
+
+          if (item.itemKey && hiddenLinkKeysByItemKey && Array.isArray(item.links) && hiddenLinkKeysByItemKey[item.itemKey]) {
+            var hiddenLinkKeys = hiddenLinkKeysByItemKey[item.itemKey];
+            var filteredLinks = item.links.filter(function (linkItem) {
+              return !(linkItem && linkItem.linkKey && hiddenLinkKeys.indexOf(linkItem.linkKey) !== -1);
+            });
+
+            if (!filteredLinks.length) {
+              return nextItems;
+            }
+
+            var filteredItem = {};
+            var itemKey;
+
+            for (itemKey in item) {
+              if (Object.prototype.hasOwnProperty.call(item, itemKey)) {
+                filteredItem[itemKey] = item[itemKey];
+              }
+            }
+
+            filteredItem.links = filteredLinks;
+            nextItems.push(filteredItem);
+            return nextItems;
+          }
+
+          nextItems.push(item);
+          return nextItems;
+        }, []);
+
+        return additionalItems.length ? nextItems.concat(additionalItems) : nextItems;
+      }
+
+      function getCalloutForSection(sectionConfig) {
+        if (!sectionConfig || !sectionConfig.callout || !sectionConfig.calloutFlag) {
+          return null;
+        }
+
+        if (!activeFeatureFlags[sectionConfig.calloutFlag]) {
+          return null;
+        }
+
+        var callout = sectionConfig.callout;
+        var calloutItems = Array.isArray(callout.items)
+          ? callout.items.filter(function (item) { return !!(item && item.label); })
+          : [];
+
+        if (!calloutItems.length) {
+          return null;
+        }
+
+        return {
+          badgeLabel: callout.badgeLabel || "Add-on",
+          title: callout.title || "Add-on",
+          description: callout.description || "",
+          items: calloutItems
+        };
+      }
+
+      function appendInlineText(parent, text) {
+        if (!parent || !text) {
+          return;
+        }
+
+        var textEl = document.createElement("span");
+        textEl.textContent = text;
+        parent.appendChild(textEl);
+      }
+
+      function appendLinkContent(parent, item) {
+        if (!parent || !item || !item.label) {
+          return;
+        }
+
+        if (item.url) {
+          var anchor = document.createElement("a");
+          anchor.href = item.url;
+          anchor.textContent = item.label;
+          parent.appendChild(anchor);
+          return;
+        }
+
+        appendInlineText(parent, item.label);
+      }
+
+      function getLinkSeparator(index, total, joinStyle) {
+        if (index === 0) {
+          return "";
+        }
+
+        if (joinStyle === "comma" && total === 2) {
+          return ", ";
+        }
+
+        if (index === total - 1) {
+          return total === 2 ? " and " : ", and ";
+        }
+
+        return ", ";
+      }
+
+      document.querySelectorAll("[data-resource-section]").forEach(function (sectionEl) {
+        var sectionKey = sectionEl.getAttribute("data-resource-section");
+        var sectionConfig = checklistSections[sectionKey];
+        var timingEl = sectionEl.querySelector("[data-resource-timing]");
+        var titleEl = sectionEl.querySelector("[data-resource-title]");
+        var descriptionEl = sectionEl.querySelector("[data-resource-description]");
+        var listEl = sectionEl.querySelector("[data-resource-list]");
+        var addonEl = sectionEl.querySelector("[data-resource-addon]");
+        var addonBadgeEl = sectionEl.querySelector("[data-resource-addon-badge]");
+        var addonTitleEl = sectionEl.querySelector("[data-resource-addon-title]");
+        var addonDescriptionEl = sectionEl.querySelector("[data-resource-addon-description]");
+        var addonListEl = sectionEl.querySelector("[data-resource-addon-list]");
+        var itemsByMsp = sectionConfig && sectionConfig.itemsByMsp && typeof sectionConfig.itemsByMsp === "object"
+          ? sectionConfig.itemsByMsp
+          : null;
+        var baseItems = getItemsForMsp(itemsByMsp, activeMsp);
+        var items = baseItems.length
+          ? applyPackageItemRules(applyHeadlessItemOverrides(baseItems, sectionConfig), sectionConfig)
+          : sectionConfig && Array.isArray(sectionConfig.items)
+            ? applyPackageItemRules(sectionConfig.items, sectionConfig)
+            : [];
+        var addonCallout = getCalloutForSection(sectionConfig);
+
+        if (timingEl && sectionConfig && sectionConfig.timingLabel) {
+          timingEl.textContent = sectionConfig.timingLabel;
+        }
+
+        if (titleEl && sectionConfig && sectionConfig.title) {
+          titleEl.textContent = sectionConfig.title;
+        }
+
+        if (descriptionEl && sectionConfig && sectionConfig.description) {
+          descriptionEl.textContent = sectionConfig.description;
+        }
 
         if (!items.length) {
           return;
@@ -801,18 +1938,38 @@
         listEl.innerHTML = "";
 
         items.forEach(function (item) {
-          if (!item || !item.label) {
+          var itemLinks = item && Array.isArray(item.links)
+            ? item.links.filter(function (linkItem) { return !!(linkItem && linkItem.label); })
+            : [];
+          var hasRenderableLabel = !!(item && item.label);
+          var hasRenderableLinks = !!itemLinks.length;
+
+          if (!item || (!hasRenderableLabel && !hasRenderableLinks)) {
             return;
           }
 
           var li = document.createElement("li");
           var strong = document.createElement("strong");
 
-          if (item.url) {
-            var anchor = document.createElement("a");
-            anchor.href = item.url;
-            anchor.textContent = item.label;
-            strong.appendChild(anchor);
+          if (hasRenderableLinks) {
+            if (item.label) {
+              if (item.linkLabelWhenSingleLink && itemLinks.length === 1 && itemLinks[0] && itemLinks[0].url) {
+                appendLinkContent(strong, {
+                  label: item.label,
+                  url: itemLinks[0].url
+                });
+                appendInlineText(strong, " ");
+              } else {
+                appendInlineText(strong, item.label + " ");
+              }
+            }
+
+            itemLinks.forEach(function (linkItem, index) {
+              appendInlineText(strong, getLinkSeparator(index, itemLinks.length, item.linkJoinStyle));
+              appendLinkContent(strong, linkItem);
+            });
+          } else if (item.url) {
+            appendLinkContent(strong, item);
           } else {
             strong.textContent = item.label;
           }
@@ -820,7 +1977,718 @@
           li.appendChild(strong);
           listEl.appendChild(li);
         });
+
+        if (!addonEl || !addonListEl) {
+          return;
+        }
+
+        if (!addonCallout) {
+          addonEl.hidden = true;
+          addonListEl.innerHTML = "";
+          if (addonDescriptionEl) {
+            addonDescriptionEl.textContent = "";
+            addonDescriptionEl.hidden = true;
+          }
+          return;
+        }
+
+        addonEl.hidden = false;
+
+        if (addonBadgeEl) {
+          addonBadgeEl.textContent = addonCallout.badgeLabel;
+        }
+
+        if (addonTitleEl) {
+          addonTitleEl.textContent = addonCallout.title;
+        }
+
+        if (addonDescriptionEl) {
+          addonDescriptionEl.textContent = addonCallout.description;
+          addonDescriptionEl.hidden = !addonCallout.description;
+        }
+
+        addonListEl.innerHTML = "";
+
+        addonCallout.items.forEach(function (item) {
+          var li = document.createElement("li");
+          var strong = document.createElement("strong");
+          appendLinkContent(strong, item);
+          li.appendChild(strong);
+          addonListEl.appendChild(li);
+        });
       });
+
+      function formatPackageDisplayName(packageKey) {
+        var labels = {
+          starter: "Starter",
+          advanced: "Advanced",
+          professional: "Professional"
+        };
+
+        return labels[packageKey] || "Advanced";
+      }
+
+      function formatGeoDisplayName(geoKey) {
+        var labels = {
+          americas: "Americas",
+          emea: "EMEA",
+          apac: "APAC"
+        };
+
+        return labels[geoKey] || "None";
+      }
+
+      function isValueDefined(value) {
+        return value !== null && typeof value !== "undefined";
+      }
+
+      function createDebugElement(tagName, className, textContent) {
+        var el = document.createElement(tagName);
+
+        if (className) {
+          el.className = className;
+        }
+
+        if (isValueDefined(textContent)) {
+          el.textContent = textContent;
+        }
+
+        return el;
+      }
+
+      function formatRawDebugValue(value, fallbackText) {
+        if (!isValueDefined(value)) {
+          return fallbackText || "Not present";
+        }
+
+        if (value === "") {
+          return "Blank";
+        }
+
+        return String(value);
+      }
+
+      function getReadableSourceText(source) {
+        var labels = {
+          url: "the URL",
+          cookie: "a saved value from a past visit",
+          default: "the built-in default",
+          none: "nothing yet"
+        };
+
+        return labels[source] || "the built-in default";
+      }
+
+      function getPackageImpactSummary(packageKey) {
+        if (packageKey === "starter") {
+          return "Starter hides Sonar Optimize in Configuration and hides Creative Analysis, Cohort Analysis, and Customer Segments in Activation.";
+        }
+
+        if (packageKey === "professional") {
+          return "Professional keeps the standard resources and adds MMM plus Incrementality in Activation.";
+        }
+
+        return "Advanced shows the standard resource set with no extra package-only additions or removals.";
+      }
+
+      function getUrlEntries() {
+        var params = new URLSearchParams(window.location.search);
+        var entries = [];
+
+        params.forEach(function (value, key) {
+          entries.push({
+            key: key,
+            normalizedKey: String(key).toLowerCase(),
+            value: value
+          });
+        });
+
+        return entries;
+      }
+
+      var debugParamDefinitions = [
+        {
+          key: "debug",
+          title: "Debug panel",
+          queryParam: debugPanelParamName,
+          cookieName: null,
+          normalize: normalizeHeadlessValue,
+          hasDefault: true,
+          defaultValue: false,
+          getActiveValue: function () {
+            return isDebugMode;
+          },
+          formatResolvedValue: function (value) {
+            return value === true ? "Shown" : "Hidden";
+          },
+          getImpact: function (value) {
+            return value === true
+              ? "This right-side guide is visible so you can inspect how the page made its decisions."
+              : "The right-side guide stays hidden.";
+          },
+          options: [
+            {
+              value: "true",
+              effect: "Shows this debug panel on the right."
+            },
+            {
+              value: "missing or false",
+              effect: "Keeps the debug panel hidden. This setting is not saved in a cookie."
+            }
+          ],
+          invalidNote: "Only true turns this on. Anything else is treated as off.",
+          priorityNote: "This one only reads the URL. It is not saved for later visits.",
+          noneSummary: "This panel only appears when the URL has debug=true."
+        },
+        {
+          key: "geo",
+          title: "Recommended region",
+          queryParam: "geo",
+          cookieName: geoCookieName,
+          normalize: normalizeGeoRecommendation,
+          hasDefault: false,
+          getActiveValue: function () {
+            return activeRecommendedGeo;
+          },
+          formatResolvedValue: function (value) {
+            return value ? formatGeoDisplayName(value) : "None";
+          },
+          getImpact: function (value) {
+            return value
+              ? "The " + formatGeoDisplayName(value) + " card is highlighted with the Recommended label."
+              : "No region card is highlighted as recommended right now.";
+          },
+          options: [
+            {
+              value: "americas",
+              effect: "Highlights the Americas booking card."
+            },
+            {
+              value: "emea",
+              effect: "Highlights the EMEA booking card."
+            },
+            {
+              value: "apac",
+              effect: "Highlights the APAC booking card."
+            },
+            {
+              value: "missing",
+              effect: "Nothing is highlighted unless a saved geo cookie from a past visit exists."
+            }
+          ],
+          invalidNote: "Use americas, emea, or apac. Anything else is ignored.",
+          priorityNote: "Order used: URL first, then the saved region cookie. There is no built-in fallback region.",
+          noneSummary: "No region is highlighted right now."
+        },
+        {
+          key: "brand",
+          title: "Brand name",
+          queryParam: "brand",
+          cookieName: brandCookieName,
+          normalize: normalizeBrandValue,
+          hasDefault: false,
+          getActiveValue: function () {
+            return activeBrand;
+          },
+          formatResolvedValue: function (value) {
+            return value || "Not showing";
+          },
+          getImpact: function (value) {
+            return value
+              ? "The smaller line under the main headline says \"" + getHeroBrandContext(value) + "\"."
+              : "No brand-specific line is showing under the main headline.";
+          },
+          options: [
+            {
+              value: "any text",
+              effect: "Shows that brand name in the smaller line under the main heading."
+            },
+            {
+              value: "missing or blank",
+              effect: "Hides the brand-specific line."
+            }
+          ],
+          invalidNote: "Blank brand values are ignored.",
+          priorityNote: "Order used: URL first, then the saved brand cookie. If the brand changes, the page clears the saved onboarding cookies first so the new brand starts clean.",
+          noneSummary: "No brand name is being shown right now.",
+          getNotice: function () {
+            if (!brandResetInfo.didReset) {
+              return null;
+            }
+
+            return "The saved brand changed from " + brandResetInfo.previousBrand + " to " + brandResetInfo.nextBrand + ", so the page cleared the saved onboarding cookies before applying the new values.";
+          }
+        },
+        {
+          key: "msp",
+          title: "Platform",
+          queryParam: resourceRouting.queryParam || "msp",
+          cookieName: mspCookieName,
+          normalize: normalizeMspValue,
+          hasDefault: true,
+          defaultValue: defaultMsp,
+          getActiveValue: function () {
+            return activeMsp;
+          },
+          formatResolvedValue: function (value) {
+            return formatMspDisplayName(value);
+          },
+          getImpact: function (value) {
+            var label = formatMspDisplayName(value);
+            var contextNote = value === "shopify"
+              ? "The top platform badge stays hidden because Shopify is the default view."
+              : "The top platform badge shows " + label + ".";
+
+            return "The Configuration card uses the " + label + " version of the Triple Pixel setup. " + contextNote;
+          },
+          options: [
+            {
+              value: "shopify",
+              effect: "Uses the Shopify Triple Pixel setup and keeps the top platform badge hidden."
+            },
+            {
+              value: "woocommerce",
+              effect: "Uses the WooCommerce Triple Pixel setup and shows a WooCommerce badge at the top."
+            },
+            {
+              value: "bigcommerce",
+              effect: "Uses the BigCommerce Triple Pixel setup and shows a BigCommerce badge at the top."
+            },
+            {
+              value: "custom",
+              effect: "Uses the custom-platform Triple Pixel setup and shows a Custom badge at the top."
+            }
+          ],
+          invalidNote: "Use Shopify, WooCommerce, BigCommerce, or custom. Anything else is ignored.",
+          priorityNote: "Order used: URL first, then the saved platform cookie, then Shopify as the default."
+        },
+        {
+          key: "headless",
+          title: "Headless setup",
+          queryParam: resourceRouting.headlessQueryParam || "headless",
+          cookieName: headlessCookieName,
+          normalize: normalizeHeadlessValue,
+          hasDefault: true,
+          defaultValue: defaultHeadless,
+          getActiveValue: function () {
+            return activeHeadless;
+          },
+          formatResolvedValue: function (value) {
+            return value === true ? "On" : "Off";
+          },
+          getImpact: function (value) {
+            return value === true
+              ? "The Triple Pixel item switches to the shared headless setup guide, and the platform badge gets a stronger highlighted style."
+              : "The page keeps the standard platform-specific Triple Pixel setup guide.";
+          },
+          options: [
+            {
+              value: "true",
+              effect: "Uses the shared headless setup guide instead of the regular platform-specific Triple Pixel guide."
+            },
+            {
+              value: "false",
+              effect: "Keeps the regular platform-specific Triple Pixel guide."
+            }
+          ],
+          invalidNote: "Use true or false. Anything else is ignored.",
+          priorityNote: "Order used: URL first, then the saved headless cookie, then false as the default."
+        },
+        {
+          key: "package",
+          title: "Package tier",
+          queryParam: resourceRouting.packageQueryParam || "package",
+          cookieName: packageCookieName,
+          normalize: normalizePackageValue,
+          hasDefault: true,
+          defaultValue: defaultPackage,
+          getActiveValue: function () {
+            return activePackage;
+          },
+          formatResolvedValue: function (value) {
+            return formatPackageDisplayName(value);
+          },
+          getImpact: function (value) {
+            return getPackageImpactSummary(value);
+          },
+          options: [
+            {
+              value: "starter",
+              effect: "Hides Sonar Optimize in Configuration and hides Creative Analysis, Cohort Analysis, and Customer Segments in Activation."
+            },
+            {
+              value: "advanced",
+              effect: "Shows the standard resource set."
+            },
+            {
+              value: "professional",
+              effect: "Shows the standard resource set and adds MMM plus Incrementality in Activation."
+            }
+          ],
+          invalidNote: "Use starter, advanced, or professional. Anything else is ignored.",
+          priorityNote: "Order used: URL first, then the saved package cookie, then Advanced as the default."
+        },
+        {
+          key: "conversion",
+          title: "Conversion add-on",
+          queryParam: featureFlagQueryParams.conversion || "hasconversion",
+          cookieName: hasConversionCookieName,
+          normalize: normalizeFeatureFlagValue,
+          hasDefault: true,
+          defaultValue: false,
+          getActiveValue: function () {
+            return activeFeatureFlags.conversion;
+          },
+          formatResolvedValue: function (value) {
+            return value === true ? "Visible" : "Hidden";
+          },
+          getImpact: function (value) {
+            return value === true
+              ? "The Conversion add-on box appears under Configuration."
+              : "The Conversion add-on box stays hidden.";
+          },
+          options: [
+            {
+              value: "true",
+              effect: "Shows the Conversion add-on box under Configuration."
+            },
+            {
+              value: "missing, blank, or false",
+              effect: "Does not turn the add-on on. If a saved cookie already says true, the page will keep showing it."
+            }
+          ],
+          invalidNote: "Only true turns this on. false is treated the same as leaving it out.",
+          priorityNote: "Order used: URL true first, then the saved add-on cookie. If neither says true, the add-on stays hidden."
+        },
+        {
+          key: "retention",
+          title: "Retention add-on",
+          queryParam: featureFlagQueryParams.retention || "hasretention",
+          cookieName: hasRetentionCookieName,
+          normalize: normalizeFeatureFlagValue,
+          hasDefault: true,
+          defaultValue: false,
+          getActiveValue: function () {
+            return activeFeatureFlags.retention;
+          },
+          formatResolvedValue: function (value) {
+            return value === true ? "Visible" : "Hidden";
+          },
+          getImpact: function (value) {
+            return value === true
+              ? "The Retention add-on box appears under Activation."
+              : "The Retention add-on box stays hidden.";
+          },
+          options: [
+            {
+              value: "true",
+              effect: "Shows the Retention add-on box under Activation."
+            },
+            {
+              value: "missing, blank, or false",
+              effect: "Does not turn the add-on on. If a saved cookie already says true, the page will keep showing it."
+            }
+          ],
+          invalidNote: "Only true turns this on. false is treated the same as leaving it out.",
+          priorityNote: "Order used: URL true first, then the saved add-on cookie. If neither says true, the add-on stays hidden."
+        }
+      ];
+
+      function buildDebugInfo(definition) {
+        var rawQuery = getQueryParamValue(definition.queryParam);
+        var rawCookie = definition.cookieName ? getCookieValue(definition.cookieName) : null;
+        var normalizedQuery = definition.normalize ? definition.normalize(rawQuery) : rawQuery;
+        var normalizedCookie = definition.cookieName && definition.normalize ? definition.normalize(rawCookie) : rawCookie;
+        var activeValue = definition.getActiveValue ? definition.getActiveValue() : null;
+        var source = "none";
+        var notice = null;
+
+        if (isValueDefined(normalizedQuery)) {
+          source = "url";
+        } else if (definition.cookieName && isValueDefined(normalizedCookie)) {
+          source = "cookie";
+        } else if (definition.hasDefault) {
+          source = "default";
+        }
+
+        if (isValueDefined(rawQuery) && !isValueDefined(normalizedQuery)) {
+          notice = definition.invalidNote || "The value in the URL is not supported, so the page ignored it.";
+        }
+
+        if (!notice && typeof definition.getNotice === "function") {
+          notice = definition.getNotice({
+            rawQuery: rawQuery,
+            rawCookie: rawCookie,
+            normalizedQuery: normalizedQuery,
+            normalizedCookie: normalizedCookie,
+            activeValue: activeValue,
+            source: source
+          });
+        }
+
+        return {
+          rawQuery: rawQuery,
+          rawCookie: rawCookie,
+          normalizedQuery: normalizedQuery,
+          normalizedCookie: normalizedCookie,
+          activeValue: activeValue,
+          source: source,
+          notice: notice,
+          effectiveDisplayValue: definition.formatResolvedValue(activeValue)
+        };
+      }
+
+      function getDebugSummaryText(definition, info) {
+        if (info.source === "none") {
+          return definition.noneSummary || "Nothing is active for this setting right now.";
+        }
+
+        if (info.source === "default") {
+          return "Using " + info.effectiveDisplayValue + " from the built-in default.";
+        }
+
+        return "Using " + info.effectiveDisplayValue + " from " + getReadableSourceText(info.source) + ".";
+      }
+
+      function appendDebugFact(parent, label, value) {
+        var row = createDebugElement("div", "debug-fact");
+        row.appendChild(createDebugElement("div", "debug-fact-label", label));
+        row.appendChild(createDebugElement("div", "debug-fact-value", value));
+        parent.appendChild(row);
+      }
+
+      function renderDebugAlerts(container) {
+        if (!container) {
+          return;
+        }
+
+        container.innerHTML = "";
+
+        if (!brandResetInfo.didReset) {
+          container.hidden = true;
+          return;
+        }
+
+        container.hidden = false;
+        container.appendChild(
+          createDebugElement(
+            "p",
+            "debug-callout",
+            "Saved onboarding cookies were cleared because the brand changed from " + brandResetInfo.previousBrand + " to " + brandResetInfo.nextBrand + "."
+          )
+        );
+      }
+
+      function renderDebugOverview(container) {
+        if (!container) {
+          return;
+        }
+
+        var overviewItems = [
+          {
+            label: "Region",
+            value: activeRecommendedGeo
+              ? formatGeoDisplayName(activeRecommendedGeo) + " is highlighted"
+              : "No region is highlighted"
+          },
+          {
+            label: "Brand line",
+            value: activeBrand
+              ? activeBrand + " is showing under the headline"
+              : "Not showing"
+          },
+          {
+            label: "Docs",
+            value: formatMspDisplayName(activeMsp) + (activeHeadless ? " headless guide" : " standard guide")
+          },
+          {
+            label: "Package",
+            value: activePackage === "starter"
+              ? "Starter rules are active"
+              : activePackage === "professional"
+                ? "Professional extras are active"
+                : "Advanced default is active"
+          },
+          {
+            label: "Add-ons",
+            value: activeFeatureFlags.conversion && activeFeatureFlags.retention
+              ? "Conversion and Retention are showing"
+              : activeFeatureFlags.conversion
+                ? "Conversion only"
+                : activeFeatureFlags.retention
+                  ? "Retention only"
+                  : "No add-ons are showing"
+          }
+        ];
+        var tbody = createDebugElement("tbody");
+
+        container.innerHTML = "";
+
+        overviewItems.forEach(function (item) {
+          var row = createDebugElement("tr");
+          var headerCell = createDebugElement("th", null, item.label);
+          var valueCell = createDebugElement("td", null, item.value);
+
+          headerCell.scope = "row";
+          row.appendChild(headerCell);
+          row.appendChild(valueCell);
+          tbody.appendChild(row);
+        });
+
+        container.appendChild(tbody);
+      }
+
+      function renderUrlSummary(container) {
+        if (!container) {
+          return;
+        }
+
+        var urlEntries = getUrlEntries();
+        var knownParamNames = debugParamDefinitions.reduce(function (names, definition) {
+          names[String(definition.queryParam).toLowerCase()] = true;
+          return names;
+        }, {});
+
+        container.innerHTML = "";
+
+        if (!urlEntries.length) {
+          container.appendChild(createDebugElement("p", "debug-note", "There are no query parameters in the URL right now."));
+          return;
+        }
+
+        var table = createDebugElement("table", "debug-table");
+        var thead = createDebugElement("thead");
+        var headRow = createDebugElement("tr");
+        var tbody = createDebugElement("tbody");
+
+        ["Parameter", "Value", "Status"].forEach(function (label) {
+          headRow.appendChild(createDebugElement("th", null, label));
+        });
+
+        thead.appendChild(headRow);
+        table.appendChild(thead);
+
+        urlEntries.forEach(function (entry) {
+          var row = createDebugElement("tr");
+          var keyCell = createDebugElement("th", null, entry.key);
+          var valueCell = createDebugElement("td", null, entry.value === "" ? "(blank)" : entry.value);
+          var statusCell = createDebugElement(
+            "td",
+            null,
+            knownParamNames[entry.normalizedKey] ? "Used by page" : "Ignored by page"
+          );
+
+          keyCell.scope = "row";
+          row.appendChild(keyCell);
+          row.appendChild(valueCell);
+          row.appendChild(statusCell);
+          tbody.appendChild(row);
+        });
+
+        table.appendChild(tbody);
+        container.appendChild(table);
+      }
+
+      function renderDebugAccordion(container) {
+        if (!container) {
+          return;
+        }
+
+        container.innerHTML = "";
+
+        debugParamDefinitions.forEach(function (definition) {
+          var info = buildDebugInfo(definition);
+          var details = createDebugElement("details", "debug-item");
+          var summary = createDebugElement("summary");
+          var summaryCopy = createDebugElement("div", "debug-summary-copy");
+          var body = createDebugElement("div", "debug-item-body");
+          var facts = createDebugElement("div", "debug-facts");
+          var impact = createDebugElement("p", "debug-callout", definition.getImpact(info.activeValue));
+          var options = createDebugElement("div", "debug-options");
+          var optionList = createDebugElement("ul", "debug-option-list");
+
+          summaryCopy.appendChild(createDebugElement("span", "debug-summary-label", definition.title));
+          summaryCopy.appendChild(createDebugElement("span", "debug-summary-text", getDebugSummaryText(definition, info)));
+          summary.appendChild(summaryCopy);
+          details.appendChild(summary);
+
+          appendDebugFact(facts, "URL says", formatRawDebugValue(info.rawQuery));
+          appendDebugFact(
+            facts,
+            "Saved from a past visit",
+            definition.cookieName ? formatRawDebugValue(info.rawCookie) : "Not used for this setting"
+          );
+          appendDebugFact(facts, "Page is using", info.effectiveDisplayValue);
+          body.appendChild(facts);
+          body.appendChild(impact);
+
+          if (info.notice) {
+            body.appendChild(createDebugElement("p", "debug-callout debug-callout--warning", info.notice));
+          }
+
+          body.appendChild(createDebugElement("p", "debug-note", definition.priorityNote));
+          options.appendChild(createDebugElement("p", "debug-options-title", "Available options"));
+
+          definition.options.forEach(function (option) {
+            var li = createDebugElement("li");
+            var label = createDebugElement("span", "debug-option-label", option.value + ": ");
+            li.appendChild(label);
+            li.appendChild(document.createTextNode(option.effect));
+            optionList.appendChild(li);
+          });
+
+          options.appendChild(optionList);
+          body.appendChild(options);
+          details.appendChild(body);
+          container.appendChild(details);
+        });
+      }
+
+      function renderDebugPanel() {
+        var panel = document.querySelector("[data-debug-panel]");
+
+        if (!panel || !isDebugMode) {
+          return;
+        }
+
+        panel.hidden = false;
+        renderDebugAlerts(panel.querySelector("[data-debug-alerts]"));
+        renderDebugOverview(panel.querySelector("[data-debug-overview]"));
+        renderUrlSummary(panel.querySelector("[data-debug-url-summary]"));
+        renderDebugAccordion(panel.querySelector("[data-debug-accordion]"));
+        syncDebugPanelHeight();
+      }
+
+      function syncDebugPanelHeight() {
+        var panel = document.querySelector("[data-debug-panel]");
+        var frame = document.querySelector(".frame");
+
+        if (!panel) {
+          return;
+        }
+
+        if (!isDebugMode || !frame || window.innerWidth <= 1240) {
+          panel.style.maxHeight = "";
+          return;
+        }
+
+        panel.style.maxHeight = frame.offsetHeight + "px";
+      }
+
+      renderDebugPanel();
+
+      if (isDebugMode) {
+        window.addEventListener("resize", syncDebugPanelHeight);
+
+        if (typeof ResizeObserver === "function") {
+          var debugResizeObserver = new ResizeObserver(syncDebugPanelHeight);
+          var debugFrame = document.querySelector(".frame");
+
+          if (debugFrame) {
+            debugResizeObserver.observe(debugFrame);
+          }
+        }
+      }
 
       var storageKey = "tw-booking-theme";
       var root = document.documentElement;
