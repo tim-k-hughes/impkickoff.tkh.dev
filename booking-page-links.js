@@ -152,7 +152,7 @@ window.BOOKING_PAGE_LINKS = {
   },
 
   // Resource routing for the two onboarding cards.
-  // The page uses lowercase `?msp=`, `?headless=`, `?package=`, `?hasconversion=`, and `?hasretention=` query params.
+  // The page accepts `?msp=`, `?headless=`, `?package=`, `?hasConversion=`, and `?hasRetention=` query params.
   // Matching is case-insensitive. Missing, empty, or unknown MSP values fall back to Shopify.
   resourceRouting: {
     queryParam: "msp",
@@ -162,8 +162,8 @@ window.BOOKING_PAGE_LINKS = {
     packageQueryParam: "package",
     defaultPackage: "advanced",
     featureFlagQueryParams: {
-      conversion: "hasconversion",
-      retention: "hasretention"
+      conversion: "hasConversion",
+      retention: "hasRetention"
     }
   },
 
