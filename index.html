@@ -122,11 +122,11 @@
     }
 
     body[data-debug-mode="true"] .page {
-      max-width: 1440px;
+      max-width: 1520px;
     }
 
     body[data-debug-mode="true"] .app-shell {
-      grid-template-columns: minmax(0, 1fr) minmax(320px, 390px);
+      grid-template-columns: minmax(0, 1fr) minmax(440px, 520px);
     }
 
     .frame {
@@ -648,7 +648,9 @@
       border-radius: var(--radius-lg);
       padding: 22px 20px;
       box-shadow: var(--shadow);
-      overflow: hidden;
+      overflow: auto;
+      overscroll-behavior: contain;
+      scrollbar-gutter: stable;
       animation: reveal 620ms ease both;
     }
 
@@ -672,7 +674,7 @@
     }
 
     .debug-panel-header {
-      margin-bottom: 18px;
+      margin-bottom: 14px;
     }
 
     .debug-eyebrow {
@@ -685,8 +687,8 @@
     }
 
     .debug-panel h2 {
-      margin: 0 0 10px;
-      font-size: 27px;
+      margin: 0 0 8px;
+      font-size: 24px;
       line-height: 1.08;
       letter-spacing: -0.03em;
     }
@@ -712,115 +714,92 @@
       background: linear-gradient(180deg, rgba(208, 120, 37, 0.12), rgba(208, 120, 37, 0.05));
     }
 
-    .debug-stack {
+    .debug-layout {
+      display: grid;
+      grid-template-columns: minmax(205px, 0.84fr) minmax(0, 1.16fr);
+      gap: 16px;
+      align-items: start;
+    }
+
+    .debug-column {
       display: grid;
       gap: 14px;
+      align-content: start;
+      min-width: 0;
     }
 
     .debug-section {
       display: grid;
-      gap: 10px;
+      gap: 8px;
     }
 
     .debug-section-title {
       margin: 0;
       color: var(--ink);
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 800;
       letter-spacing: -0.01em;
     }
 
-    .debug-overview {
-      display: grid;
-      gap: 10px;
-    }
-
-    .debug-overview-card {
-      padding: 13px 14px;
-      border-radius: var(--radius-sm);
+    .debug-table-wrap {
       border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
       background: var(--info-card-bg);
     }
 
-    .debug-overview-label {
-      margin: 0 0 6px;
-      color: var(--mid-gray);
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
+    .debug-table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
     }
 
-    .debug-overview-value {
-      margin: 0 0 4px;
-      color: var(--ink);
-      font-size: 16px;
-      font-weight: 800;
-      line-height: 1.3;
-    }
-
-    .debug-overview-note {
-      margin: 0;
-      color: var(--charcoal);
+    .debug-table th,
+    .debug-table td {
+      padding: 9px 11px;
+      border-top: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
       font-size: 13px;
-      line-height: 1.5;
+      line-height: 1.45;
     }
 
-    .debug-chip-groups {
-      display: grid;
-      gap: 10px;
+    .debug-table tbody tr:first-child th,
+    .debug-table tbody tr:first-child td,
+    .debug-table thead + tbody tr:first-child th,
+    .debug-table thead + tbody tr:first-child td {
+      border-top: 0;
     }
 
-    .debug-chip-group {
-      display: grid;
-      gap: 8px;
-    }
-
-    .debug-chip-group-label {
-      margin: 0;
+    .debug-table thead th {
       color: var(--mid-gray);
+      background: rgba(12, 112, 242, 0.08);
       font-size: 11px;
       font-weight: 800;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
     }
 
-    .debug-chip-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
+    .debug-table tbody th {
+      width: 34%;
+      color: var(--ink);
+      background: rgba(12, 112, 242, 0.04);
+      font-size: 12px;
+      font-weight: 800;
     }
 
-    .debug-chip {
-      display: inline-flex;
-      align-items: center;
-      min-height: 30px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(12, 112, 242, 0.16);
-      background: rgba(12, 112, 242, 0.08);
+    .debug-table td {
       color: var(--charcoal);
-      font-size: 12px;
-      font-weight: 700;
-      line-height: 1.2;
       word-break: break-word;
     }
 
-    .debug-chip--muted {
-      border-color: var(--line);
-      background: var(--global-bg);
-      color: var(--mid-gray);
-    }
-
-    .debug-chip--ignored {
-      border-color: rgba(208, 120, 37, 0.28);
-      background: rgba(208, 120, 37, 0.1);
-      color: var(--charcoal);
+    .debug-table-wrap .debug-note {
+      padding: 11px 12px;
     }
 
     .debug-accordion {
       display: grid;
-      gap: 10px;
+      gap: 8px;
     }
 
     .debug-item {
@@ -834,9 +813,8 @@
       list-style: none;
       display: flex;
       align-items: flex-start;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 14px 14px 13px;
+      gap: 10px;
+      padding: 12px 12px 11px;
       cursor: pointer;
     }
 
@@ -846,45 +824,22 @@
 
     .debug-summary-copy {
       display: grid;
-      gap: 4px;
+      gap: 3px;
       min-width: 0;
+      flex: 1 1 auto;
     }
 
     .debug-summary-label {
       color: var(--ink);
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 800;
       line-height: 1.3;
     }
 
     .debug-summary-text {
       color: var(--charcoal);
-      font-size: 13px;
+      font-size: 12px;
       line-height: 1.45;
-    }
-
-    .debug-summary-meta {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      flex-shrink: 0;
-    }
-
-    .debug-source-pill {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 28px;
-      padding: 0 10px;
-      border-radius: 999px;
-      border: 1px solid var(--line);
-      background: var(--global-bg);
-      color: var(--charcoal);
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      white-space: nowrap;
     }
 
     .debug-item summary::after {
@@ -893,6 +848,7 @@
       font-size: 20px;
       font-weight: 700;
       line-height: 1;
+      flex-shrink: 0;
     }
 
     .debug-item[open] summary::after {
@@ -902,7 +858,7 @@
     .debug-item-body {
       display: grid;
       gap: 12px;
-      padding: 0 14px 14px;
+      padding: 0 12px 12px;
       border-top: 1px solid var(--line);
     }
 
@@ -964,7 +920,7 @@
       font-weight: 800;
     }
 
-    @media (max-width: 1120px) {
+    @media (max-width: 1240px) {
       body[data-debug-mode="true"] .app-shell {
         grid-template-columns: minmax(0, 1fr);
       }
@@ -972,6 +928,13 @@
       .debug-panel {
         position: static;
         top: auto;
+        max-height: none;
+      }
+    }
+
+    @media (max-width: 820px) {
+      .debug-layout {
+        grid-template-columns: minmax(0, 1fr);
       }
     }
 
@@ -1149,26 +1112,33 @@
         <div class="debug-panel-header">
           <p class="debug-eyebrow">Debug View</p>
           <h2>Why this page looks the way it does</h2>
-          <p class="debug-help">A cookie here just means a saved value from a past visit. Open any section below to compare the URL, the saved cookie, and the final choice the page made.</p>
+          <p class="debug-help">A cookie here just means a saved value from a past visit.</p>
         </div>
 
-        <div class="debug-stack">
-          <section class="debug-section" data-debug-alerts hidden></section>
+        <div class="debug-layout">
+          <div class="debug-column">
+            <section class="debug-section" data-debug-alerts hidden></section>
 
-          <section class="debug-section">
-            <h3 class="debug-section-title">Current page state</h3>
-            <div class="debug-overview" data-debug-overview></div>
-          </section>
+            <section class="debug-section">
+              <h3 class="debug-section-title">Current page state</h3>
+              <div class="debug-table-wrap">
+                <table class="debug-table" data-debug-overview></table>
+              </div>
+            </section>
 
-          <section class="debug-section">
-            <h3 class="debug-section-title">What is in the URL right now</h3>
-            <div class="debug-chip-groups" data-debug-url-summary></div>
-          </section>
+            <section class="debug-section">
+              <h3 class="debug-section-title">URL right now</h3>
+              <div class="debug-table-wrap" data-debug-url-summary></div>
+            </section>
+          </div>
 
-          <section class="debug-section">
-            <h3 class="debug-section-title">Parameter guide</h3>
-            <div class="debug-accordion" data-debug-accordion></div>
-          </section>
+          <div class="debug-column">
+            <section class="debug-section">
+              <h3 class="debug-section-title">Parameter guide</h3>
+              <p class="debug-note">Open any item to compare the URL, any saved cookie, and the final value the page used.</p>
+              <div class="debug-accordion" data-debug-accordion></div>
+            </section>
+          </div>
         </div>
       </aside>
     </div>
@@ -2098,17 +2068,6 @@
         return String(value);
       }
 
-      function formatSourceBadgeLabel(source) {
-        var labels = {
-          url: "URL",
-          cookie: "Saved",
-          default: "Default",
-          none: "None"
-        };
-
-        return labels[source] || "Default";
-      }
-
       function getReadableSourceText(source) {
         var labels = {
           url: "the URL",
@@ -2527,49 +2486,56 @@
 
         var overviewItems = [
           {
-            label: "Recommended region",
-            value: activeRecommendedGeo ? formatGeoDisplayName(activeRecommendedGeo) : "None",
-            note: activeRecommendedGeo
-              ? "The " + formatGeoDisplayName(activeRecommendedGeo) + " card is currently highlighted."
-              : "No region card is highlighted."
+            label: "Region",
+            value: activeRecommendedGeo
+              ? formatGeoDisplayName(activeRecommendedGeo) + " is highlighted"
+              : "No region is highlighted"
           },
           {
             label: "Brand line",
-            value: activeBrand ? activeBrand : "Not showing",
-            note: activeBrand
-              ? "The supporting line under the headline is visible."
-              : "The page is using the generic headline area with no brand line."
+            value: activeBrand
+              ? activeBrand + " is showing under the headline"
+              : "Not showing"
           },
           {
-            label: "Platform docs",
-            value: formatMspDisplayName(activeMsp) + (activeHeadless ? " + Headless" : ""),
-            note: activeHeadless
-              ? "The Configuration card is using the headless Triple Pixel guide."
-              : "The Configuration card is using the regular platform-specific Triple Pixel guide."
+            label: "Docs",
+            value: formatMspDisplayName(activeMsp) + (activeHeadless ? " headless guide" : " standard guide")
           },
           {
-            label: "Package tier",
-            value: formatPackageDisplayName(activePackage),
-            note: getPackageImpactSummary(activePackage)
+            label: "Package",
+            value: activePackage === "starter"
+              ? "Starter rules are active"
+              : activePackage === "professional"
+                ? "Professional extras are active"
+                : "Advanced default is active"
           },
           {
-            label: "Add-on boxes",
-            value: (activeFeatureFlags.conversion ? "Conversion" : "") + (activeFeatureFlags.conversion && activeFeatureFlags.retention ? " + " : "") + (activeFeatureFlags.retention ? "Retention" : "") || "None",
-            note: activeFeatureFlags.conversion || activeFeatureFlags.retention
-              ? "Only the add-on boxes listed above are currently showing."
-              : "No add-on callout boxes are showing."
+            label: "Add-ons",
+            value: activeFeatureFlags.conversion && activeFeatureFlags.retention
+              ? "Conversion and Retention are showing"
+              : activeFeatureFlags.conversion
+                ? "Conversion only"
+                : activeFeatureFlags.retention
+                  ? "Retention only"
+                  : "No add-ons are showing"
           }
         ];
+        var tbody = createDebugElement("tbody");
 
         container.innerHTML = "";
 
         overviewItems.forEach(function (item) {
-          var card = createDebugElement("div", "debug-overview-card");
-          card.appendChild(createDebugElement("p", "debug-overview-label", item.label));
-          card.appendChild(createDebugElement("p", "debug-overview-value", item.value));
-          card.appendChild(createDebugElement("p", "debug-overview-note", item.note));
-          container.appendChild(card);
+          var row = createDebugElement("tr");
+          var headerCell = createDebugElement("th", null, item.label);
+          var valueCell = createDebugElement("td", null, item.value);
+
+          headerCell.scope = "row";
+          row.appendChild(headerCell);
+          row.appendChild(valueCell);
+          tbody.appendChild(row);
         });
+
+        container.appendChild(tbody);
       }
 
       function renderUrlSummary(container) {
@@ -2582,12 +2548,6 @@
           names[String(definition.queryParam).toLowerCase()] = true;
           return names;
         }, {});
-        var recognizedEntries = urlEntries.filter(function (entry) {
-          return !!knownParamNames[entry.normalizedKey];
-        });
-        var ignoredEntries = urlEntries.filter(function (entry) {
-          return !knownParamNames[entry.normalizedKey];
-        });
 
         container.innerHTML = "";
 
@@ -2596,42 +2556,37 @@
           return;
         }
 
-        [
-          {
-            label: "Used by this page",
-            entries: recognizedEntries,
-            chipClassName: "debug-chip"
-          },
-          {
-            label: "Extra URL values this page ignores",
-            entries: ignoredEntries,
-            chipClassName: "debug-chip debug-chip--ignored"
-          }
-        ].forEach(function (group) {
-          var groupEl;
-          var chipList;
+        var table = createDebugElement("table", "debug-table");
+        var thead = createDebugElement("thead");
+        var headRow = createDebugElement("tr");
+        var tbody = createDebugElement("tbody");
 
-          if (!group.entries.length) {
-            return;
-          }
-
-          groupEl = createDebugElement("div", "debug-chip-group");
-          groupEl.appendChild(createDebugElement("p", "debug-chip-group-label", group.label));
-          chipList = createDebugElement("div", "debug-chip-list");
-
-          group.entries.forEach(function (entry) {
-            chipList.appendChild(
-              createDebugElement(
-                "span",
-                group.chipClassName,
-                entry.key + "=" + (entry.value === "" ? "(blank)" : entry.value)
-              )
-            );
-          });
-
-          groupEl.appendChild(chipList);
-          container.appendChild(groupEl);
+        ["Parameter", "Value", "Status"].forEach(function (label) {
+          headRow.appendChild(createDebugElement("th", null, label));
         });
+
+        thead.appendChild(headRow);
+        table.appendChild(thead);
+
+        urlEntries.forEach(function (entry) {
+          var row = createDebugElement("tr");
+          var keyCell = createDebugElement("th", null, entry.key);
+          var valueCell = createDebugElement("td", null, entry.value === "" ? "(blank)" : entry.value);
+          var statusCell = createDebugElement(
+            "td",
+            null,
+            knownParamNames[entry.normalizedKey] ? "Used by page" : "Ignored by page"
+          );
+
+          keyCell.scope = "row";
+          row.appendChild(keyCell);
+          row.appendChild(valueCell);
+          row.appendChild(statusCell);
+          tbody.appendChild(row);
+        });
+
+        table.appendChild(tbody);
+        container.appendChild(table);
       }
 
       function renderDebugAccordion(container) {
@@ -2646,24 +2601,15 @@
           var details = createDebugElement("details", "debug-item");
           var summary = createDebugElement("summary");
           var summaryCopy = createDebugElement("div", "debug-summary-copy");
-          var summaryMeta = createDebugElement("div", "debug-summary-meta");
-          var sourcePill = createDebugElement("span", "debug-source-pill", formatSourceBadgeLabel(info.source));
           var body = createDebugElement("div", "debug-item-body");
           var facts = createDebugElement("div", "debug-facts");
           var impact = createDebugElement("p", "debug-callout", definition.getImpact(info.activeValue));
           var options = createDebugElement("div", "debug-options");
           var optionList = createDebugElement("ul", "debug-option-list");
 
-          if (definition.key === "debug" || info.source === "url" || info.source === "cookie" || !!info.notice) {
-            details.open = true;
-          }
-
           summaryCopy.appendChild(createDebugElement("span", "debug-summary-label", definition.title));
           summaryCopy.appendChild(createDebugElement("span", "debug-summary-text", getDebugSummaryText(definition, info)));
-          summary.className = "debug-item-summary";
           summary.appendChild(summaryCopy);
-          summaryMeta.appendChild(sourcePill);
-          summary.appendChild(summaryMeta);
           details.appendChild(summary);
 
           appendDebugFact(facts, "URL says", formatRawDebugValue(info.rawQuery));
@@ -2710,9 +2656,39 @@
         renderDebugOverview(panel.querySelector("[data-debug-overview]"));
         renderUrlSummary(panel.querySelector("[data-debug-url-summary]"));
         renderDebugAccordion(panel.querySelector("[data-debug-accordion]"));
+        syncDebugPanelHeight();
+      }
+
+      function syncDebugPanelHeight() {
+        var panel = document.querySelector("[data-debug-panel]");
+        var frame = document.querySelector(".frame");
+
+        if (!panel) {
+          return;
+        }
+
+        if (!isDebugMode || !frame || window.innerWidth <= 1240) {
+          panel.style.maxHeight = "";
+          return;
+        }
+
+        panel.style.maxHeight = frame.offsetHeight + "px";
       }
 
       renderDebugPanel();
+
+      if (isDebugMode) {
+        window.addEventListener("resize", syncDebugPanelHeight);
+
+        if (typeof ResizeObserver === "function") {
+          var debugResizeObserver = new ResizeObserver(syncDebugPanelHeight);
+          var debugFrame = document.querySelector(".frame");
+
+          if (debugFrame) {
+            debugResizeObserver.observe(debugFrame);
+          }
+        }
+      }
 
       var storageKey = "tw-booking-theme";
       var root = document.documentElement;
