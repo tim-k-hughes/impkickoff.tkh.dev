@@ -110,6 +110,25 @@
       position: relative;
     }
 
+    .app-shell {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    body[data-debug-mode="true"] {
+      align-items: flex-start;
+    }
+
+    body[data-debug-mode="true"] .page {
+      max-width: 1440px;
+    }
+
+    body[data-debug-mode="true"] .app-shell {
+      grid-template-columns: minmax(0, 1fr) minmax(320px, 390px);
+    }
+
     .frame {
       background: var(--white);
       border-radius: var(--radius-lg);
@@ -620,6 +639,342 @@
       color: var(--mid-gray);
     }
 
+    .debug-panel {
+      position: sticky;
+      top: 24px;
+      align-self: start;
+      background: rgba(255, 255, 255, 0.94);
+      border: 1px solid var(--frame-border);
+      border-radius: var(--radius-lg);
+      padding: 22px 20px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      animation: reveal 620ms ease both;
+    }
+
+    html[data-theme="dark"] .debug-panel {
+      background: rgba(7, 26, 62, 0.96);
+    }
+
+    .debug-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(340px 120px at 100% 0%, rgba(12, 112, 242, 0.14), transparent 60%),
+        linear-gradient(180deg, var(--frame-overlay-top), transparent 28%);
+      pointer-events: none;
+    }
+
+    .debug-panel > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .debug-panel-header {
+      margin-bottom: 18px;
+    }
+
+    .debug-eyebrow {
+      margin: 0 0 8px;
+      color: var(--tag-text);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .debug-panel h2 {
+      margin: 0 0 10px;
+      font-size: 27px;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+    }
+
+    .debug-help,
+    .debug-note,
+    .debug-callout {
+      margin: 0;
+      color: var(--charcoal);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .debug-callout {
+      padding: 12px 14px;
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(12, 112, 242, 0.18);
+      background: linear-gradient(180deg, rgba(12, 112, 242, 0.1), rgba(12, 112, 242, 0.04));
+    }
+
+    .debug-callout--warning {
+      border-color: rgba(208, 120, 37, 0.28);
+      background: linear-gradient(180deg, rgba(208, 120, 37, 0.12), rgba(208, 120, 37, 0.05));
+    }
+
+    .debug-stack {
+      display: grid;
+      gap: 14px;
+    }
+
+    .debug-section {
+      display: grid;
+      gap: 10px;
+    }
+
+    .debug-section-title {
+      margin: 0;
+      color: var(--ink);
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+    }
+
+    .debug-overview {
+      display: grid;
+      gap: 10px;
+    }
+
+    .debug-overview-card {
+      padding: 13px 14px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--line);
+      background: var(--info-card-bg);
+    }
+
+    .debug-overview-label {
+      margin: 0 0 6px;
+      color: var(--mid-gray);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .debug-overview-value {
+      margin: 0 0 4px;
+      color: var(--ink);
+      font-size: 16px;
+      font-weight: 800;
+      line-height: 1.3;
+    }
+
+    .debug-overview-note {
+      margin: 0;
+      color: var(--charcoal);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .debug-chip-groups {
+      display: grid;
+      gap: 10px;
+    }
+
+    .debug-chip-group {
+      display: grid;
+      gap: 8px;
+    }
+
+    .debug-chip-group-label {
+      margin: 0;
+      color: var(--mid-gray);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .debug-chip-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .debug-chip {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(12, 112, 242, 0.16);
+      background: rgba(12, 112, 242, 0.08);
+      color: var(--charcoal);
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.2;
+      word-break: break-word;
+    }
+
+    .debug-chip--muted {
+      border-color: var(--line);
+      background: var(--global-bg);
+      color: var(--mid-gray);
+    }
+
+    .debug-chip--ignored {
+      border-color: rgba(208, 120, 37, 0.28);
+      background: rgba(208, 120, 37, 0.1);
+      color: var(--charcoal);
+    }
+
+    .debug-accordion {
+      display: grid;
+      gap: 10px;
+    }
+
+    .debug-item {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      background: var(--info-card-bg);
+      overflow: hidden;
+    }
+
+    .debug-item summary {
+      list-style: none;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 14px 13px;
+      cursor: pointer;
+    }
+
+    .debug-item summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .debug-summary-copy {
+      display: grid;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .debug-summary-label {
+      color: var(--ink);
+      font-size: 15px;
+      font-weight: 800;
+      line-height: 1.3;
+    }
+
+    .debug-summary-text {
+      color: var(--charcoal);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .debug-summary-meta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .debug-source-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 28px;
+      padding: 0 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--global-bg);
+      color: var(--charcoal);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .debug-item summary::after {
+      content: "+";
+      color: var(--brand-blue);
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .debug-item[open] summary::after {
+      content: "-";
+    }
+
+    .debug-item-body {
+      display: grid;
+      gap: 12px;
+      padding: 0 14px 14px;
+      border-top: 1px solid var(--line);
+    }
+
+    .debug-facts {
+      display: grid;
+      gap: 8px;
+    }
+
+    .debug-fact {
+      display: grid;
+      gap: 4px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: rgba(12, 112, 242, 0.05);
+    }
+
+    .debug-fact-label {
+      color: var(--mid-gray);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .debug-fact-value {
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.4;
+      word-break: break-word;
+    }
+
+    .debug-options {
+      display: grid;
+      gap: 8px;
+    }
+
+    .debug-options-title {
+      margin: 0;
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .debug-option-list {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--charcoal);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .debug-option-list li + li {
+      margin-top: 6px;
+    }
+
+    .debug-option-label {
+      color: var(--ink);
+      font-weight: 800;
+    }
+
+    @media (max-width: 1120px) {
+      body[data-debug-mode="true"] .app-shell {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .debug-panel {
+        position: static;
+        top: auto;
+      }
+    }
+
     a:focus-visible {
       outline: 3px solid var(--focus-ring);
       outline-offset: 2px;
@@ -673,7 +1028,8 @@
 </head>
 <body>
   <main class="page">
-    <section class="frame">
+    <div class="app-shell">
+      <section class="frame">
       <div class="topbar">
         <div class="brand" aria-label="Triple Whale">
           <p class="brand-name">Triple Whale</p>
@@ -787,7 +1143,35 @@
       </section>
 
       <div class="footer">If you are unsure, start with the region closest to your business hours.</div>
-    </section>
+      </section>
+
+      <aside class="debug-panel" data-debug-panel hidden>
+        <div class="debug-panel-header">
+          <p class="debug-eyebrow">Debug View</p>
+          <h2>Why this page looks the way it does</h2>
+          <p class="debug-help">A cookie here just means a saved value from a past visit. Open any section below to compare the URL, the saved cookie, and the final choice the page made.</p>
+        </div>
+
+        <div class="debug-stack">
+          <section class="debug-section" data-debug-alerts hidden></section>
+
+          <section class="debug-section">
+            <h3 class="debug-section-title">Current page state</h3>
+            <div class="debug-overview" data-debug-overview></div>
+          </section>
+
+          <section class="debug-section">
+            <h3 class="debug-section-title">What is in the URL right now</h3>
+            <div class="debug-chip-groups" data-debug-url-summary></div>
+          </section>
+
+          <section class="debug-section">
+            <h3 class="debug-section-title">Parameter guide</h3>
+            <div class="debug-accordion" data-debug-accordion></div>
+          </section>
+        </div>
+      </aside>
+    </div>
   </main>
 
   <script src="booking-page-links.js"></script>
@@ -936,12 +1320,19 @@
       var packageCookieName = "tw_package";
       var hasConversionCookieName = "tw_hasconversion";
       var hasRetentionCookieName = "tw_hasretention";
+      var debugPanelParamName = "debug";
       var featureFlagQueryParams = resourceRouting.featureFlagQueryParams && typeof resourceRouting.featureFlagQueryParams === "object"
         ? resourceRouting.featureFlagQueryParams
         : {};
       var featureFlagCookieNames = {
         conversion: hasConversionCookieName,
         retention: hasRetentionCookieName
+      };
+      var isDebugMode = normalizeHeadlessValue(getQueryParamValue(debugPanelParamName)) === true;
+      var brandResetInfo = {
+        didReset: false,
+        previousBrand: null,
+        nextBrand: null
       };
       var persistedCookieNames = [
         geoCookieName,
@@ -958,6 +1349,18 @@
         return normalizedBrand ? normalizedBrand.toLowerCase() : null;
       }
 
+      function applyDebugModeState() {
+        if (document.documentElement) {
+          document.documentElement.setAttribute("data-debug-mode", String(isDebugMode));
+        }
+
+        if (document.body) {
+          document.body.setAttribute("data-debug-mode", String(isDebugMode));
+        }
+      }
+
+      applyDebugModeState();
+
       function resetPersistedCookiesForBrandChange() {
         var queryBrand = normalizeBrandComparisonValue(getQueryParamValue("brand"));
         var cookieBrand = normalizeBrandComparisonValue(getCookieValue(brandCookieName));
@@ -966,6 +1369,9 @@
           return;
         }
 
+        brandResetInfo.didReset = true;
+        brandResetInfo.previousBrand = normalizeBrandValue(getCookieValue(brandCookieName));
+        brandResetInfo.nextBrand = normalizeBrandValue(getQueryParamValue("brand"));
         persistedCookieNames.forEach(deleteCookieValue);
       }
 
@@ -1176,6 +1582,8 @@
         return validGeoValues[normalizedValue] ? normalizedValue : null;
       }
 
+      var activeRecommendedGeo = null;
+
       function applyGeoRecommendation() {
         var rawQueryGeo = getQueryParamValue("geo");
         var queryGeo = normalizeGeoRecommendation(rawQueryGeo);
@@ -1189,6 +1597,8 @@
         if (queryGeo) {
           setCookieValue(geoCookieName, rawQueryGeo);
         }
+
+        activeRecommendedGeo = recommendedGeo;
 
         var recommendedCard = document.querySelector('.region-card[data-geo="' + recommendedGeo + '"]');
 
@@ -1637,6 +2047,672 @@
           addonListEl.appendChild(li);
         });
       });
+
+      function formatPackageDisplayName(packageKey) {
+        var labels = {
+          starter: "Starter",
+          advanced: "Advanced",
+          professional: "Professional"
+        };
+
+        return labels[packageKey] || "Advanced";
+      }
+
+      function formatGeoDisplayName(geoKey) {
+        var labels = {
+          americas: "Americas",
+          emea: "EMEA",
+          apac: "APAC"
+        };
+
+        return labels[geoKey] || "None";
+      }
+
+      function isValueDefined(value) {
+        return value !== null && typeof value !== "undefined";
+      }
+
+      function createDebugElement(tagName, className, textContent) {
+        var el = document.createElement(tagName);
+
+        if (className) {
+          el.className = className;
+        }
+
+        if (isValueDefined(textContent)) {
+          el.textContent = textContent;
+        }
+
+        return el;
+      }
+
+      function formatRawDebugValue(value, fallbackText) {
+        if (!isValueDefined(value)) {
+          return fallbackText || "Not present";
+        }
+
+        if (value === "") {
+          return "Blank";
+        }
+
+        return String(value);
+      }
+
+      function formatSourceBadgeLabel(source) {
+        var labels = {
+          url: "URL",
+          cookie: "Saved",
+          default: "Default",
+          none: "None"
+        };
+
+        return labels[source] || "Default";
+      }
+
+      function getReadableSourceText(source) {
+        var labels = {
+          url: "the URL",
+          cookie: "a saved value from a past visit",
+          default: "the built-in default",
+          none: "nothing yet"
+        };
+
+        return labels[source] || "the built-in default";
+      }
+
+      function getPackageImpactSummary(packageKey) {
+        if (packageKey === "starter") {
+          return "Starter hides Sonar Optimize in Configuration and hides Creative Analysis, Cohort Analysis, and Customer Segments in Activation.";
+        }
+
+        if (packageKey === "professional") {
+          return "Professional keeps the standard resources and adds MMM plus Incrementality in Activation.";
+        }
+
+        return "Advanced shows the standard resource set with no extra package-only additions or removals.";
+      }
+
+      function getUrlEntries() {
+        var params = new URLSearchParams(window.location.search);
+        var entries = [];
+
+        params.forEach(function (value, key) {
+          entries.push({
+            key: key,
+            normalizedKey: String(key).toLowerCase(),
+            value: value
+          });
+        });
+
+        return entries;
+      }
+
+      var debugParamDefinitions = [
+        {
+          key: "debug",
+          title: "Debug panel",
+          queryParam: debugPanelParamName,
+          cookieName: null,
+          normalize: normalizeHeadlessValue,
+          hasDefault: true,
+          defaultValue: false,
+          getActiveValue: function () {
+            return isDebugMode;
+          },
+          formatResolvedValue: function (value) {
+            return value === true ? "Shown" : "Hidden";
+          },
+          getImpact: function (value) {
+            return value === true
+              ? "This right-side guide is visible so you can inspect how the page made its decisions."
+              : "The right-side guide stays hidden.";
+          },
+          options: [
+            {
+              value: "true",
+              effect: "Shows this debug panel on the right."
+            },
+            {
+              value: "missing or false",
+              effect: "Keeps the debug panel hidden. This setting is not saved in a cookie."
+            }
+          ],
+          invalidNote: "Only true turns this on. Anything else is treated as off.",
+          priorityNote: "This one only reads the URL. It is not saved for later visits.",
+          noneSummary: "This panel only appears when the URL has debug=true."
+        },
+        {
+          key: "geo",
+          title: "Recommended region",
+          queryParam: "geo",
+          cookieName: geoCookieName,
+          normalize: normalizeGeoRecommendation,
+          hasDefault: false,
+          getActiveValue: function () {
+            return activeRecommendedGeo;
+          },
+          formatResolvedValue: function (value) {
+            return value ? formatGeoDisplayName(value) : "None";
+          },
+          getImpact: function (value) {
+            return value
+              ? "The " + formatGeoDisplayName(value) + " card is highlighted with the Recommended label."
+              : "No region card is highlighted as recommended right now.";
+          },
+          options: [
+            {
+              value: "americas",
+              effect: "Highlights the Americas booking card."
+            },
+            {
+              value: "emea",
+              effect: "Highlights the EMEA booking card."
+            },
+            {
+              value: "apac",
+              effect: "Highlights the APAC booking card."
+            },
+            {
+              value: "missing",
+              effect: "Nothing is highlighted unless a saved geo cookie from a past visit exists."
+            }
+          ],
+          invalidNote: "Use americas, emea, or apac. Anything else is ignored.",
+          priorityNote: "Order used: URL first, then the saved region cookie. There is no built-in fallback region.",
+          noneSummary: "No region is highlighted right now."
+        },
+        {
+          key: "brand",
+          title: "Brand name",
+          queryParam: "brand",
+          cookieName: brandCookieName,
+          normalize: normalizeBrandValue,
+          hasDefault: false,
+          getActiveValue: function () {
+            return activeBrand;
+          },
+          formatResolvedValue: function (value) {
+            return value || "Not showing";
+          },
+          getImpact: function (value) {
+            return value
+              ? "The smaller line under the main headline says \"" + getHeroBrandContext(value) + "\"."
+              : "No brand-specific line is showing under the main headline.";
+          },
+          options: [
+            {
+              value: "any text",
+              effect: "Shows that brand name in the smaller line under the main heading."
+            },
+            {
+              value: "missing or blank",
+              effect: "Hides the brand-specific line."
+            }
+          ],
+          invalidNote: "Blank brand values are ignored.",
+          priorityNote: "Order used: URL first, then the saved brand cookie. If the brand changes, the page clears the saved onboarding cookies first so the new brand starts clean.",
+          noneSummary: "No brand name is being shown right now.",
+          getNotice: function () {
+            if (!brandResetInfo.didReset) {
+              return null;
+            }
+
+            return "The saved brand changed from " + brandResetInfo.previousBrand + " to " + brandResetInfo.nextBrand + ", so the page cleared the saved onboarding cookies before applying the new values.";
+          }
+        },
+        {
+          key: "msp",
+          title: "Platform",
+          queryParam: resourceRouting.queryParam || "msp",
+          cookieName: mspCookieName,
+          normalize: normalizeMspValue,
+          hasDefault: true,
+          defaultValue: defaultMsp,
+          getActiveValue: function () {
+            return activeMsp;
+          },
+          formatResolvedValue: function (value) {
+            return formatMspDisplayName(value);
+          },
+          getImpact: function (value) {
+            var label = formatMspDisplayName(value);
+            var contextNote = value === "shopify"
+              ? "The top platform badge stays hidden because Shopify is the default view."
+              : "The top platform badge shows " + label + ".";
+
+            return "The Configuration card uses the " + label + " version of the Triple Pixel setup. " + contextNote;
+          },
+          options: [
+            {
+              value: "shopify",
+              effect: "Uses the Shopify Triple Pixel setup and keeps the top platform badge hidden."
+            },
+            {
+              value: "woocommerce",
+              effect: "Uses the WooCommerce Triple Pixel setup and shows a WooCommerce badge at the top."
+            },
+            {
+              value: "bigcommerce",
+              effect: "Uses the BigCommerce Triple Pixel setup and shows a BigCommerce badge at the top."
+            },
+            {
+              value: "custom",
+              effect: "Uses the custom-platform Triple Pixel setup and shows a Custom badge at the top."
+            }
+          ],
+          invalidNote: "Use Shopify, WooCommerce, BigCommerce, or custom. Anything else is ignored.",
+          priorityNote: "Order used: URL first, then the saved platform cookie, then Shopify as the default."
+        },
+        {
+          key: "headless",
+          title: "Headless setup",
+          queryParam: resourceRouting.headlessQueryParam || "headless",
+          cookieName: headlessCookieName,
+          normalize: normalizeHeadlessValue,
+          hasDefault: true,
+          defaultValue: defaultHeadless,
+          getActiveValue: function () {
+            return activeHeadless;
+          },
+          formatResolvedValue: function (value) {
+            return value === true ? "On" : "Off";
+          },
+          getImpact: function (value) {
+            return value === true
+              ? "The Triple Pixel item switches to the shared headless setup guide, and the platform badge gets a stronger highlighted style."
+              : "The page keeps the standard platform-specific Triple Pixel setup guide.";
+          },
+          options: [
+            {
+              value: "true",
+              effect: "Uses the shared headless setup guide instead of the regular platform-specific Triple Pixel guide."
+            },
+            {
+              value: "false",
+              effect: "Keeps the regular platform-specific Triple Pixel guide."
+            }
+          ],
+          invalidNote: "Use true or false. Anything else is ignored.",
+          priorityNote: "Order used: URL first, then the saved headless cookie, then false as the default."
+        },
+        {
+          key: "package",
+          title: "Package tier",
+          queryParam: resourceRouting.packageQueryParam || "package",
+          cookieName: packageCookieName,
+          normalize: normalizePackageValue,
+          hasDefault: true,
+          defaultValue: defaultPackage,
+          getActiveValue: function () {
+            return activePackage;
+          },
+          formatResolvedValue: function (value) {
+            return formatPackageDisplayName(value);
+          },
+          getImpact: function (value) {
+            return getPackageImpactSummary(value);
+          },
+          options: [
+            {
+              value: "starter",
+              effect: "Hides Sonar Optimize in Configuration and hides Creative Analysis, Cohort Analysis, and Customer Segments in Activation."
+            },
+            {
+              value: "advanced",
+              effect: "Shows the standard resource set."
+            },
+            {
+              value: "professional",
+              effect: "Shows the standard resource set and adds MMM plus Incrementality in Activation."
+            }
+          ],
+          invalidNote: "Use starter, advanced, or professional. Anything else is ignored.",
+          priorityNote: "Order used: URL first, then the saved package cookie, then Advanced as the default."
+        },
+        {
+          key: "conversion",
+          title: "Conversion add-on",
+          queryParam: featureFlagQueryParams.conversion || "hasconversion",
+          cookieName: hasConversionCookieName,
+          normalize: normalizeFeatureFlagValue,
+          hasDefault: true,
+          defaultValue: false,
+          getActiveValue: function () {
+            return activeFeatureFlags.conversion;
+          },
+          formatResolvedValue: function (value) {
+            return value === true ? "Visible" : "Hidden";
+          },
+          getImpact: function (value) {
+            return value === true
+              ? "The Conversion add-on box appears under Configuration."
+              : "The Conversion add-on box stays hidden.";
+          },
+          options: [
+            {
+              value: "true",
+              effect: "Shows the Conversion add-on box under Configuration."
+            },
+            {
+              value: "missing, blank, or false",
+              effect: "Does not turn the add-on on. If a saved cookie already says true, the page will keep showing it."
+            }
+          ],
+          invalidNote: "Only true turns this on. false is treated the same as leaving it out.",
+          priorityNote: "Order used: URL true first, then the saved add-on cookie. If neither says true, the add-on stays hidden."
+        },
+        {
+          key: "retention",
+          title: "Retention add-on",
+          queryParam: featureFlagQueryParams.retention || "hasretention",
+          cookieName: hasRetentionCookieName,
+          normalize: normalizeFeatureFlagValue,
+          hasDefault: true,
+          defaultValue: false,
+          getActiveValue: function () {
+            return activeFeatureFlags.retention;
+          },
+          formatResolvedValue: function (value) {
+            return value === true ? "Visible" : "Hidden";
+          },
+          getImpact: function (value) {
+            return value === true
+              ? "The Retention add-on box appears under Activation."
+              : "The Retention add-on box stays hidden.";
+          },
+          options: [
+            {
+              value: "true",
+              effect: "Shows the Retention add-on box under Activation."
+            },
+            {
+              value: "missing, blank, or false",
+              effect: "Does not turn the add-on on. If a saved cookie already says true, the page will keep showing it."
+            }
+          ],
+          invalidNote: "Only true turns this on. false is treated the same as leaving it out.",
+          priorityNote: "Order used: URL true first, then the saved add-on cookie. If neither says true, the add-on stays hidden."
+        }
+      ];
+
+      function buildDebugInfo(definition) {
+        var rawQuery = getQueryParamValue(definition.queryParam);
+        var rawCookie = definition.cookieName ? getCookieValue(definition.cookieName) : null;
+        var normalizedQuery = definition.normalize ? definition.normalize(rawQuery) : rawQuery;
+        var normalizedCookie = definition.cookieName && definition.normalize ? definition.normalize(rawCookie) : rawCookie;
+        var activeValue = definition.getActiveValue ? definition.getActiveValue() : null;
+        var source = "none";
+        var notice = null;
+
+        if (isValueDefined(normalizedQuery)) {
+          source = "url";
+        } else if (definition.cookieName && isValueDefined(normalizedCookie)) {
+          source = "cookie";
+        } else if (definition.hasDefault) {
+          source = "default";
+        }
+
+        if (isValueDefined(rawQuery) && !isValueDefined(normalizedQuery)) {
+          notice = definition.invalidNote || "The value in the URL is not supported, so the page ignored it.";
+        }
+
+        if (!notice && typeof definition.getNotice === "function") {
+          notice = definition.getNotice({
+            rawQuery: rawQuery,
+            rawCookie: rawCookie,
+            normalizedQuery: normalizedQuery,
+            normalizedCookie: normalizedCookie,
+            activeValue: activeValue,
+            source: source
+          });
+        }
+
+        return {
+          rawQuery: rawQuery,
+          rawCookie: rawCookie,
+          normalizedQuery: normalizedQuery,
+          normalizedCookie: normalizedCookie,
+          activeValue: activeValue,
+          source: source,
+          notice: notice,
+          effectiveDisplayValue: definition.formatResolvedValue(activeValue)
+        };
+      }
+
+      function getDebugSummaryText(definition, info) {
+        if (info.source === "none") {
+          return definition.noneSummary || "Nothing is active for this setting right now.";
+        }
+
+        if (info.source === "default") {
+          return "Using " + info.effectiveDisplayValue + " from the built-in default.";
+        }
+
+        return "Using " + info.effectiveDisplayValue + " from " + getReadableSourceText(info.source) + ".";
+      }
+
+      function appendDebugFact(parent, label, value) {
+        var row = createDebugElement("div", "debug-fact");
+        row.appendChild(createDebugElement("div", "debug-fact-label", label));
+        row.appendChild(createDebugElement("div", "debug-fact-value", value));
+        parent.appendChild(row);
+      }
+
+      function renderDebugAlerts(container) {
+        if (!container) {
+          return;
+        }
+
+        container.innerHTML = "";
+
+        if (!brandResetInfo.didReset) {
+          container.hidden = true;
+          return;
+        }
+
+        container.hidden = false;
+        container.appendChild(
+          createDebugElement(
+            "p",
+            "debug-callout",
+            "Saved onboarding cookies were cleared because the brand changed from " + brandResetInfo.previousBrand + " to " + brandResetInfo.nextBrand + "."
+          )
+        );
+      }
+
+      function renderDebugOverview(container) {
+        if (!container) {
+          return;
+        }
+
+        var overviewItems = [
+          {
+            label: "Recommended region",
+            value: activeRecommendedGeo ? formatGeoDisplayName(activeRecommendedGeo) : "None",
+            note: activeRecommendedGeo
+              ? "The " + formatGeoDisplayName(activeRecommendedGeo) + " card is currently highlighted."
+              : "No region card is highlighted."
+          },
+          {
+            label: "Brand line",
+            value: activeBrand ? activeBrand : "Not showing",
+            note: activeBrand
+              ? "The supporting line under the headline is visible."
+              : "The page is using the generic headline area with no brand line."
+          },
+          {
+            label: "Platform docs",
+            value: formatMspDisplayName(activeMsp) + (activeHeadless ? " + Headless" : ""),
+            note: activeHeadless
+              ? "The Configuration card is using the headless Triple Pixel guide."
+              : "The Configuration card is using the regular platform-specific Triple Pixel guide."
+          },
+          {
+            label: "Package tier",
+            value: formatPackageDisplayName(activePackage),
+            note: getPackageImpactSummary(activePackage)
+          },
+          {
+            label: "Add-on boxes",
+            value: (activeFeatureFlags.conversion ? "Conversion" : "") + (activeFeatureFlags.conversion && activeFeatureFlags.retention ? " + " : "") + (activeFeatureFlags.retention ? "Retention" : "") || "None",
+            note: activeFeatureFlags.conversion || activeFeatureFlags.retention
+              ? "Only the add-on boxes listed above are currently showing."
+              : "No add-on callout boxes are showing."
+          }
+        ];
+
+        container.innerHTML = "";
+
+        overviewItems.forEach(function (item) {
+          var card = createDebugElement("div", "debug-overview-card");
+          card.appendChild(createDebugElement("p", "debug-overview-label", item.label));
+          card.appendChild(createDebugElement("p", "debug-overview-value", item.value));
+          card.appendChild(createDebugElement("p", "debug-overview-note", item.note));
+          container.appendChild(card);
+        });
+      }
+
+      function renderUrlSummary(container) {
+        if (!container) {
+          return;
+        }
+
+        var urlEntries = getUrlEntries();
+        var knownParamNames = debugParamDefinitions.reduce(function (names, definition) {
+          names[String(definition.queryParam).toLowerCase()] = true;
+          return names;
+        }, {});
+        var recognizedEntries = urlEntries.filter(function (entry) {
+          return !!knownParamNames[entry.normalizedKey];
+        });
+        var ignoredEntries = urlEntries.filter(function (entry) {
+          return !knownParamNames[entry.normalizedKey];
+        });
+
+        container.innerHTML = "";
+
+        if (!urlEntries.length) {
+          container.appendChild(createDebugElement("p", "debug-note", "There are no query parameters in the URL right now."));
+          return;
+        }
+
+        [
+          {
+            label: "Used by this page",
+            entries: recognizedEntries,
+            chipClassName: "debug-chip"
+          },
+          {
+            label: "Extra URL values this page ignores",
+            entries: ignoredEntries,
+            chipClassName: "debug-chip debug-chip--ignored"
+          }
+        ].forEach(function (group) {
+          var groupEl;
+          var chipList;
+
+          if (!group.entries.length) {
+            return;
+          }
+
+          groupEl = createDebugElement("div", "debug-chip-group");
+          groupEl.appendChild(createDebugElement("p", "debug-chip-group-label", group.label));
+          chipList = createDebugElement("div", "debug-chip-list");
+
+          group.entries.forEach(function (entry) {
+            chipList.appendChild(
+              createDebugElement(
+                "span",
+                group.chipClassName,
+                entry.key + "=" + (entry.value === "" ? "(blank)" : entry.value)
+              )
+            );
+          });
+
+          groupEl.appendChild(chipList);
+          container.appendChild(groupEl);
+        });
+      }
+
+      function renderDebugAccordion(container) {
+        if (!container) {
+          return;
+        }
+
+        container.innerHTML = "";
+
+        debugParamDefinitions.forEach(function (definition) {
+          var info = buildDebugInfo(definition);
+          var details = createDebugElement("details", "debug-item");
+          var summary = createDebugElement("summary");
+          var summaryCopy = createDebugElement("div", "debug-summary-copy");
+          var summaryMeta = createDebugElement("div", "debug-summary-meta");
+          var sourcePill = createDebugElement("span", "debug-source-pill", formatSourceBadgeLabel(info.source));
+          var body = createDebugElement("div", "debug-item-body");
+          var facts = createDebugElement("div", "debug-facts");
+          var impact = createDebugElement("p", "debug-callout", definition.getImpact(info.activeValue));
+          var options = createDebugElement("div", "debug-options");
+          var optionList = createDebugElement("ul", "debug-option-list");
+
+          if (definition.key === "debug" || info.source === "url" || info.source === "cookie" || !!info.notice) {
+            details.open = true;
+          }
+
+          summaryCopy.appendChild(createDebugElement("span", "debug-summary-label", definition.title));
+          summaryCopy.appendChild(createDebugElement("span", "debug-summary-text", getDebugSummaryText(definition, info)));
+          summary.className = "debug-item-summary";
+          summary.appendChild(summaryCopy);
+          summaryMeta.appendChild(sourcePill);
+          summary.appendChild(summaryMeta);
+          details.appendChild(summary);
+
+          appendDebugFact(facts, "URL says", formatRawDebugValue(info.rawQuery));
+          appendDebugFact(
+            facts,
+            "Saved from a past visit",
+            definition.cookieName ? formatRawDebugValue(info.rawCookie) : "Not used for this setting"
+          );
+          appendDebugFact(facts, "Page is using", info.effectiveDisplayValue);
+          body.appendChild(facts);
+          body.appendChild(impact);
+
+          if (info.notice) {
+            body.appendChild(createDebugElement("p", "debug-callout debug-callout--warning", info.notice));
+          }
+
+          body.appendChild(createDebugElement("p", "debug-note", definition.priorityNote));
+          options.appendChild(createDebugElement("p", "debug-options-title", "Available options"));
+
+          definition.options.forEach(function (option) {
+            var li = createDebugElement("li");
+            var label = createDebugElement("span", "debug-option-label", option.value + ": ");
+            li.appendChild(label);
+            li.appendChild(document.createTextNode(option.effect));
+            optionList.appendChild(li);
+          });
+
+          options.appendChild(optionList);
+          body.appendChild(options);
+          details.appendChild(body);
+          container.appendChild(details);
+        });
+      }
+
+      function renderDebugPanel() {
+        var panel = document.querySelector("[data-debug-panel]");
+
+        if (!panel || !isDebugMode) {
+          return;
+        }
+
+        panel.hidden = false;
+        renderDebugAlerts(panel.querySelector("[data-debug-alerts]"));
+        renderDebugOverview(panel.querySelector("[data-debug-overview]"));
+        renderUrlSummary(panel.querySelector("[data-debug-url-summary]"));
+        renderDebugAccordion(panel.querySelector("[data-debug-accordion]"));
+      }
+
+      renderDebugPanel();
 
       var storageKey = "tw-booking-theme";
       var root = document.documentElement;

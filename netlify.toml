@@ -1,0 +1,5 @@
+[[redirects]]
+  from = "/projects/tw-onboardinghub/*"
+  to = "https://tw-onboardinghub.netlify.app/:splat"
+  status = 200
+  force = true
