@@ -79,8 +79,8 @@ The page now reads lowercase `?msp=`, `?headless=`, `?package=`, `?hasconversion
 - `?package=starter` removes Sonar Optimize from configuration and hides Creative Analysis, Cohort Analysis, and Customer Segments from activation
 - `?package=professional` includes the full advanced/default activation set plus MMM and Incrementality
 - Missing, blank, or `?package=advanced` keeps the default experience
-- `?hasconversion=true` adds the separate bottom-of-card Conversion callout under Configuration and updates the `tw_hasconversion` cookie
-- `?hasretention=true` adds the separate bottom-of-card Retention callout under Activation and updates the `tw_hasretention` cookie
+- `?hasconversion=true` adds the compact Conversion add-on callout under Configuration and updates the `tw_hasconversion` cookie
+- `?hasretention=true` adds the compact Retention add-on callout under Activation and updates the `tw_hasretention` cookie
 - If either flag is missing or blank, the page falls back to its matching cookie when present
 - Only `true` is treated as an active value for those feature flags
 
@@ -102,7 +102,7 @@ The hero copy now reads `?brand=` from the URL and personalizes the supporting b
 - Blank `brand` values do not overwrite the cookie
 - If both the URL and cookie have values, the URL wins and the cookie is updated
 - If a new `?brand=` value differs from the stored `tw_brand`, the page clears the persisted onboarding cookies first so the new brand starts from a clean state before any fresh query params are applied
-- The main hero headline stays fixed as `Welcome to Triple Whale`, and the brand now appears in a smaller supporting line when available
+- The main hero headline stays fixed as `Welcome to Triple Whale!`, and the brand now appears in a smaller supporting line when available
 
 ## Geo Recommendation Persistence
 The recommended region highlight now uses `geo` from the URL first and falls back to a cookie on later visits.

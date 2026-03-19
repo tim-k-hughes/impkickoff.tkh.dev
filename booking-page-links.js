@@ -24,11 +24,11 @@ var CONFIGURATION_URLS = {
   },
   addonCallouts: {
     conversion: {
-      badgeLabel: "Included add-on",
+      badgeLabel: "Add-on",
       title: "Conversion",
-      description: "Custom Events is included with your paid add-on. Use this guide to get it set up.",
+      description: "",
       items: [
-        { label: "Setup Custom Events", url: "https://example.com/add-ons/conversion/setup-custom-events" }
+        { label: "Set up Custom Events", url: "https://example.com/add-ons/conversion/setup-custom-events" }
       ]
     }
   }
@@ -91,9 +91,9 @@ var ACTIVATION_URLS = {
   },
   addonCallouts: {
     retention: {
-      badgeLabel: "Included add-on",
+      badgeLabel: "Add-on",
       title: "Retention",
-      description: "Segment syncing is included with your paid add-on. Use this guide to get it live.",
+      description: "",
       items: [
         { label: "Sync customer segments", url: "https://example.com/add-ons/retention/sync-customer-segments" }
       ]

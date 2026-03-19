@@ -427,6 +427,8 @@
       border: 1px solid var(--line);
       border-radius: var(--radius-md);
       padding: 18px 18px 19px;
+      display: flex;
+      flex-direction: column;
     }
 
     .info-card-header {
@@ -494,11 +496,15 @@
     }
 
     .info-card-addon {
-      margin-top: 16px;
+      margin-top: auto;
       padding: 14px 14px 12px;
       border-radius: var(--radius-sm);
       border: 1px solid rgba(12, 112, 242, 0.18);
       background: linear-gradient(180deg, rgba(12, 112, 242, 0.08), rgba(12, 112, 242, 0.03));
+    }
+
+    .info-card > ul[data-resource-list] {
+      margin-bottom: 16px;
     }
 
     .info-card-addon[hidden] {
@@ -541,6 +547,10 @@
       color: var(--charcoal);
       font-size: 14px;
       line-height: 1.5;
+    }
+
+    .info-card-addon-description[hidden] {
+      display: none;
     }
 
     .info-card-addon-list {
@@ -692,7 +702,7 @@
       </div>
 
       <header>
-        <h1 data-brand-headline>Welcome to Triple Whale</h1>
+        <h1 data-brand-headline>Welcome to Triple Whale!</h1>
         <p class="hero-brand-context" data-brand-context hidden>Quickstart resources for your brand</p>
         <p class="lead" data-brand-lead-copy>Let's get your kickoff call booked so onboarding can get started.</p>
       </header>
@@ -742,9 +752,9 @@
           <div class="info-card-addon" data-resource-addon hidden>
             <div class="info-card-addon-header">
               <h4 class="info-card-addon-title" data-resource-addon-title>Conversion</h4>
-              <span class="info-card-addon-badge" data-resource-addon-badge>Included add-on</span>
+              <span class="info-card-addon-badge" data-resource-addon-badge>Add-on</span>
             </div>
-            <p class="info-card-addon-description" data-resource-addon-description>Custom Events is included with your paid add-on. Use this guide to get it set up.</p>
+            <p class="info-card-addon-description" data-resource-addon-description hidden></p>
             <ul class="info-card-addon-list" data-resource-addon-list></ul>
           </div>
         </article>
@@ -761,9 +771,9 @@
           <div class="info-card-addon" data-resource-addon hidden>
             <div class="info-card-addon-header">
               <h4 class="info-card-addon-title" data-resource-addon-title>Retention</h4>
-              <span class="info-card-addon-badge" data-resource-addon-badge>Included add-on</span>
+              <span class="info-card-addon-badge" data-resource-addon-badge>Add-on</span>
             </div>
-            <p class="info-card-addon-description" data-resource-addon-description>Segment syncing is included with your paid add-on. Use this guide to get it live.</p>
+            <p class="info-card-addon-description" data-resource-addon-description hidden></p>
             <ul class="info-card-addon-list" data-resource-addon-list></ul>
           </div>
         </article>
@@ -1072,7 +1082,7 @@
       };
 
       function getHeroHeadline() {
-        return "Welcome to Triple Whale";
+        return "Welcome to Triple Whale!";
       }
 
       function getHeroBrandContext(brandName) {
@@ -1457,7 +1467,7 @@
         }
 
         return {
-          badgeLabel: callout.badgeLabel || "Included add-on",
+          badgeLabel: callout.badgeLabel || "Add-on",
           title: callout.title || "Add-on",
           description: callout.description || "",
           items: calloutItems
@@ -1595,6 +1605,10 @@
         if (!addonCallout) {
           addonEl.hidden = true;
           addonListEl.innerHTML = "";
+          if (addonDescriptionEl) {
+            addonDescriptionEl.textContent = "";
+            addonDescriptionEl.hidden = true;
+          }
           return;
         }
 
@@ -1610,6 +1624,7 @@
 
         if (addonDescriptionEl) {
           addonDescriptionEl.textContent = addonCallout.description;
+          addonDescriptionEl.hidden = !addonCallout.description;
         }
 
         addonListEl.innerHTML = "";
