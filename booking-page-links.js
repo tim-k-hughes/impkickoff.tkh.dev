@@ -121,23 +121,44 @@ function getProfessionalActivationItems() {
 }
 
 window.BOOKING_PAGE_LINKS = {
+  // Booking link routing.
+  // The page accepts `?cohort=` and swaps regional booking URLs when supported.
+  bookingRouting: {
+    cohortQueryParam: "cohort"
+  },
+
   // Main booking buttons on each region card.
   // `dataLinkKey` must match the `data-link` attribute in index.html.
   bookingButtons: {
     americasCard: {
       label: "Book Americas",
       dataLinkKey: "americas",
-      url: "https://example.com/americas"
+      url: "https://example.com/americas",
+      cohortUrls: {
+        smb: "https://example.com/smb/americas",
+        midMarket: "https://example.com/mid-market/americas",
+        enterprise: "https://example.com/enterprise/americas"
+      }
     },
     emeaCard: {
       label: "Book EMEA",
       dataLinkKey: "emea",
-      url: "https://example.com/emea"
+      url: "https://example.com/emea",
+      cohortUrls: {
+        smb: "https://example.com/smb/emea",
+        midMarket: "https://example.com/mid-market/emea",
+        enterprise: "https://example.com/enterprise/emea"
+      }
     },
     apacCard: {
       label: "Book APAC",
       dataLinkKey: "apac",
-      url: "https://example.com/apac"
+      url: "https://example.com/apac",
+      cohortUrls: {
+        smb: "https://example.com/smb/apac",
+        midMarket: "https://example.com/mid-market/apac",
+        enterprise: "https://example.com/enterprise/apac"
+      }
     }
   },
 
@@ -147,7 +168,12 @@ window.BOOKING_PAGE_LINKS = {
     worldwideAvailability: {
       label: "View worldwide availability",
       dataLinkKey: "worldwide",
-      url: "https://example.com/worldwide"
+      url: "https://example.com/worldwide",
+      cohortUrls: {
+        smb: "https://example.com/smb/worldwide",
+        midMarket: "https://example.com/mid-market/worldwide",
+        enterprise: "https://example.com/enterprise/worldwide"
+      }
     }
   },
 

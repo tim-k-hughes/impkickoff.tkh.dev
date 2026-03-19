@@ -60,9 +60,21 @@ Current status noted in that prior thread:
 - Brand-kit styling has now been applied to `index.html` (color, typography, spacing, tone, CTA/focus states).
 - Booking URLs in `booking-page-links.js` are still placeholders and should be replaced with production links.
 - The two onboarding resource cards now support MSP-aware link sets in `booking-page-links.js`.
+- Booking links now also support cohort-aware routing for `?cohort=` with default, SMB, mid-market, and enterprise router sets.
+
+## URL-Driven Personalization
+The page now reads `?cohort=`, `?msp=`, `?headless=`, `?package=`, `?hasConversion=`, and `?hasRetention=` from the URL and swaps booking links and onboarding resources accordingly.
+
+## Cohort-Aware Booking Links
+- Supported values: `SMB`, `mid-market`, `enterprise`
+- Matching is case-insensitive and ignores spaces / punctuation
+- Missing, blank, or unknown `cohort` values fall back to the `tw_cohort` cookie when present, otherwise keep the default shared booking routers
+- A valid `?cohort=` value updates the `tw_cohort` cookie
+- Blank or invalid `?cohort=` values do not overwrite the cookie
+- `booking-page-links.js` stores the default regional URLs plus cohort-specific overrides under each booking button and the worldwide link
 
 ## MSP-Aware Resource Links
-The page now reads `?msp=`, `?headless=`, `?package=`, `?hasConversion=`, and `?hasRetention=` from the URL and swaps the onboarding resource cards accordingly.
+The page also reads `?msp=`, `?headless=`, `?package=`, `?hasConversion=`, and `?hasRetention=` from the URL and swaps the onboarding resource cards accordingly.
 
 - Supported values: `Shopify`, `WooCommerce`, `BigCommerce`, `custom`
 - Matching is case-insensitive and ignores spaces / punctuation
@@ -100,7 +112,7 @@ The hero copy now reads `?brand=` from the URL and personalizes the supporting b
 - If `brand` is missing, the page falls back to `tw_brand` when present
 - Blank `brand` values do not overwrite the cookie
 - If both the URL and cookie have values, the URL wins and the cookie is updated
-- If a new `?brand=` value differs from the stored `tw_brand`, the page clears the saved parameter cookies for `geo`, `msp`, `headless`, `brand`, `package`, `hasConversion`, and `hasRetention` first so the new brand starts from a clean state before any fresh query params are applied
+- If a new `?brand=` value differs from the stored `tw_brand`, the page clears the saved parameter cookies for `geo`, `cohort`, `msp`, `headless`, `brand`, `package`, `hasConversion`, and `hasRetention` first so the new brand starts from a clean state before any fresh query params are applied
 - The main hero headline stays fixed as `Welcome to Triple Whale!`, and the brand now appears in a smaller supporting line when available
 
 ## Geo Recommendation Persistence

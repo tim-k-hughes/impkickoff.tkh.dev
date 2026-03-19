@@ -1120,7 +1120,7 @@
         <div class="debug-panel-header">
           <p class="debug-eyebrow">Debug View</p>
           <h2>Why this page looks the way it does</h2>
-          <p class="debug-help">A cookie here just means a saved value from a past visit. The table shows the resolved value, how it was chosen, and the accepted values for each setting. Hover an option to see what it does.</p>
+          <p class="debug-help">A cookie here just means a saved value from a past visit. The table shows the resolved value, how it was chosen, and the values you can actively use to change each setting. Default and fallback behavior is explained in the notes column. Hover a value to see what it does.</p>
         </div>
 
         <section class="debug-section" data-debug-alerts hidden></section>
@@ -1145,6 +1145,7 @@
     (function () {
       var linkConfig = window.BOOKING_PAGE_LINKS || {};
       var bookingLinks = {};
+      var bookingRouting = linkConfig.bookingRouting || {};
       var resourceRouting = linkConfig.resourceRouting || {};
       var checklistSections = linkConfig.checklistSections || {};
 
@@ -1208,6 +1209,21 @@
         };
 
         return validPackageValues[normalizedValue] || null;
+      }
+
+      function normalizeCohortValue(value) {
+        if (value === null || typeof value === "undefined") {
+          return null;
+        }
+
+        var normalizedValue = String(value).toLowerCase().replace(/[^a-z]/g, "");
+        var validCohortValues = {
+          smb: "smb",
+          midmarket: "midMarket",
+          enterprise: "enterprise"
+        };
+
+        return validCohortValues[normalizedValue] || null;
       }
 
       function getQueryParamValue(paramName) {
@@ -1280,6 +1296,7 @@
       var defaultHeadless = normalizeHeadlessValue(resourceRouting.defaultHeadless) === true;
       var defaultPackage = normalizePackageValue(resourceRouting.defaultPackage) || "advanced";
       var geoCookieName = "tw_geo";
+      var cohortCookieName = "tw_cohort";
       var mspCookieName = "tw_msp";
       var headlessCookieName = "tw_headless";
       var brandCookieName = "tw_brand";
@@ -1296,6 +1313,7 @@
       };
       var persistedCookieDetails = [
         { displayParam: "geo", cookieName: geoCookieName },
+        { displayParam: bookingRouting.cohortQueryParam || "cohort", cookieName: cohortCookieName },
         { displayParam: resourceRouting.queryParam || "msp", cookieName: mspCookieName },
         { displayParam: resourceRouting.headlessQueryParam || "headless", cookieName: headlessCookieName },
         { displayParam: "brand", cookieName: brandCookieName },
@@ -1395,6 +1413,21 @@
       }
 
       var activeMsp = getActiveMsp();
+
+      function getActiveCohort() {
+        var rawCohort = getQueryParamValue(bookingRouting.cohortQueryParam || "cohort");
+        var queryCohort = normalizeCohortValue(rawCohort);
+        var cookieCohort = normalizeCohortValue(getCookieValue(cohortCookieName));
+
+        if (queryCohort) {
+          setCookieValue(cohortCookieName, rawCohort);
+          return queryCohort;
+        }
+
+        return cookieCohort || null;
+      }
+
+      var activeCohort = getActiveCohort();
 
       function getActiveHeadless() {
         var rawHeadless = getQueryParamValue(resourceRouting.headlessQueryParam || "headless");
@@ -1536,6 +1569,33 @@
         });
       }
 
+      function applyActiveBookingContext() {
+        if (document.documentElement) {
+          document.documentElement.setAttribute("data-active-cohort", activeCohort || "");
+        }
+
+        if (document.body) {
+          document.body.setAttribute("data-active-cohort", activeCohort || "");
+        }
+      }
+
+      function getResolvedBookingUrl(entry) {
+        if (!entry) {
+          return null;
+        }
+
+        if (
+          activeCohort &&
+          entry.cohortUrls &&
+          typeof entry.cohortUrls === "object" &&
+          entry.cohortUrls[activeCohort]
+        ) {
+          return entry.cohortUrls[activeCohort];
+        }
+
+        return entry.url || null;
+      }
+
       function addBookingLinksFromGroup(group) {
         if (!group || typeof group !== "object") {
           return;
@@ -1543,10 +1603,12 @@
 
         Object.keys(group).forEach(function (entryKey) {
           var entry = group[entryKey];
-          if (!entry || !entry.dataLinkKey || !entry.url) {
+          var resolvedUrl = getResolvedBookingUrl(entry);
+
+          if (!entry || !entry.dataLinkKey || !resolvedUrl) {
             return;
           }
-          bookingLinks[entry.dataLinkKey] = entry.url;
+          bookingLinks[entry.dataLinkKey] = resolvedUrl;
         });
       }
 
@@ -1733,6 +1795,7 @@
       applyTimezoneLabels();
       applyBrandCopy();
       applyActiveMspContext();
+      applyActiveBookingContext();
 
       function getItemsForMsp(itemsByMsp, mspKey) {
         if (!itemsByMsp || typeof itemsByMsp !== "object") {
@@ -2051,6 +2114,16 @@
         return labels[packageKey] || "Advanced";
       }
 
+      function formatCohortDisplayName(cohortKey) {
+        var labels = {
+          smb: "SMB",
+          midMarket: "Mid-Market",
+          enterprise: "Enterprise"
+        };
+
+        return labels[cohortKey] || "Default shared routing";
+      }
+
       function formatGeoDisplayName(geoKey) {
         var labels = {
           americas: "Americas",
@@ -2129,15 +2202,94 @@
             {
               value: "true",
               effect: "Shows this debug panel on the right."
-            },
-            {
-              value: "false or blank",
-              effect: "Keeps the debug panel hidden. This setting is not saved in a cookie."
             }
           ],
           invalidNote: "Only true turns this on. Anything else is treated as off.",
           priorityNote: "This one only reads the URL. It is not saved for later visits.",
           noneSummary: "This panel only appears when the URL has debug=true."
+        },
+        {
+          key: "brand",
+          title: "Brand name",
+          queryParam: "brand",
+          displayParam: "brand",
+          cookieName: brandCookieName,
+          normalize: normalizeBrandValue,
+          hasDefault: false,
+          getActiveValue: function () {
+            return activeBrand;
+          },
+          formatCurrentValue: function (value) {
+            return value || "";
+          },
+          formatResolvedValue: function (value) {
+            return value || "Not showing";
+          },
+          getImpact: function (value) {
+            return value
+              ? "The smaller line under the main headline says \"" + getHeroBrandContext(value) + "\"."
+              : "No brand-specific line is showing under the main headline.";
+          },
+          options: [
+            {
+              value: "any text",
+              effect: "Shows that brand name in the smaller line under the main heading."
+            }
+          ],
+          invalidNote: "Blank brand values are ignored.",
+          priorityNote: "Order used: URL first, then the saved brand cookie. If the brand changes, the page clears " + getPersistedCookieSummaryText() + " so the new brand starts clean.",
+          noneSummary: "No brand name is being shown right now.",
+          getNotice: function () {
+            if (!brandResetInfo.didReset) {
+              return null;
+            }
+
+            return "The saved brand changed from " + brandResetInfo.previousBrand + " to " + brandResetInfo.nextBrand + ", so the page cleared " + getPersistedCookieSummaryText() + " before applying the new values.";
+          }
+        },
+        {
+          key: "cohort",
+          title: "MRR cohort",
+          queryParam: bookingRouting.cohortQueryParam || "cohort",
+          displayParam: bookingRouting.cohortQueryParam || "cohort",
+          cookieName: cohortCookieName,
+          normalize: normalizeCohortValue,
+          hasDefault: true,
+          defaultValue: null,
+          getActiveValue: function () {
+            return activeCohort;
+          },
+          formatCurrentValue: function (value, source) {
+            if (value) {
+              return formatCohortDisplayName(value);
+            }
+
+            return source === "default" ? "Default shared routing" : "";
+          },
+          formatResolvedValue: function (value) {
+            return value ? formatCohortDisplayName(value) : "Default shared routing";
+          },
+          getImpact: function (value) {
+            return value
+              ? "The Americas, EMEA, APAC, and worldwide booking buttons route to the " + formatCohortDisplayName(value) + " team routers."
+              : "The booking buttons stay on the default shared routers.";
+          },
+          options: [
+            {
+              value: "SMB",
+              effect: "Routes the Americas, EMEA, APAC, and worldwide booking links to the SMB team routers."
+            },
+            {
+              value: "mid-market",
+              effect: "Routes the Americas, EMEA, APAC, and worldwide booking links to the mid-market team routers."
+            },
+            {
+              value: "enterprise",
+              effect: "Routes the Americas, EMEA, APAC, and worldwide booking links to the enterprise team routers."
+            }
+          ],
+          invalidNote: "Use SMB, mid-market, or enterprise. Anything else is ignored.",
+          priorityNote: "Order used: URL first, then the saved cohort cookie. If neither is set, the page keeps the default shared booking routers."
         },
         {
           key: "geo",
@@ -2173,10 +2325,6 @@
             {
               value: "APAC",
               effect: "Highlights the APAC booking card."
-            },
-            {
-              value: "blank",
-              effect: "Nothing is highlighted unless a saved geo cookie from a past visit exists."
             }
           ],
           invalidNote: "Use americas, emea, or apac. Anything else is ignored.",
@@ -2184,53 +2332,10 @@
           noneSummary: "No region is highlighted right now."
         },
         {
-          key: "brand",
-          title: "Brand name",
-          queryParam: "brand",
-          displayParam: "brand",
-          cookieName: brandCookieName,
-          normalize: normalizeBrandValue,
-          hasDefault: false,
-          getActiveValue: function () {
-            return activeBrand;
-          },
-          formatCurrentValue: function (value) {
-            return value || "";
-          },
-          formatResolvedValue: function (value) {
-            return value || "Not showing";
-          },
-          getImpact: function (value) {
-            return value
-              ? "The smaller line under the main headline says \"" + getHeroBrandContext(value) + "\"."
-              : "No brand-specific line is showing under the main headline.";
-          },
-          options: [
-            {
-              value: "any text",
-              effect: "Shows that brand name in the smaller line under the main heading."
-            },
-            {
-              value: "blank",
-              effect: "Hides the brand-specific line."
-            }
-          ],
-          invalidNote: "Blank brand values are ignored.",
-          priorityNote: "Order used: URL first, then the saved brand cookie. If the brand changes, the page clears " + getPersistedCookieSummaryText() + " so the new brand starts clean.",
-          noneSummary: "No brand name is being shown right now.",
-          getNotice: function () {
-            if (!brandResetInfo.didReset) {
-              return null;
-            }
-
-            return "The saved brand changed from " + brandResetInfo.previousBrand + " to " + brandResetInfo.nextBrand + ", so the page cleared " + getPersistedCookieSummaryText() + " before applying the new values.";
-          }
-        },
-        {
           key: "msp",
           title: "Platform",
           queryParam: resourceRouting.queryParam || "msp",
-          displayParam: resourceRouting.queryParam || "msp",
+          displayParam: "MSP",
           cookieName: mspCookieName,
           normalize: normalizeMspValue,
           hasDefault: true,
@@ -2301,10 +2406,6 @@
             {
               value: "true",
               effect: "Uses the shared headless setup guide instead of the regular platform-specific Triple Pixel guide."
-            },
-            {
-              value: "false or blank",
-              effect: "False turns the headless override off. A blank value falls back to the saved value or the default."
             }
           ],
           invalidNote: "Use true or false. Anything else is ignored.",
@@ -2376,10 +2477,6 @@
             {
               value: "true",
               effect: "Shows the Conversion add-on box under Configuration."
-            },
-            {
-              value: "blank or false",
-              effect: "Does not turn the add-on on. If a saved cookie already says true, the page will keep showing it."
             }
           ],
           invalidNote: "Only true turns this on. Other values are ignored.",
@@ -2413,10 +2510,6 @@
             {
               value: "true",
               effect: "Shows the Retention add-on box under Activation."
-            },
-            {
-              value: "blank or false",
-              effect: "Does not turn the add-on on. If a saved cookie already says true, the page will keep showing it."
             }
           ],
           invalidNote: "Only true turns this on. Other values are ignored.",
@@ -2506,7 +2599,7 @@
 
         container.innerHTML = "";
 
-        ["Parameter", "Current value", "Note", "Available options"].forEach(function (label) {
+        ["Parameter", "Current value", "Note", "Values to use"].forEach(function (label) {
           headRow.appendChild(createDebugElement("th", null, label));
         });
 
