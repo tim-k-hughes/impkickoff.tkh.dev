@@ -1,3 +1,125 @@
+// Configuration URLs.
+// Triple Pixel is the only MSP-specific document in Configuration.
+// Everything else in Configuration is shared across platforms.
+var CONFIGURATION_URLS = {
+  triplePixelByMsp: {
+    shopify: "https://example.com/shopify/triple-pixel",
+    woocommerce: "https://example.com/woocommerce/triple-pixel",
+    bigcommerce: "https://example.com/bigcommerce/triple-pixel",
+    custom: "https://example.com/custom/triple-pixel"
+  },
+  headlessTriplePixel: "https://example.com/headless/triple-pixel",
+  sharedItems: {
+    integrations: "https://example.com/integrations",
+    utms: "https://example.com/utms",
+    sonarSend: "https://example.com/sonar-send",
+    sonarOptimize: "https://example.com/sonar-optimize",
+    postPurchaseSurvey: "https://example.com/post-purchase-survey",
+    cogs: "https://example.com/cogs",
+    shippingCosts: "https://example.com/shipping-costs",
+    handlingFees: "https://example.com/handling-fees",
+    expenses: "https://example.com/expenses",
+    subscriptionOrders: "https://example.com/subscription-orders",
+    affiliatesAndInfluencers: "https://example.com/affiliates-and-influencers"
+  },
+  addonCallouts: {
+    conversion: {
+      badgeLabel: "Included add-on",
+      title: "Conversion",
+      description: "Custom Events is included with your paid add-on. Use this guide to get it set up.",
+      items: [
+        { label: "Setup Custom Events", url: "https://example.com/add-ons/conversion/setup-custom-events" }
+      ]
+    }
+  }
+};
+
+function getConfigurationItems(triplePixelUrl) {
+  return [
+    { itemKey: "triplePixel", label: "Install your Triple Pixel", url: triplePixelUrl },
+    { label: "Connect Integrations", url: CONFIGURATION_URLS.sharedItems.integrations },
+    { label: "Add required UTMs", url: CONFIGURATION_URLS.sharedItems.utms },
+    {
+      itemKey: "sonar",
+      label: "Enable",
+      linkLabelWhenSingleLink: true,
+      links: [
+        { linkKey: "sonarSend", label: "Sonar Send", url: CONFIGURATION_URLS.sharedItems.sonarSend },
+        { linkKey: "sonarOptimize", label: "Sonar Optimize", url: CONFIGURATION_URLS.sharedItems.sonarOptimize }
+      ]
+    },
+    { label: "Configure and install your Post Purchase Survey", url: CONFIGURATION_URLS.sharedItems.postPurchaseSurvey },
+    {
+      itemKey: "costs",
+      label: "Define",
+      links: [
+        { linkKey: "cogs", label: "COGS", url: CONFIGURATION_URLS.sharedItems.cogs },
+        { linkKey: "shippingCosts", label: "Shipping Costs", url: CONFIGURATION_URLS.sharedItems.shippingCosts },
+        { linkKey: "handlingFees", label: "Handling Fees", url: CONFIGURATION_URLS.sharedItems.handlingFees },
+        { linkKey: "expenses", label: "Expenses", url: CONFIGURATION_URLS.sharedItems.expenses }
+      ]
+    },
+    {
+      itemKey: "mapping",
+      label: "Map",
+      linkJoinStyle: "comma",
+      links: [
+        { linkKey: "subscriptionOrders", label: "Subscription Orders", url: CONFIGURATION_URLS.sharedItems.subscriptionOrders },
+        { linkKey: "affiliatesAndInfluencers", label: "Affiliates and Influencers", url: CONFIGURATION_URLS.sharedItems.affiliatesAndInfluencers }
+      ]
+    }
+  ];
+}
+
+// Activation URLs.
+// Activation docs are shared across MSPs. Package and included add-on callouts layer on below.
+var ACTIVATION_URLS = {
+  sharedItems: {
+    summaryDashboard: "https://example.com/activation/summary-dashboard",
+    attributionDashboard: "https://example.com/activation/attribution-dashboard",
+    creativeAnalysis: "https://example.com/activation/creative-analysis",
+    cohortAnalysis: "https://example.com/activation/cohort-analysis",
+    customerSegments: "https://example.com/activation/customer-segments",
+    aiVisibility: "https://example.com/activation/ai-visibility",
+    moby: "https://example.com/activation/moby"
+  },
+  packageAdditions: {
+    professional: {
+      mmm: "https://example.com/activation/mmm",
+      incrementality: "https://example.com/activation/incrementality"
+    }
+  },
+  addonCallouts: {
+    retention: {
+      badgeLabel: "Included add-on",
+      title: "Retention",
+      description: "Segment syncing is included with your paid add-on. Use this guide to get it live.",
+      items: [
+        { label: "Sync customer segments", url: "https://example.com/add-ons/retention/sync-customer-segments" }
+      ]
+    }
+  }
+};
+
+function getActivationItems() {
+  return [
+    { itemKey: "summaryDashboard", label: "Summary Dashboard", url: ACTIVATION_URLS.sharedItems.summaryDashboard },
+    { itemKey: "attributionDashboard", label: "Attribution Dashboard", url: ACTIVATION_URLS.sharedItems.attributionDashboard },
+    { itemKey: "creativeAnalysis", label: "Creative Analysis", url: ACTIVATION_URLS.sharedItems.creativeAnalysis },
+    { itemKey: "cohortAnalysis", label: "Cohort Analysis", url: ACTIVATION_URLS.sharedItems.cohortAnalysis },
+    { itemKey: "customerSegments", label: "Customer Segments", url: ACTIVATION_URLS.sharedItems.customerSegments },
+    { itemKey: "aiVisibility", label: "AI Visibility", url: ACTIVATION_URLS.sharedItems.aiVisibility },
+    { itemKey: "moby", label: "Moby", url: ACTIVATION_URLS.sharedItems.moby }
+  ];
+}
+
+function getProfessionalActivationItems() {
+  return [
+    { itemKey: "mmm", label: "Getting Started with MMM", url: ACTIVATION_URLS.packageAdditions.professional.mmm },
+    { itemKey: "incrementality", label: "Getting Started with Incrementality", url: ACTIVATION_URLS.packageAdditions.professional.incrementality }
+  ];
+}
+
 window.BOOKING_PAGE_LINKS = {
   // Main booking buttons on each region card.
   // `dataLinkKey` must match the `data-link` attribute in index.html.
@@ -30,8 +152,7 @@ window.BOOKING_PAGE_LINKS = {
   },
 
   // Resource routing for the two onboarding cards.
-  // The page uses lowercase `?msp=`, `?headless=`, `?package=`, and `?addon=` query params.
-  // `?add-on=` is also accepted as a legacy alias for add-on routing.
+  // The page uses lowercase `?msp=`, `?headless=`, `?package=`, `?hasconversion=`, and `?hasretention=` query params.
   // Matching is case-insensitive. Missing, empty, or unknown MSP values fall back to Shopify.
   resourceRouting: {
     queryParam: "msp",
@@ -40,160 +161,30 @@ window.BOOKING_PAGE_LINKS = {
     defaultHeadless: false,
     packageQueryParam: "package",
     defaultPackage: "advanced",
-    addonQueryParam: "addon",
-    addonQueryParamAliases: ["add-on"]
+    featureFlagQueryParams: {
+      conversion: "hasconversion",
+      retention: "hasretention"
+    }
   },
 
-  // Bulleted checklist links in the two info cards.
+  // Onboarding resource content for the two info cards.
   // `sectionKey` must match `data-resource-section` / `data-resource-list` in index.html.
   checklistSections: {
     beforeKickoff: {
-      timingLabel: "Going into kickoff",
+      timingLabel: "Initial account setup",
       title: "Configuration",
       description: "Complete as much setup as you can before your kickoff so we can validate faster on the call and create a clear path into activation.",
       sectionKey: "beforeKickoff",
       headlessItemOverrides: {
         triplePixel: {
-          url: "https://example.com/headless/triple-pixel"
+          url: CONFIGURATION_URLS.headlessTriplePixel
         }
       },
       itemsByMsp: {
-        shopify: [
-          { itemKey: "triplePixel", label: "Install your Triple Pixel", url: "https://example.com/shopify/triple-pixel" },
-          { label: "Connect Integrations", url: "https://example.com/shopify/key-integrations" },
-          { label: "Add required UTMs", url: "https://example.com/shopify/tracking-and-utm-rules" },
-          {
-            itemKey: "sonar",
-            label: "Enable",
-            linkLabelWhenSingleLink: true,
-            links: [
-              { linkKey: "sonarSend", label: "Sonar Send", url: "https://example.com/shopify/sonar-send" },
-              { linkKey: "sonarOptimize", label: "Sonar Optimize", url: "https://example.com/shopify/sonar-optimize" }
-            ]
-          },
-          { label: "Configure and install your Post Purchase Survey", url: "https://example.com/shopify/post-purchase-survey" },
-          {
-            itemKey: "costs",
-            label: "Define",
-            links: [
-              { linkKey: "cogs", label: "COGS", url: "https://example.com/shopify/cogs" },
-              { linkKey: "shippingCosts", label: "Shipping Costs", url: "https://example.com/shopify/shipping-costs" },
-              { linkKey: "handlingFees", label: "Handling Fees", url: "https://example.com/shopify/handling-fees" },
-              { linkKey: "expenses", label: "Expenses", url: "https://example.com/shopify/expenses" }
-            ]
-          },
-          {
-            itemKey: "mapping",
-            label: "Map",
-            linkJoinStyle: "comma",
-            links: [
-              { linkKey: "subscriptionOrders", label: "Subscription Orders", url: "https://example.com/shopify/subscription-orders" },
-              { linkKey: "affiliatesAndInfluencers", label: "Affiliates and Influencers", url: "https://example.com/shopify/affiliates-and-influencers" }
-            ]
-          }
-        ],
-        woocommerce: [
-          { itemKey: "triplePixel", label: "Install your Triple Pixel", url: "https://example.com/woocommerce/triple-pixel" },
-          { label: "Connect Integrations", url: "https://example.com/woocommerce/key-integrations" },
-          { label: "Add required UTMs", url: "https://example.com/woocommerce/tracking-and-utm-rules" },
-          {
-            itemKey: "sonar",
-            label: "Enable",
-            linkLabelWhenSingleLink: true,
-            links: [
-              { linkKey: "sonarSend", label: "Sonar Send", url: "https://example.com/woocommerce/sonar-send" },
-              { linkKey: "sonarOptimize", label: "Sonar Optimize", url: "https://example.com/woocommerce/sonar-optimize" }
-            ]
-          },
-          { label: "Configure and install your Post Purchase Survey", url: "https://example.com/woocommerce/post-purchase-survey" },
-          {
-            itemKey: "costs",
-            label: "Define",
-            links: [
-              { linkKey: "cogs", label: "COGS", url: "https://example.com/woocommerce/cogs" },
-              { linkKey: "shippingCosts", label: "Shipping Costs", url: "https://example.com/woocommerce/shipping-costs" },
-              { linkKey: "handlingFees", label: "Handling Fees", url: "https://example.com/woocommerce/handling-fees" },
-              { linkKey: "expenses", label: "Expenses", url: "https://example.com/woocommerce/expenses" }
-            ]
-          },
-          {
-            itemKey: "mapping",
-            label: "Map",
-            linkJoinStyle: "comma",
-            links: [
-              { linkKey: "subscriptionOrders", label: "Subscription Orders", url: "https://example.com/woocommerce/subscription-orders" },
-              { linkKey: "affiliatesAndInfluencers", label: "Affiliates and Influencers", url: "https://example.com/woocommerce/affiliates-and-influencers" }
-            ]
-          }
-        ],
-        bigcommerce: [
-          { itemKey: "triplePixel", label: "Install your Triple Pixel", url: "https://example.com/bigcommerce/triple-pixel" },
-          { label: "Connect Integrations", url: "https://example.com/bigcommerce/key-integrations" },
-          { label: "Add required UTMs", url: "https://example.com/bigcommerce/tracking-and-utm-rules" },
-          {
-            itemKey: "sonar",
-            label: "Enable",
-            linkLabelWhenSingleLink: true,
-            links: [
-              { linkKey: "sonarSend", label: "Sonar Send", url: "https://example.com/bigcommerce/sonar-send" },
-              { linkKey: "sonarOptimize", label: "Sonar Optimize", url: "https://example.com/bigcommerce/sonar-optimize" }
-            ]
-          },
-          { label: "Configure and install your Post Purchase Survey", url: "https://example.com/bigcommerce/post-purchase-survey" },
-          {
-            itemKey: "costs",
-            label: "Define",
-            links: [
-              { linkKey: "cogs", label: "COGS", url: "https://example.com/bigcommerce/cogs" },
-              { linkKey: "shippingCosts", label: "Shipping Costs", url: "https://example.com/bigcommerce/shipping-costs" },
-              { linkKey: "handlingFees", label: "Handling Fees", url: "https://example.com/bigcommerce/handling-fees" },
-              { linkKey: "expenses", label: "Expenses", url: "https://example.com/bigcommerce/expenses" }
-            ]
-          },
-          {
-            itemKey: "mapping",
-            label: "Map",
-            linkJoinStyle: "comma",
-            links: [
-              { linkKey: "subscriptionOrders", label: "Subscription Orders", url: "https://example.com/bigcommerce/subscription-orders" },
-              { linkKey: "affiliatesAndInfluencers", label: "Affiliates and Influencers", url: "https://example.com/bigcommerce/affiliates-and-influencers" }
-            ]
-          }
-        ],
-        custom: [
-          { itemKey: "triplePixel", label: "Install your Triple Pixel", url: "https://example.com/custom/triple-pixel" },
-          { label: "Connect Integrations", url: "https://example.com/custom/key-integrations" },
-          { label: "Add required UTMs", url: "https://example.com/custom/tracking-and-utm-rules" },
-          {
-            itemKey: "sonar",
-            label: "Enable",
-            linkLabelWhenSingleLink: true,
-            links: [
-              { linkKey: "sonarSend", label: "Sonar Send", url: "https://example.com/custom/sonar-send" },
-              { linkKey: "sonarOptimize", label: "Sonar Optimize", url: "https://example.com/custom/sonar-optimize" }
-            ]
-          },
-          { label: "Configure and install your Post Purchase Survey", url: "https://example.com/custom/post-purchase-survey" },
-          {
-            itemKey: "costs",
-            label: "Define",
-            links: [
-              { linkKey: "cogs", label: "COGS", url: "https://example.com/custom/cogs" },
-              { linkKey: "shippingCosts", label: "Shipping Costs", url: "https://example.com/custom/shipping-costs" },
-              { linkKey: "handlingFees", label: "Handling Fees", url: "https://example.com/custom/handling-fees" },
-              { linkKey: "expenses", label: "Expenses", url: "https://example.com/custom/expenses" }
-            ]
-          },
-          {
-            itemKey: "mapping",
-            label: "Map",
-            linkJoinStyle: "comma",
-            links: [
-              { linkKey: "subscriptionOrders", label: "Subscription Orders", url: "https://example.com/custom/subscription-orders" },
-              { linkKey: "affiliatesAndInfluencers", label: "Affiliates and Influencers", url: "https://example.com/custom/affiliates-and-influencers" }
-            ]
-          }
-        ]
+        shopify: getConfigurationItems(CONFIGURATION_URLS.triplePixelByMsp.shopify),
+        woocommerce: getConfigurationItems(CONFIGURATION_URLS.triplePixelByMsp.woocommerce),
+        bigcommerce: getConfigurationItems(CONFIGURATION_URLS.triplePixelByMsp.bigcommerce),
+        custom: getConfigurationItems(CONFIGURATION_URLS.triplePixelByMsp.custom)
       },
       packageOverrides: {
         starter: {
@@ -202,56 +193,25 @@ window.BOOKING_PAGE_LINKS = {
           }
         }
       },
-      addonOverrides: {
-        conversion: {
-          callout: {
-            badgeLabel: "Included add-on",
-            title: "Conversion",
-            description: "Your team has access to this add-on setup guide as part of onboarding.",
-            items: [
-              { label: "Setup Custom Events", url: "https://example.com/add-ons/conversion/setup-custom-events" }
-            ]
-          }
-        }
-      }
+      calloutFlag: "conversion",
+      callout: CONFIGURATION_URLS.addonCallouts.conversion
     },
     kickoffOutcomes: {
-      timingLabel: "Leaving kickoff",
+      timingLabel: "Once configured",
       title: "Activation",
       description: "After your kickoff, your team should know what is configured, what still needs to be finished, and what to focus on as activation begins.",
       sectionKey: "kickoffOutcomes",
-      items: [
-        { itemKey: "summaryDashboard", label: "Summary Dashboard", url: "https://example.com/activation/summary-dashboard" },
-        { itemKey: "attributionDashboard", label: "Attribution Dashboard", url: "https://example.com/activation/attribution-dashboard" },
-        { itemKey: "creativeAnalysis", label: "Creative Analysis", url: "https://example.com/activation/creative-analysis" },
-        { itemKey: "cohortAnalysis", label: "Cohort Analysis", url: "https://example.com/activation/cohort-analysis" },
-        { itemKey: "customerSegments", label: "Customer Segments", url: "https://example.com/activation/customer-segments" },
-        { itemKey: "aiVisibility", label: "AI Visibility", url: "https://example.com/activation/ai-visibility" },
-        { itemKey: "moby", label: "Moby", url: "https://example.com/activation/moby" }
-      ],
+      items: getActivationItems(),
       packageOverrides: {
         starter: {
           hiddenItemKeys: ["creativeAnalysis", "cohortAnalysis", "customerSegments"]
         },
         professional: {
-          additionalItems: [
-            { itemKey: "mmm", label: "Getting Started with MMM", url: "https://example.com/activation/mmm" },
-            { itemKey: "incrementality", label: "Getting Started with Incrementality", url: "https://example.com/activation/incrementality" }
-          ]
+          additionalItems: getProfessionalActivationItems()
         }
       },
-      addonOverrides: {
-        retention: {
-          callout: {
-            badgeLabel: "Included add-on",
-            title: "Retention",
-            description: "Your team has access to this add-on guide as activation gets underway.",
-            items: [
-              { label: "Sync customer segments", url: "https://example.com/add-ons/retention/sync-customer-segments" }
-            ]
-          }
-        }
-      }
+      calloutFlag: "retention",
+      callout: ACTIVATION_URLS.addonCallouts.retention
     }
   }
 };

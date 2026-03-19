@@ -63,7 +63,7 @@ Current status noted in that prior thread:
 - The two onboarding resource cards now support MSP-aware link sets in `booking-page-links.js`.
 
 ## MSP-Aware Resource Links
-The page now reads lowercase `?msp=`, `?headless=`, `?package=`, and `?addon=` from the URL and swaps the onboarding resource cards accordingly. `?add-on=` is also accepted.
+The page now reads lowercase `?msp=`, `?headless=`, `?package=`, `?hasconversion=`, and `?hasretention=` from the URL and swaps the onboarding resource cards accordingly.
 
 - Supported values: `Shopify`, `WooCommerce`, `BigCommerce`, `custom`
 - Matching is case-insensitive and ignores spaces / punctuation
@@ -79,19 +79,20 @@ The page now reads lowercase `?msp=`, `?headless=`, `?package=`, and `?addon=` f
 - `?package=starter` removes Sonar Optimize from configuration and hides Creative Analysis, Cohort Analysis, and Customer Segments from activation
 - `?package=professional` includes the full advanced/default activation set plus MMM and Incrementality
 - Missing, blank, or `?package=advanced` keeps the default experience
-- `?addon=conversion` adds a separate bottom-of-card Conversion add-on callout under Configuration with a Setup Custom Events guide
-- `?addon=retention` adds a separate bottom-of-card Retention add-on callout under Activation with a Sync customer segments guide
-- Missing, blank, or unknown `addon` values leave the two sections unchanged
+- `?hasconversion=true` adds the separate bottom-of-card Conversion callout under Configuration and updates the `tw_hasconversion` cookie
+- `?hasretention=true` adds the separate bottom-of-card Retention callout under Activation and updates the `tw_hasretention` cookie
+- If either flag is missing or blank, the page falls back to its matching cookie when present
+- Only `true` is treated as an active value for those feature flags
 
 Edit platform-specific resource links in:
 
 - `booking-page-links.js` -> `checklistSections.beforeKickoff.itemsByMsp`
 - `booking-page-links.js` -> `checklistSections.beforeKickoff.headlessItemOverrides`
 - `booking-page-links.js` -> `checklistSections.<section>.packageOverrides`
-- `booking-page-links.js` -> `checklistSections.<section>.addonOverrides`
+- `booking-page-links.js` -> `checklistSections.<section>.callout`
 - `booking-page-links.js` -> `checklistSections.kickoffOutcomes.items`
 
-Configuration remains MSP-aware, and `headless=true` now overrides the Triple Pixel install item with a shared headless URL. Activation uses one shared resource list for all brands unless a package rule trims specific trainings. Add-ons now render as separate bottom-of-card callouts instead of blending into the main checklist. Resource bullets can also include multiple inline links in a single bullet when needed, including the combined Sonar, costs, and mapping rows in Configuration. Section timing labels, titles, descriptions, package rules, and add-on rules all live in `booking-page-links.js`, so copy and URLs can be maintained in one place. The page also surfaces a small platform context label for non-Shopify MSPs so revisits still visibly reflect the active platform when needed.
+Configuration is now mostly platform-agnostic: Triple Pixel is the one MSP-specific setup doc, and `headless=true` can still override that one item with the shared headless URL. Activation uses one shared resource list for all brands unless a package rule trims specific trainings. Add-ons render as separate bottom-of-card callouts instead of blending into the main checklist. Resource bullets can also include multiple inline links in a single bullet when needed, including the combined Sonar, costs, and mapping rows in Configuration. `booking-page-links.js` is now split into clear `CONFIGURATION_URLS` and `ACTIVATION_URLS` blocks near the top so URLs and exceptions are easier to update. The page also surfaces a small platform context label for non-Shopify MSPs so revisits still visibly reflect the active platform when needed.
 
 ## Brand Personalization
 The hero copy now reads `?brand=` from the URL and personalizes the supporting brand line when a brand name is available.

@@ -507,10 +507,10 @@
 
     .info-card-addon-header {
       display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 8px;
-      margin: 0 0 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px 10px;
+      margin: 0 0 6px;
     }
 
     .info-card-addon-badge {
@@ -537,7 +537,7 @@
     }
 
     .info-card-addon-description {
-      margin: 0 0 10px;
+      margin: 0 0 8px;
       color: var(--charcoal);
       font-size: 14px;
       line-height: 1.5;
@@ -734,17 +734,17 @@
           <div class="info-card-header">
             <div class="info-card-title-row">
               <h3 data-resource-title="beforeKickoff">Configuration</h3>
-              <span class="info-card-timing" data-resource-timing="beforeKickoff">Going into kickoff</span>
+              <span class="info-card-timing" data-resource-timing="beforeKickoff">Initial account setup</span>
             </div>
           </div>
           <p data-resource-description="beforeKickoff">Complete as much setup as you can before your kickoff so we can validate faster on the call and create a clear path into activation.</p>
           <ul data-resource-list="beforeKickoff"></ul>
           <div class="info-card-addon" data-resource-addon hidden>
             <div class="info-card-addon-header">
-              <span class="info-card-addon-badge" data-resource-addon-badge>Included add-on</span>
               <h4 class="info-card-addon-title" data-resource-addon-title>Conversion</h4>
+              <span class="info-card-addon-badge" data-resource-addon-badge>Included add-on</span>
             </div>
-            <p class="info-card-addon-description" data-resource-addon-description>Your team has access to this add-on setup guide as part of onboarding.</p>
+            <p class="info-card-addon-description" data-resource-addon-description>Custom Events is included with your paid add-on. Use this guide to get it set up.</p>
             <ul class="info-card-addon-list" data-resource-addon-list></ul>
           </div>
         </article>
@@ -753,17 +753,17 @@
           <div class="info-card-header">
             <div class="info-card-title-row">
               <h3 data-resource-title="kickoffOutcomes">Activation</h3>
-              <span class="info-card-timing" data-resource-timing="kickoffOutcomes">Leaving kickoff</span>
+              <span class="info-card-timing" data-resource-timing="kickoffOutcomes">Once configured</span>
             </div>
           </div>
           <p data-resource-description="kickoffOutcomes">After your kickoff, your team should know what is configured, what still needs to be finished, and what to focus on as activation begins.</p>
           <ul data-resource-list="kickoffOutcomes"></ul>
           <div class="info-card-addon" data-resource-addon hidden>
             <div class="info-card-addon-header">
-              <span class="info-card-addon-badge" data-resource-addon-badge>Included add-on</span>
               <h4 class="info-card-addon-title" data-resource-addon-title>Retention</h4>
+              <span class="info-card-addon-badge" data-resource-addon-badge>Included add-on</span>
             </div>
-            <p class="info-card-addon-description" data-resource-addon-description>Your team has access to this add-on guide as activation gets underway.</p>
+            <p class="info-card-addon-description" data-resource-addon-description>Segment syncing is included with your paid add-on. Use this guide to get it live.</p>
             <ul class="info-card-addon-list" data-resource-addon-list></ul>
           </div>
         </article>
@@ -850,20 +850,6 @@
         return validPackageValues[normalizedValue] || null;
       }
 
-      function normalizeAddonValue(value) {
-        if (value === null || typeof value === "undefined") {
-          return null;
-        }
-
-        var normalizedValue = String(value).toLowerCase().trim();
-        var validAddonValues = {
-          conversion: "conversion",
-          retention: "retention"
-        };
-
-        return validAddonValues[normalizedValue] || null;
-      }
-
       function getQueryParamValue(paramName) {
         if (!paramName) {
           return null;
@@ -883,22 +869,6 @@
         });
 
         return match;
-      }
-
-      function getQueryParamValueFromList(paramNames) {
-        if (!Array.isArray(paramNames) || !paramNames.length) {
-          return null;
-        }
-
-        for (var i = 0; i < paramNames.length; i += 1) {
-          var value = getQueryParamValue(paramNames[i]);
-
-          if (value !== null) {
-            return value;
-          }
-        }
-
-        return null;
       }
 
       function getCookieValue(cookieName) {
@@ -954,7 +924,24 @@
       var headlessCookieName = "tw_headless";
       var brandCookieName = "tw_brand";
       var packageCookieName = "tw_package";
-      var persistedCookieNames = [geoCookieName, mspCookieName, headlessCookieName, brandCookieName, packageCookieName];
+      var hasConversionCookieName = "tw_hasconversion";
+      var hasRetentionCookieName = "tw_hasretention";
+      var featureFlagQueryParams = resourceRouting.featureFlagQueryParams && typeof resourceRouting.featureFlagQueryParams === "object"
+        ? resourceRouting.featureFlagQueryParams
+        : {};
+      var featureFlagCookieNames = {
+        conversion: hasConversionCookieName,
+        retention: hasRetentionCookieName
+      };
+      var persistedCookieNames = [
+        geoCookieName,
+        mspCookieName,
+        headlessCookieName,
+        brandCookieName,
+        packageCookieName,
+        hasConversionCookieName,
+        hasRetentionCookieName
+      ];
 
       function normalizeBrandComparisonValue(value) {
         var normalizedBrand = normalizeBrandValue(value);
@@ -1049,25 +1036,40 @@
 
       var activePackage = getActivePackage();
 
-      function getActiveAddon() {
-        var addonParamNames = [];
-        var configuredAddonParam = resourceRouting.addonQueryParam || "addon";
-        var addonAliases = Array.isArray(resourceRouting.addonQueryParamAliases)
-          ? resourceRouting.addonQueryParamAliases
-          : ["add-on"];
+      function normalizeFeatureFlagValue(value) {
+        if (value === true) {
+          return true;
+        }
 
-        addonParamNames.push(configuredAddonParam);
-        addonAliases.forEach(function (alias) {
-          if (alias && addonParamNames.indexOf(alias) === -1) {
-            addonParamNames.push(alias);
-          }
-        });
+        if (value === null || typeof value === "undefined") {
+          return null;
+        }
 
-        var rawAddon = getQueryParamValueFromList(addonParamNames);
-        return normalizeAddonValue(rawAddon);
+        return String(value).toLowerCase().trim() === "true" ? true : null;
       }
 
-      var activeAddon = getActiveAddon();
+      function getActiveFeatureFlag(featureFlagKey) {
+        if (!featureFlagKey) {
+          return false;
+        }
+
+        var queryParamName = featureFlagQueryParams[featureFlagKey];
+        var cookieName = featureFlagCookieNames[featureFlagKey];
+        var queryFlag = normalizeFeatureFlagValue(getQueryParamValue(queryParamName));
+        var cookieFlag = normalizeFeatureFlagValue(getCookieValue(cookieName));
+
+        if (queryFlag === true) {
+          setCookieValue(cookieName, "true");
+          return true;
+        }
+
+        return cookieFlag === true;
+      }
+
+      var activeFeatureFlags = {
+        conversion: getActiveFeatureFlag("conversion"),
+        retention: getActiveFeatureFlag("retention")
+      };
 
       function getHeroHeadline() {
         return "Welcome to Triple Whale";
@@ -1436,20 +1438,16 @@
         return additionalItems.length ? nextItems.concat(additionalItems) : nextItems;
       }
 
-      function getAddonCallout(sectionConfig) {
-        if (!sectionConfig || !activeAddon) {
+      function getCalloutForSection(sectionConfig) {
+        if (!sectionConfig || !sectionConfig.callout || !sectionConfig.calloutFlag) {
           return null;
         }
 
-        var addonOverrides = sectionConfig.addonOverrides && typeof sectionConfig.addonOverrides === "object"
-          ? sectionConfig.addonOverrides[activeAddon]
-          : null;
-
-        if (!addonOverrides || !addonOverrides.callout) {
+        if (!activeFeatureFlags[sectionConfig.calloutFlag]) {
           return null;
         }
 
-        var callout = addonOverrides.callout;
+        var callout = sectionConfig.callout;
         var calloutItems = Array.isArray(callout.items)
           ? callout.items.filter(function (item) { return !!(item && item.label); })
           : [];
@@ -1529,7 +1527,7 @@
           : sectionConfig && Array.isArray(sectionConfig.items)
             ? applyPackageItemRules(sectionConfig.items, sectionConfig)
             : [];
-        var addonCallout = getAddonCallout(sectionConfig);
+        var addonCallout = getCalloutForSection(sectionConfig);
 
         if (timingEl && sectionConfig && sectionConfig.timingLabel) {
           timingEl.textContent = sectionConfig.timingLabel;
