@@ -63,24 +63,35 @@ Current status noted in that prior thread:
 - The two onboarding resource cards now support MSP-aware link sets in `booking-page-links.js`.
 
 ## MSP-Aware Resource Links
-The page now reads lowercase `?msp=` and `?headless=` from the URL and swaps the onboarding resource cards accordingly.
+The page now reads lowercase `?msp=`, `?headless=`, `?package=`, and `?add-on=` from the URL and swaps the onboarding resource cards accordingly.
 
 - Supported values: `Shopify`, `WooCommerce`, `BigCommerce`, `custom`
 - Matching is case-insensitive and ignores spaces / punctuation
 - Missing, blank, or unknown `msp` values fall back to the `tw_msp` cookie when present, otherwise default to Shopify
 - A valid `?msp=` value updates the `tw_msp` cookie
 - Blank or invalid `?msp=` values do not overwrite the cookie
-- `?headless=true` adds extra setup docs for the active MSP and updates the `tw_headless` cookie
+- `?headless=true` swaps the Triple Pixel install bullet to one shared headless setup URL and updates the `tw_headless` cookie
 - `?headless=false` turns those extra docs off and updates the `tw_headless` cookie
 - If `headless` is missing, the page falls back to `tw_headless` when present, otherwise defaults to `false`
+- Missing, blank, or unknown `package` values fall back to `tw_package` when present, otherwise default to `advanced`
+- A valid `?package=` value updates the `tw_package` cookie
+- Blank or invalid `?package=` values do not overwrite the cookie
+- `?package=starter` removes Sonar Optimize from configuration and hides Creative Analysis, Cohort Analysis, and Customer Segments from activation
+- `?package=professional` includes the full advanced/default activation set plus MMM and Incrementality
+- Missing, blank, or `?package=advanced` keeps the default experience
+- `?add-on=conversion` adds a clearly labeled Conversion add-on guide for Setup Custom Events under Configuration
+- `?add-on=retention` adds a clearly labeled Retention add-on guide for Sync customer segments under Activation
+- Missing, blank, or unknown `add-on` values leave the two sections unchanged
 
 Edit platform-specific resource links in:
 
 - `booking-page-links.js` -> `checklistSections.beforeKickoff.itemsByMsp`
-- `booking-page-links.js` -> `checklistSections.kickoffOutcomes.itemsByMsp`
-- `booking-page-links.js` -> `checklistSections.<section>.headlessItemsByMsp`
+- `booking-page-links.js` -> `checklistSections.beforeKickoff.headlessItemOverrides`
+- `booking-page-links.js` -> `checklistSections.<section>.packageOverrides`
+- `booking-page-links.js` -> `checklistSections.<section>.addonOverrides`
+- `booking-page-links.js` -> `checklistSections.kickoffOutcomes.items`
 
-Section titles and descriptions for those two cards also live in `booking-page-links.js`, so copy and URLs can be maintained in one place. The page also surfaces a small platform context label so revisits still visibly reflect the active MSP, including when headless mode comes from the cookie.
+Configuration remains MSP-aware, and `headless=true` now overrides the Triple Pixel install item with a shared headless URL. Activation uses one shared resource list for all brands unless a package rule trims specific trainings. Add-on guides layer on top of those defaults and package rules. Resource bullets can also include multiple inline links in a single bullet when needed (for example, one action with separate links for Sonar Send and Sonar Optimize). Section phase labels, timing labels, titles, descriptions, package rules, and add-on rules all live in `booking-page-links.js`, so copy and URLs can be maintained in one place. The page also surfaces a small platform context label so revisits still visibly reflect the active MSP, including when headless mode comes from the cookie.
 
 ## Brand Personalization
 The hero copy now reads `?brand=` from the URL and personalizes the headline and supporting copy when a brand name is available.
@@ -89,6 +100,7 @@ The hero copy now reads `?brand=` from the URL and personalizes the headline and
 - If `brand` is missing, the page falls back to `tw_brand` when present
 - Blank `brand` values do not overwrite the cookie
 - If both the URL and cookie have values, the URL wins and the cookie is updated
+- If a new `?brand=` value differs from the stored `tw_brand`, the page clears the persisted onboarding cookies first so the new brand starts from a clean state before any fresh query params are applied
 
 ## Geo Recommendation Persistence
 The recommended region highlight now uses `geo` from the URL first and falls back to a cookie on later visits.

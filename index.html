@@ -141,6 +141,15 @@
       margin-bottom: 20px;
     }
 
+    .topbar-actions {
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-left: auto;
+    }
+
     .brand {
       position: relative;
       display: inline-flex;
@@ -378,16 +387,19 @@
       z-index: 1;
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      margin: 0 0 14px;
-      padding: 8px 12px;
+      gap: 6px;
+      margin: 0;
+      padding: 0 14px;
+      min-height: 40px;
       border-radius: 999px;
       border: 1px solid var(--line);
-      background: var(--info-card-bg);
+      background: var(--toggle-bg);
       color: var(--charcoal);
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: 0.01em;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      white-space: nowrap;
     }
 
     html[data-active-headless="true"] .resource-context {
@@ -404,9 +416,50 @@
       padding: 18px 18px 19px;
     }
 
+    .info-card-header {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      margin: 0 0 10px;
+    }
+
+    .info-card-kicker {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      min-width: 0;
+    }
+
+    .info-card-phase {
+      color: var(--mid-gray);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .info-card-timing {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 0 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(12, 112, 242, 0.2);
+      background: rgba(12, 112, 242, 0.08);
+      color: var(--tag-text);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
     .info-card h3 {
-      margin: 0 0 9px;
-      font-size: 18px;
+      margin: 0;
+      font-size: 24px;
+      letter-spacing: -0.02em;
       color: var(--ink);
     }
 
@@ -507,6 +560,13 @@
 
       .topbar {
         margin-bottom: 14px;
+        align-items: flex-start;
+        flex-wrap: wrap;
+      }
+
+      .topbar-actions {
+        width: 100%;
+        justify-content: space-between;
       }
 
       .theme-toggle {
@@ -535,22 +595,27 @@
         <div class="brand" aria-label="Triple Whale">
           <p class="brand-name">Triple Whale</p>
         </div>
-        <button class="theme-toggle" id="theme-toggle" type="button" aria-pressed="false" aria-label="Enable dark mode" title="Enable dark mode">
-          <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3c0 .28-.02.56-.02.84A9 9 0 0 0 21 12.79z"></path>
-          </svg>
-          <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true">
-            <circle cx="12" cy="12" r="4"></circle>
-            <line x1="12" y1="2" x2="12" y2="5"></line>
-            <line x1="12" y1="19" x2="12" y2="22"></line>
-            <line x1="2" y1="12" x2="5" y2="12"></line>
-            <line x1="19" y1="12" x2="22" y2="12"></line>
-            <line x1="4.9" y1="4.9" x2="7.1" y2="7.1"></line>
-            <line x1="16.9" y1="16.9" x2="19.1" y2="19.1"></line>
-            <line x1="4.9" y1="19.1" x2="7.1" y2="16.9"></line>
-            <line x1="16.9" y1="7.1" x2="19.1" y2="4.9"></line>
-          </svg>
-        </button>
+        <div class="topbar-actions">
+          <p class="resource-context" data-active-msp-copy aria-live="polite">
+            Setup: Shopify
+          </p>
+          <button class="theme-toggle" id="theme-toggle" type="button" aria-pressed="false" aria-label="Enable dark mode" title="Enable dark mode">
+            <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3c0 .28-.02.56-.02.84A9 9 0 0 0 21 12.79z"></path>
+            </svg>
+            <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="4"></circle>
+              <line x1="12" y1="2" x2="12" y2="5"></line>
+              <line x1="12" y1="19" x2="12" y2="22"></line>
+              <line x1="2" y1="12" x2="5" y2="12"></line>
+              <line x1="19" y1="12" x2="22" y2="12"></line>
+              <line x1="4.9" y1="4.9" x2="7.1" y2="7.1"></line>
+              <line x1="16.9" y1="16.9" x2="19.1" y2="19.1"></line>
+              <line x1="4.9" y1="19.1" x2="7.1" y2="16.9"></line>
+              <line x1="16.9" y1="7.1" x2="19.1" y2="4.9"></line>
+            </svg>
+          </button>
+        </div>
       </div>
 
       <header>
@@ -593,20 +658,28 @@
         </article>
       </div>
 
-      <p class="resource-context" data-active-msp-copy aria-live="polite">
-        Setup resources are tailored to your ecommerce platform.
-      </p>
-
       <div class="info-grid">
         <article class="info-card" data-resource-section="beforeKickoff">
-          <h3 data-resource-title="beforeKickoff">Configuration before kickoff</h3>
-          <p data-resource-description="beforeKickoff">Phase 2 is configuration. Complete as much setup as you can before kickoff so we can validate everything faster on the call.</p>
+          <div class="info-card-header">
+            <div class="info-card-kicker">
+              <span class="info-card-phase" data-resource-phase="beforeKickoff">Phase 2</span>
+              <span class="info-card-timing" data-resource-timing="beforeKickoff">Before kickoff</span>
+            </div>
+            <h3 data-resource-title="beforeKickoff">Configuration</h3>
+          </div>
+          <p data-resource-description="beforeKickoff">Complete as much setup as you can before your kickoff so we can validate faster on the call and create a clear path into activation.</p>
           <ul data-resource-list="beforeKickoff"></ul>
         </article>
 
         <article class="info-card" data-resource-section="kickoffOutcomes">
-          <h3 data-resource-title="kickoffOutcomes">Activation after kickoff</h3>
-          <p data-resource-description="kickoffOutcomes">Phase 3 is activation. Leaving kickoff, your team should know what is configured, what still needs to be finished, and what to use as training begins.</p>
+          <div class="info-card-header">
+            <div class="info-card-kicker">
+              <span class="info-card-phase" data-resource-phase="kickoffOutcomes">Phase 3</span>
+              <span class="info-card-timing" data-resource-timing="kickoffOutcomes">After kickoff</span>
+            </div>
+            <h3 data-resource-title="kickoffOutcomes">Activation</h3>
+          </div>
+          <p data-resource-description="kickoffOutcomes">After your kickoff, your team should know what is configured, what still needs to be finished, and what to focus on as activation begins.</p>
           <ul data-resource-list="kickoffOutcomes"></ul>
         </article>
       </div>
@@ -677,6 +750,35 @@
         return normalizedValue || null;
       }
 
+      function normalizePackageValue(value) {
+        if (value === null || typeof value === "undefined") {
+          return null;
+        }
+
+        var normalizedValue = String(value).toLowerCase().trim();
+        var validPackageValues = {
+          starter: "starter",
+          advanced: "advanced",
+          professional: "professional"
+        };
+
+        return validPackageValues[normalizedValue] || null;
+      }
+
+      function normalizeAddonValue(value) {
+        if (value === null || typeof value === "undefined") {
+          return null;
+        }
+
+        var normalizedValue = String(value).toLowerCase().trim();
+        var validAddonValues = {
+          conversion: "conversion",
+          retention: "retention"
+        };
+
+        return validAddonValues[normalizedValue] || null;
+      }
+
       function getQueryParamValue(paramName) {
         if (!paramName) {
           return null;
@@ -729,12 +831,47 @@
         ].join("; ");
       }
 
+      function deleteCookieValue(cookieName) {
+        if (!cookieName || typeof document === "undefined") {
+          return;
+        }
+
+        document.cookie = [
+          cookieName + "=",
+          "path=/",
+          "max-age=0",
+          "expires=Thu, 01 Jan 1970 00:00:00 GMT",
+          "SameSite=Lax"
+        ].join("; ");
+      }
+
       var defaultMsp = normalizeMspValue(resourceRouting.defaultMsp) || "shopify";
       var defaultHeadless = normalizeHeadlessValue(resourceRouting.defaultHeadless) === true;
+      var defaultPackage = normalizePackageValue(resourceRouting.defaultPackage) || "advanced";
       var geoCookieName = "tw_geo";
       var mspCookieName = "tw_msp";
       var headlessCookieName = "tw_headless";
       var brandCookieName = "tw_brand";
+      var packageCookieName = "tw_package";
+      var persistedCookieNames = [geoCookieName, mspCookieName, headlessCookieName, brandCookieName, packageCookieName];
+
+      function normalizeBrandComparisonValue(value) {
+        var normalizedBrand = normalizeBrandValue(value);
+        return normalizedBrand ? normalizedBrand.toLowerCase() : null;
+      }
+
+      function resetPersistedCookiesForBrandChange() {
+        var queryBrand = normalizeBrandComparisonValue(getQueryParamValue("brand"));
+        var cookieBrand = normalizeBrandComparisonValue(getCookieValue(brandCookieName));
+
+        if (!queryBrand || !cookieBrand || queryBrand === cookieBrand) {
+          return;
+        }
+
+        persistedCookieNames.forEach(deleteCookieValue);
+      }
+
+      resetPersistedCookiesForBrandChange();
 
       function formatMspDisplayName(mspKey) {
         var labels = {
@@ -796,6 +933,28 @@
 
       var activeBrand = getActiveBrand();
 
+      function getActivePackage() {
+        var rawPackage = getQueryParamValue(resourceRouting.packageQueryParam || "package");
+        var queryPackage = normalizePackageValue(rawPackage);
+        var cookiePackage = normalizePackageValue(getCookieValue(packageCookieName));
+
+        if (queryPackage) {
+          setCookieValue(packageCookieName, rawPackage);
+          return queryPackage;
+        }
+
+        return cookiePackage || defaultPackage;
+      }
+
+      var activePackage = getActivePackage();
+
+      function getActiveAddon() {
+        var rawAddon = getQueryParamValue(resourceRouting.addonQueryParam || "add-on");
+        return normalizeAddonValue(rawAddon);
+      }
+
+      var activeAddon = getActiveAddon();
+
       function getHeroHeadline(brandName) {
         return brandName
           ? "Welcome to Triple Whale, " + brandName + ". Book your kickoff and turn insights into action."
@@ -841,8 +1000,8 @@
 
         document.querySelectorAll("[data-active-msp-copy]").forEach(function (copyEl) {
           copyEl.textContent = activeHeadless
-            ? "Showing " + activeMspLabel + " headless setup resources."
-            : "Showing " + activeMspLabel + " setup resources.";
+            ? "Setup: " + activeMspLabel + " Headless"
+            : "Setup: " + activeMspLabel;
         });
       }
 
@@ -1056,27 +1215,190 @@
         return [];
       }
 
+      function applyHeadlessItemOverrides(items, sectionConfig) {
+        if (!activeHeadless || !Array.isArray(items) || !items.length || !sectionConfig) {
+          return items;
+        }
+
+        var headlessItemOverrides = sectionConfig.headlessItemOverrides && typeof sectionConfig.headlessItemOverrides === "object"
+          ? sectionConfig.headlessItemOverrides
+          : null;
+
+        if (!headlessItemOverrides) {
+          return items;
+        }
+
+        return items.map(function (item) {
+          if (!item || !item.itemKey || !headlessItemOverrides[item.itemKey]) {
+            return item;
+          }
+
+          var override = headlessItemOverrides[item.itemKey];
+          var mergedItem = {};
+          var itemKey;
+
+          for (itemKey in item) {
+            if (Object.prototype.hasOwnProperty.call(item, itemKey)) {
+              mergedItem[itemKey] = item[itemKey];
+            }
+          }
+
+          for (itemKey in override) {
+            if (Object.prototype.hasOwnProperty.call(override, itemKey)) {
+              mergedItem[itemKey] = override[itemKey];
+            }
+          }
+
+          return mergedItem;
+        });
+      }
+
+      function applyPackageItemRules(items, sectionConfig) {
+        if (!Array.isArray(items) || !items.length || !sectionConfig) {
+          return items;
+        }
+
+        var packageOverrides = sectionConfig.packageOverrides && typeof sectionConfig.packageOverrides === "object"
+          ? sectionConfig.packageOverrides[activePackage]
+          : null;
+
+        if (!packageOverrides) {
+          return items;
+        }
+
+        var hiddenItemKeys = Array.isArray(packageOverrides.hiddenItemKeys)
+          ? packageOverrides.hiddenItemKeys
+          : [];
+        var hiddenLinkKeysByItemKey = packageOverrides.hiddenLinkKeysByItemKey && typeof packageOverrides.hiddenLinkKeysByItemKey === "object"
+          ? packageOverrides.hiddenLinkKeysByItemKey
+          : null;
+        var additionalItems = Array.isArray(packageOverrides.additionalItems)
+          ? packageOverrides.additionalItems.filter(function (item) { return !!item; })
+          : [];
+
+        var nextItems = items.reduce(function (nextItems, item) {
+          if (!item) {
+            return nextItems;
+          }
+
+          if (item.itemKey && hiddenItemKeys.indexOf(item.itemKey) !== -1) {
+            return nextItems;
+          }
+
+          if (item.itemKey && hiddenLinkKeysByItemKey && Array.isArray(item.links) && hiddenLinkKeysByItemKey[item.itemKey]) {
+            var hiddenLinkKeys = hiddenLinkKeysByItemKey[item.itemKey];
+            var filteredLinks = item.links.filter(function (linkItem) {
+              return !(linkItem && linkItem.linkKey && hiddenLinkKeys.indexOf(linkItem.linkKey) !== -1);
+            });
+
+            if (!filteredLinks.length) {
+              return nextItems;
+            }
+
+            var filteredItem = {};
+            var itemKey;
+
+            for (itemKey in item) {
+              if (Object.prototype.hasOwnProperty.call(item, itemKey)) {
+                filteredItem[itemKey] = item[itemKey];
+              }
+            }
+
+            filteredItem.links = filteredLinks;
+            nextItems.push(filteredItem);
+            return nextItems;
+          }
+
+          nextItems.push(item);
+          return nextItems;
+        }, []);
+
+        return additionalItems.length ? nextItems.concat(additionalItems) : nextItems;
+      }
+
+      function applyAddonItemRules(items, sectionConfig) {
+        if (!Array.isArray(items) || !items.length || !sectionConfig || !activeAddon) {
+          return items;
+        }
+
+        var addonOverrides = sectionConfig.addonOverrides && typeof sectionConfig.addonOverrides === "object"
+          ? sectionConfig.addonOverrides[activeAddon]
+          : null;
+
+        if (!addonOverrides) {
+          return items;
+        }
+
+        var additionalItems = Array.isArray(addonOverrides.additionalItems)
+          ? addonOverrides.additionalItems.filter(function (item) { return !!item; })
+          : [];
+
+        return additionalItems.length ? items.concat(additionalItems) : items;
+      }
+
+      function appendInlineText(parent, text) {
+        if (!parent || !text) {
+          return;
+        }
+
+        var textEl = document.createElement("span");
+        textEl.textContent = text;
+        parent.appendChild(textEl);
+      }
+
+      function appendLinkContent(parent, item) {
+        if (!parent || !item || !item.label) {
+          return;
+        }
+
+        if (item.url) {
+          var anchor = document.createElement("a");
+          anchor.href = item.url;
+          anchor.textContent = item.label;
+          parent.appendChild(anchor);
+          return;
+        }
+
+        appendInlineText(parent, item.label);
+      }
+
+      function getLinkSeparator(index, total) {
+        if (index === 0) {
+          return "";
+        }
+
+        if (index === total - 1) {
+          return total === 2 ? " and " : ", and ";
+        }
+
+        return ", ";
+      }
+
       document.querySelectorAll("[data-resource-section]").forEach(function (sectionEl) {
         var sectionKey = sectionEl.getAttribute("data-resource-section");
         var sectionConfig = checklistSections[sectionKey];
+        var phaseEl = sectionEl.querySelector("[data-resource-phase]");
+        var timingEl = sectionEl.querySelector("[data-resource-timing]");
         var titleEl = sectionEl.querySelector("[data-resource-title]");
         var descriptionEl = sectionEl.querySelector("[data-resource-description]");
         var listEl = sectionEl.querySelector("[data-resource-list]");
         var itemsByMsp = sectionConfig && sectionConfig.itemsByMsp && typeof sectionConfig.itemsByMsp === "object"
           ? sectionConfig.itemsByMsp
           : null;
-        var headlessItemsByMsp = sectionConfig && sectionConfig.headlessItemsByMsp && typeof sectionConfig.headlessItemsByMsp === "object"
-          ? sectionConfig.headlessItemsByMsp
-          : null;
         var baseItems = getItemsForMsp(itemsByMsp, activeMsp);
-        var headlessItems = activeHeadless
-          ? getItemsForMsp(headlessItemsByMsp, activeMsp)
-          : [];
         var items = baseItems.length
-          ? baseItems.concat(headlessItems)
+          ? applyAddonItemRules(applyPackageItemRules(applyHeadlessItemOverrides(baseItems, sectionConfig), sectionConfig), sectionConfig)
           : sectionConfig && Array.isArray(sectionConfig.items)
-            ? sectionConfig.items
+            ? applyAddonItemRules(applyPackageItemRules(sectionConfig.items, sectionConfig), sectionConfig)
             : [];
+
+        if (phaseEl && sectionConfig && sectionConfig.phaseLabel) {
+          phaseEl.textContent = sectionConfig.phaseLabel;
+        }
+
+        if (timingEl && sectionConfig && sectionConfig.timingLabel) {
+          timingEl.textContent = sectionConfig.timingLabel;
+        }
 
         if (titleEl && sectionConfig && sectionConfig.title) {
           titleEl.textContent = sectionConfig.title;
@@ -1093,18 +1415,30 @@
         listEl.innerHTML = "";
 
         items.forEach(function (item) {
-          if (!item || !item.label) {
+          var itemLinks = item && Array.isArray(item.links)
+            ? item.links.filter(function (linkItem) { return !!(linkItem && linkItem.label); })
+            : [];
+          var hasRenderableLabel = !!(item && item.label);
+          var hasRenderableLinks = !!itemLinks.length;
+
+          if (!item || (!hasRenderableLabel && !hasRenderableLinks)) {
             return;
           }
 
           var li = document.createElement("li");
           var strong = document.createElement("strong");
 
-          if (item.url) {
-            var anchor = document.createElement("a");
-            anchor.href = item.url;
-            anchor.textContent = item.label;
-            strong.appendChild(anchor);
+          if (hasRenderableLinks) {
+            if (item.label) {
+              appendInlineText(strong, item.label + " ");
+            }
+
+            itemLinks.forEach(function (linkItem, index) {
+              appendInlineText(strong, getLinkSeparator(index, itemLinks.length));
+              appendLinkContent(strong, linkItem);
+            });
+          } else if (item.url) {
+            appendLinkContent(strong, item);
           } else {
             strong.textContent = item.label;
           }
