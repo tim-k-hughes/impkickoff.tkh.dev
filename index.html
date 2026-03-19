@@ -1492,9 +1492,13 @@
         appendInlineText(parent, item.label);
       }
 
-      function getLinkSeparator(index, total) {
+      function getLinkSeparator(index, total, joinStyle) {
         if (index === 0) {
           return "";
+        }
+
+        if (joinStyle === "comma" && total === 2) {
+          return ", ";
         }
 
         if (index === total - 1) {
@@ -1573,7 +1577,7 @@
             }
 
             itemLinks.forEach(function (linkItem, index) {
-              appendInlineText(strong, getLinkSeparator(index, itemLinks.length));
+              appendInlineText(strong, getLinkSeparator(index, itemLinks.length, item.linkJoinStyle));
               appendLinkContent(strong, linkItem);
             });
           } else if (item.url) {

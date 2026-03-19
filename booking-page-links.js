@@ -60,75 +60,139 @@ window.BOOKING_PAGE_LINKS = {
       itemsByMsp: {
         shopify: [
           { itemKey: "triplePixel", label: "Install your Triple Pixel", url: "https://example.com/shopify/triple-pixel" },
-          { label: "Connect your key integrations", url: "https://example.com/shopify/key-integrations" },
-          { label: "Configure UTMs", url: "https://example.com/shopify/tracking-and-utm-rules" },
+          { label: "Connect Integrations", url: "https://example.com/shopify/key-integrations" },
+          { label: "Add required UTMs", url: "https://example.com/shopify/tracking-and-utm-rules" },
           {
             itemKey: "sonar",
-            label: "Configure",
+            label: "Enable",
             linkLabelWhenSingleLink: true,
             links: [
               { linkKey: "sonarSend", label: "Sonar Send", url: "https://example.com/shopify/sonar-send" },
               { linkKey: "sonarOptimize", label: "Sonar Optimize", url: "https://example.com/shopify/sonar-optimize" }
             ]
           },
-          { label: "Configure your post-purchase survey", url: "https://example.com/shopify/post-purchase-survey" },
-          { label: "Map subscription orders", url: "https://example.com/shopify/subscription-orders" },
-          { label: "Define cost settings", url: "https://example.com/shopify/cost-settings" },
-          { label: "Map affiliates and influencers", url: "https://example.com/shopify/affiliates-and-influencers" }
+          { label: "Configure and install your Post Purchase Survey", url: "https://example.com/shopify/post-purchase-survey" },
+          {
+            itemKey: "costs",
+            label: "Define",
+            links: [
+              { linkKey: "cogs", label: "COGS", url: "https://example.com/shopify/cogs" },
+              { linkKey: "shippingCosts", label: "Shipping Costs", url: "https://example.com/shopify/shipping-costs" },
+              { linkKey: "handlingFees", label: "Handling Fees", url: "https://example.com/shopify/handling-fees" },
+              { linkKey: "expenses", label: "Expenses", url: "https://example.com/shopify/expenses" }
+            ]
+          },
+          {
+            itemKey: "mapping",
+            label: "Map",
+            linkJoinStyle: "comma",
+            links: [
+              { linkKey: "subscriptionOrders", label: "Subscription Orders", url: "https://example.com/shopify/subscription-orders" },
+              { linkKey: "affiliatesAndInfluencers", label: "Affiliates and Influencers", url: "https://example.com/shopify/affiliates-and-influencers" }
+            ]
+          }
         ],
         woocommerce: [
           { itemKey: "triplePixel", label: "Install your Triple Pixel", url: "https://example.com/woocommerce/triple-pixel" },
-          { label: "Connect your key integrations", url: "https://example.com/woocommerce/key-integrations" },
-          { label: "Configure UTMs", url: "https://example.com/woocommerce/tracking-and-utm-rules" },
+          { label: "Connect Integrations", url: "https://example.com/woocommerce/key-integrations" },
+          { label: "Add required UTMs", url: "https://example.com/woocommerce/tracking-and-utm-rules" },
           {
             itemKey: "sonar",
-            label: "Configure",
+            label: "Enable",
             linkLabelWhenSingleLink: true,
             links: [
               { linkKey: "sonarSend", label: "Sonar Send", url: "https://example.com/woocommerce/sonar-send" },
               { linkKey: "sonarOptimize", label: "Sonar Optimize", url: "https://example.com/woocommerce/sonar-optimize" }
             ]
           },
-          { label: "Configure your post-purchase survey", url: "https://example.com/woocommerce/post-purchase-survey" },
-          { label: "Map subscription orders", url: "https://example.com/woocommerce/subscription-orders" },
-          { label: "Define cost settings", url: "https://example.com/woocommerce/cost-settings" },
-          { label: "Map affiliates and influencers", url: "https://example.com/woocommerce/affiliates-and-influencers" }
+          { label: "Configure and install your Post Purchase Survey", url: "https://example.com/woocommerce/post-purchase-survey" },
+          {
+            itemKey: "costs",
+            label: "Define",
+            links: [
+              { linkKey: "cogs", label: "COGS", url: "https://example.com/woocommerce/cogs" },
+              { linkKey: "shippingCosts", label: "Shipping Costs", url: "https://example.com/woocommerce/shipping-costs" },
+              { linkKey: "handlingFees", label: "Handling Fees", url: "https://example.com/woocommerce/handling-fees" },
+              { linkKey: "expenses", label: "Expenses", url: "https://example.com/woocommerce/expenses" }
+            ]
+          },
+          {
+            itemKey: "mapping",
+            label: "Map",
+            linkJoinStyle: "comma",
+            links: [
+              { linkKey: "subscriptionOrders", label: "Subscription Orders", url: "https://example.com/woocommerce/subscription-orders" },
+              { linkKey: "affiliatesAndInfluencers", label: "Affiliates and Influencers", url: "https://example.com/woocommerce/affiliates-and-influencers" }
+            ]
+          }
         ],
         bigcommerce: [
           { itemKey: "triplePixel", label: "Install your Triple Pixel", url: "https://example.com/bigcommerce/triple-pixel" },
-          { label: "Connect your key integrations", url: "https://example.com/bigcommerce/key-integrations" },
-          { label: "Configure UTMs", url: "https://example.com/bigcommerce/tracking-and-utm-rules" },
+          { label: "Connect Integrations", url: "https://example.com/bigcommerce/key-integrations" },
+          { label: "Add required UTMs", url: "https://example.com/bigcommerce/tracking-and-utm-rules" },
           {
             itemKey: "sonar",
-            label: "Configure",
+            label: "Enable",
             linkLabelWhenSingleLink: true,
             links: [
               { linkKey: "sonarSend", label: "Sonar Send", url: "https://example.com/bigcommerce/sonar-send" },
               { linkKey: "sonarOptimize", label: "Sonar Optimize", url: "https://example.com/bigcommerce/sonar-optimize" }
             ]
           },
-          { label: "Configure your post-purchase survey", url: "https://example.com/bigcommerce/post-purchase-survey" },
-          { label: "Map subscription orders", url: "https://example.com/bigcommerce/subscription-orders" },
-          { label: "Define cost settings", url: "https://example.com/bigcommerce/cost-settings" },
-          { label: "Map affiliates and influencers", url: "https://example.com/bigcommerce/affiliates-and-influencers" }
+          { label: "Configure and install your Post Purchase Survey", url: "https://example.com/bigcommerce/post-purchase-survey" },
+          {
+            itemKey: "costs",
+            label: "Define",
+            links: [
+              { linkKey: "cogs", label: "COGS", url: "https://example.com/bigcommerce/cogs" },
+              { linkKey: "shippingCosts", label: "Shipping Costs", url: "https://example.com/bigcommerce/shipping-costs" },
+              { linkKey: "handlingFees", label: "Handling Fees", url: "https://example.com/bigcommerce/handling-fees" },
+              { linkKey: "expenses", label: "Expenses", url: "https://example.com/bigcommerce/expenses" }
+            ]
+          },
+          {
+            itemKey: "mapping",
+            label: "Map",
+            linkJoinStyle: "comma",
+            links: [
+              { linkKey: "subscriptionOrders", label: "Subscription Orders", url: "https://example.com/bigcommerce/subscription-orders" },
+              { linkKey: "affiliatesAndInfluencers", label: "Affiliates and Influencers", url: "https://example.com/bigcommerce/affiliates-and-influencers" }
+            ]
+          }
         ],
         custom: [
           { itemKey: "triplePixel", label: "Install your Triple Pixel", url: "https://example.com/custom/triple-pixel" },
-          { label: "Connect your key integrations", url: "https://example.com/custom/key-integrations" },
-          { label: "Configure UTMs", url: "https://example.com/custom/tracking-and-utm-rules" },
+          { label: "Connect Integrations", url: "https://example.com/custom/key-integrations" },
+          { label: "Add required UTMs", url: "https://example.com/custom/tracking-and-utm-rules" },
           {
             itemKey: "sonar",
-            label: "Configure",
+            label: "Enable",
             linkLabelWhenSingleLink: true,
             links: [
               { linkKey: "sonarSend", label: "Sonar Send", url: "https://example.com/custom/sonar-send" },
               { linkKey: "sonarOptimize", label: "Sonar Optimize", url: "https://example.com/custom/sonar-optimize" }
             ]
           },
-          { label: "Configure your post-purchase survey", url: "https://example.com/custom/post-purchase-survey" },
-          { label: "Map subscription orders", url: "https://example.com/custom/subscription-orders" },
-          { label: "Define cost settings", url: "https://example.com/custom/cost-settings" },
-          { label: "Map affiliates and influencers", url: "https://example.com/custom/affiliates-and-influencers" }
+          { label: "Configure and install your Post Purchase Survey", url: "https://example.com/custom/post-purchase-survey" },
+          {
+            itemKey: "costs",
+            label: "Define",
+            links: [
+              { linkKey: "cogs", label: "COGS", url: "https://example.com/custom/cogs" },
+              { linkKey: "shippingCosts", label: "Shipping Costs", url: "https://example.com/custom/shipping-costs" },
+              { linkKey: "handlingFees", label: "Handling Fees", url: "https://example.com/custom/handling-fees" },
+              { linkKey: "expenses", label: "Expenses", url: "https://example.com/custom/expenses" }
+            ]
+          },
+          {
+            itemKey: "mapping",
+            label: "Map",
+            linkJoinStyle: "comma",
+            links: [
+              { linkKey: "subscriptionOrders", label: "Subscription Orders", url: "https://example.com/custom/subscription-orders" },
+              { linkKey: "affiliatesAndInfluencers", label: "Affiliates and Influencers", url: "https://example.com/custom/affiliates-and-influencers" }
+            ]
+          }
         ]
       },
       packageOverrides: {
