@@ -1,7 +1,6 @@
 # Triple Whale Onboarding Booking Hub
 
-✨ **Live app:** [triplewhale-onboarding-kickoff.netlify.app
-](https://triplewhale-onboarding-kickoff.netlify.app/)
+✨ **Live app:** [**impkickoff.tkh.dev**](https://impkickoff.tkh.dev)
 ## Purpose
 This repo contains a single-page booking hub used as `{{booking_link}}` in the welcome email.  
 The page routes customers to book by region first (`Americas`, `EMEA`, `APAC`) with a `worldwide` fallback.
