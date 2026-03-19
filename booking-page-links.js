@@ -136,8 +136,8 @@ window.BOOKING_PAGE_LINKS = {
       url: "https://example.com/americas",
       cohortUrls: {
         smb: "https://example.com/smb/americas",
-        midMarket: "https://example.com/mid-market/americas",
-        enterprise: "https://example.com/enterprise/americas"
+        mm: "https://example.com/mm/americas",
+        ent: "https://example.com/ent/americas"
       }
     },
     emeaCard: {
@@ -146,8 +146,8 @@ window.BOOKING_PAGE_LINKS = {
       url: "https://example.com/emea",
       cohortUrls: {
         smb: "https://example.com/smb/emea",
-        midMarket: "https://example.com/mid-market/emea",
-        enterprise: "https://example.com/enterprise/emea"
+        mm: "https://example.com/mm/emea",
+        ent: "https://example.com/ent/emea"
       }
     },
     apacCard: {
@@ -156,8 +156,8 @@ window.BOOKING_PAGE_LINKS = {
       url: "https://example.com/apac",
       cohortUrls: {
         smb: "https://example.com/smb/apac",
-        midMarket: "https://example.com/mid-market/apac",
-        enterprise: "https://example.com/enterprise/apac"
+        mm: "https://example.com/mm/apac",
+        ent: "https://example.com/ent/apac"
       }
     }
   },
@@ -171,8 +171,8 @@ window.BOOKING_PAGE_LINKS = {
       url: "https://example.com/worldwide",
       cohortUrls: {
         smb: "https://example.com/smb/worldwide",
-        midMarket: "https://example.com/mid-market/worldwide",
-        enterprise: "https://example.com/enterprise/worldwide"
+        mm: "https://example.com/mm/worldwide",
+        ent: "https://example.com/ent/worldwide"
       }
     }
   },

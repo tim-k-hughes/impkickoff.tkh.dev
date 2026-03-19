@@ -1219,8 +1219,8 @@
         var normalizedValue = String(value).toLowerCase().replace(/[^a-z]/g, "");
         var validCohortValues = {
           smb: "smb",
-          midmarket: "midMarket",
-          enterprise: "enterprise"
+          mm: "mm",
+          ent: "ent"
         };
 
         return validCohortValues[normalizedValue] || null;
@@ -2117,8 +2117,8 @@
       function formatCohortDisplayName(cohortKey) {
         var labels = {
           smb: "SMB",
-          midMarket: "Mid-Market",
-          enterprise: "Enterprise"
+          mm: "MM",
+          ent: "ENT"
         };
 
         return labels[cohortKey] || "Default shared routing";
@@ -2276,19 +2276,19 @@
           },
           options: [
             {
-              value: "SMB",
+              value: "smb",
               effect: "Routes the Americas, EMEA, APAC, and worldwide booking links to the SMB team routers."
             },
             {
-              value: "mid-market",
-              effect: "Routes the Americas, EMEA, APAC, and worldwide booking links to the mid-market team routers."
+              value: "mm",
+              effect: "Routes the Americas, EMEA, APAC, and worldwide booking links to the MM team routers."
             },
             {
-              value: "enterprise",
-              effect: "Routes the Americas, EMEA, APAC, and worldwide booking links to the enterprise team routers."
+              value: "ent",
+              effect: "Routes the Americas, EMEA, APAC, and worldwide booking links to the ENT team routers."
             }
           ],
-          invalidNote: "Use SMB, mid-market, or enterprise. Anything else is ignored.",
+          invalidNote: "Use smb, mm, or ent. Anything else is ignored.",
           priorityNote: "Order used: URL first, then the saved cohort cookie. If neither is set, the page keeps the default shared booking routers."
         },
         {
