@@ -1585,6 +1585,15 @@
         }
 
         if (
+          activeMsp &&
+          entry.mspUrls &&
+          typeof entry.mspUrls === "object" &&
+          entry.mspUrls[activeMsp]
+        ) {
+          return entry.mspUrls[activeMsp];
+        }
+
+        if (
           activeCohort &&
           entry.cohortUrls &&
           typeof entry.cohortUrls === "object" &&
@@ -2271,7 +2280,7 @@
           },
           getImpact: function (value) {
             return value
-              ? "The Americas, EMEA, APAC, and worldwide booking buttons route to the " + formatCohortDisplayName(value) + " team routers."
+              ? "The Americas, EMEA, APAC, and worldwide booking buttons route to the " + formatCohortDisplayName(value) + " team routers unless a platform-specific booking override is active."
               : "The booking buttons stay on the default shared routers.";
           },
           options: [
@@ -2289,7 +2298,7 @@
             }
           ],
           invalidNote: "Use smb, mm, or ent. Anything else is ignored.",
-          priorityNote: "Order used: URL first, then the saved cohort cookie. If neither is set, the page keeps the default shared booking routers."
+          priorityNote: "Order used: platform-specific booking overrides first, then URL cohort, then the saved cohort cookie. If none are set, the page keeps the default shared booking routers."
         },
         {
           key: "geo",
@@ -2355,6 +2364,10 @@
               ? "The top platform badge stays hidden because Shopify is the default view."
               : "The top platform badge shows " + label + ".";
 
+            if (value === "custom") {
+              return "The Configuration card uses the " + label + " version of the Triple Pixel setup, and all booking buttons switch to the custom-team routers. " + contextNote;
+            }
+
             return "The Configuration card uses the " + label + " version of the Triple Pixel setup. " + contextNote;
           },
           options: [
@@ -2376,7 +2389,7 @@
             }
           ],
           invalidNote: "Use Shopify, WooCommerce, BigCommerce, or custom. Anything else is ignored.",
-          priorityNote: "Order used: URL first, then the saved platform cookie, then Shopify as the default."
+          priorityNote: "Order used: URL first, then the saved platform cookie, then Shopify as the default. Custom is the only platform that also overrides the booking links."
         },
         {
           key: "headless",
