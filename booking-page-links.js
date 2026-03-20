@@ -123,6 +123,7 @@ function getProfessionalActivationItems() {
 window.BOOKING_PAGE_LINKS = {
   // Booking link routing.
   // The page accepts `?cohort=` and swaps regional booking URLs when supported.
+  // `?msp=custom` can also override those booking URLs with custom-team routers.
   bookingRouting: {
     cohortQueryParam: "cohort"
   },
@@ -134,6 +135,9 @@ window.BOOKING_PAGE_LINKS = {
       label: "Book Americas",
       dataLinkKey: "americas",
       url: "https://example.com/americas",
+      mspUrls: {
+        custom: "https://example.com/custom/americas"
+      },
       cohortUrls: {
         smb: "https://example.com/smb/americas",
         mm: "https://example.com/mm/americas",
@@ -144,6 +148,9 @@ window.BOOKING_PAGE_LINKS = {
       label: "Book EMEA",
       dataLinkKey: "emea",
       url: "https://example.com/emea",
+      mspUrls: {
+        custom: "https://example.com/custom/emea"
+      },
       cohortUrls: {
         smb: "https://example.com/smb/emea",
         mm: "https://example.com/mm/emea",
@@ -154,6 +161,9 @@ window.BOOKING_PAGE_LINKS = {
       label: "Book APAC",
       dataLinkKey: "apac",
       url: "https://example.com/apac",
+      mspUrls: {
+        custom: "https://example.com/custom/apac"
+      },
       cohortUrls: {
         smb: "https://example.com/smb/apac",
         mm: "https://example.com/mm/apac",
@@ -169,6 +179,9 @@ window.BOOKING_PAGE_LINKS = {
       label: "View worldwide availability",
       dataLinkKey: "worldwide",
       url: "https://example.com/worldwide",
+      mspUrls: {
+        custom: "https://example.com/custom/worldwide"
+      },
       cohortUrls: {
         smb: "https://example.com/smb/worldwide",
         mm: "https://example.com/mm/worldwide",

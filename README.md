@@ -62,6 +62,7 @@ Current status noted in that prior thread:
 - Booking URLs in `booking-page-links.js` are still placeholders and should be replaced with production links.
 - The two onboarding resource cards now support MSP-aware link sets in `booking-page-links.js`.
 - Booking links now also support cohort-aware routing for `?cohort=` with default, `smb`, `mm`, and `ent` router sets.
+- `?msp=custom` now overrides all four booking links with the custom-team routers instead of using shared or cohort booking routes.
 
 ## URL-Driven Personalization
 The page now reads `?cohort=`, `?msp=`, `?headless=`, `?package=`, `?hasConversion=`, and `?hasRetention=` from the URL and swaps booking links and onboarding resources accordingly.
@@ -73,6 +74,7 @@ The page now reads `?cohort=`, `?msp=`, `?headless=`, `?package=`, `?hasConversi
 - A valid `?cohort=` value updates the `tw_cohort` cookie
 - Blank or invalid `?cohort=` values do not overwrite the cookie
 - `booking-page-links.js` stores the default regional URLs plus cohort-specific overrides under each booking button and the worldwide link
+- `msp=custom` takes precedence over cohort routing and swaps the Americas, EMEA, APAC, and worldwide links to the custom-team booking routers
 
 ## MSP-Aware Resource Links
 The page also reads `?msp=`, `?headless=`, `?package=`, `?hasConversion=`, and `?hasRetention=` from the URL and swaps the onboarding resource cards accordingly.
@@ -82,6 +84,7 @@ The page also reads `?msp=`, `?headless=`, `?package=`, `?hasConversion=`, and `
 - Missing, blank, or unknown `msp` values fall back to the `tw_msp` cookie when present, otherwise default to Shopify
 - A valid `?msp=` value updates the `tw_msp` cookie
 - Blank or invalid `?msp=` values do not overwrite the cookie
+- `?msp=custom` also overrides all booking buttons and the worldwide link with the custom-team booking URLs
 - `?headless=true` swaps the Triple Pixel install bullet to one shared headless setup URL and updates the `tw_headless` cookie
 - `?headless=false` turns those extra docs off and updates the `tw_headless` cookie
 - If `headless` is missing, the page falls back to `tw_headless` when present, otherwise defaults to `false`
